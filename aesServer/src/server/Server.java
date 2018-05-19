@@ -2,7 +2,6 @@ package server;
 
 import java.io.IOException;
 
-import database.ActionsType;
 import database.MySqlConnection;
 
 public class Server extends AbstractServer 
@@ -25,6 +24,7 @@ public class Server extends AbstractServer
    */
   public void handleMessageFromClient(Object msg, ConnectionToClient client)
   {
+	  	System.out.println("Message recived from: "+client.getId());
 	  	MessageType message = (MessageType) msg;
 	  	MySqlConnection.action(message.getAction(), message.getObj());
 	    try {
