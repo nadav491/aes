@@ -47,7 +47,7 @@ public class MySqlConnection
 	 * This function execute the queries.
 	 * @param action - the action to take.
 	 * @param obj - the object to use in the action.
-	 * @return
+	 * @return if there is an object return it , else return null.
 	 */
 	public static Object action(ActionNumber action, Object obj)
 	{		
@@ -55,7 +55,7 @@ public class MySqlConnection
 		{
 		case QUESIOTN_GET_ALL: return(getAllQuestion()); 
 		case QUESTION_GET_BY_ID: return(getQuestionById((String)obj));
-		case QUESTION_UPDATE: updateQuestion((Question)obj);  break;
+		case QUESTION_UPDATE: return(updateQuestion((Question)obj));
 		}
 		return null;
 	}
@@ -130,7 +130,6 @@ public class MySqlConnection
 			update.setString(7, updatedQuestion.getAnswer4());
 			update.setInt(8, updatedQuestion.getCorrect());
 			update.setString(9, updatedQuestion.getCode());
-			System.out.println(update.toString());
 			update.executeUpdate();
 		} catch (SQLException e) {e.printStackTrace();}
 		return true;

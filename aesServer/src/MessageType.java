@@ -1,11 +1,17 @@
-package server;
+
+
+import java.io.Serializable;
 
 import database.ActionsType.ActionNumber;
 
 /**
  * This class is used to determine how to transfer messages to server and client.
  */
-public class MessageType {
+public class MessageType implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4977398872945543277L;
 	private ActionNumber action;
 	private Object obj;
 	

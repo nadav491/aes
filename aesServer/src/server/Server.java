@@ -2,7 +2,11 @@ package server;
 
 import java.io.IOException;
 
+import database.ActionsType;
+import database.ActionsType.ActionNumber;
 import database.MySqlConnection;
+import message.MessageType;
+import question.Question;
 
 public class Server extends AbstractServer 
 {
@@ -25,11 +29,13 @@ public class Server extends AbstractServer
   public void handleMessageFromClient(Object msg, ConnectionToClient client)
   {
 	  	System.out.println("Message recived from: "+client.getId());
-	  	MessageType message = (MessageType) msg;
-	  	MySqlConnection.action(message.getAction(), message.getObj());
-	    try {
-			client.sendToClient(msg);
+	  	MessageType msgType = (MessageType)msg;	
+	  	Object answer = MySqlConnection.action(ActionsType.getAction(msgType.getAction()), msgType.getObj());
+	  	try {
+	  		client.sendToClient(answer);
+
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
   }
