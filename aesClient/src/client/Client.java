@@ -20,6 +20,7 @@ public class Client implements ChatIF
    */
   ChatClient client;
 
+  
   /**
    * Constructs an instance of the ClientConsole UI.
    *
@@ -43,17 +44,6 @@ public class Client implements ChatIF
   {
 	  this.answer = answer;
 	  this.gotAnswer = true;
-  }
-  /**
-   * This method waits for input from the console.  Once it is 
-   * received, it sends it to the client's message handler.
-   */
-  public void accept() 
-  {
-	  System.out.println(getAllQuestion());
-	  Question q = getQuestionById("33333");
-	  q.setCorrect(2);
-	  System.out.println(updateQuestion(q));
   }
 
   /**
@@ -86,43 +76,24 @@ public class Client implements ChatIF
 	  MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.QUESIOTN_GET_ALL),"");
 	  this.client.handleMessageFromClientUI(msg);
 	  waitForAnswer();
-	  return (ArrayList<Question>) this.answer;
+	  return (ArrayList<Question>)this.answer;
 	}
   
-	private Question getQuestionById(String code)
+  public Question getQuestionById(String code)
 	{
 		  MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.QUESTION_GET_BY_ID),code);
 		  this.client.handleMessageFromClientUI(msg);
 		  waitForAnswer();
-		  return (Question) this.answer;
+		  return (Question)this.answer;
 	}
 	
-	private boolean updateQuestion(Question updatedQuestion)
+  public boolean updateQuestion(Question updatedQuestion)
 	{
 		  MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.QUESTION_UPDATE),updatedQuestion);
 		  this.client.handleMessageFromClientUI(msg);
 		  waitForAnswer();
-		  return (boolean) this.answer;
+		  return (boolean)this.answer;
 	}
-  /**
-   * This method is responsible for the creation of the Client UI.
-   *
-   * @param args[0] The host to connect to.
-   */
-  public static void main(String[] args) 
-  {
-    String host = "";
-    int port = 0;  //The port number
-    try
-    {
-      host = args[0];
-    }
-    catch(ArrayIndexOutOfBoundsException e)
-    {
-      host = "localhost";
-    }
-    Client chat= new Client(host, DEFAULT_PORT);
-    chat.accept();  //Wait for console data
-  }
+
 }
 //End of ConsoleChat class
