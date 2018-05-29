@@ -9,7 +9,7 @@ import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
-	public static final String HOST_IP = "192.168.1.13";
+	public static final String HOST_IP = "192.168.56.1";
 	public static final int HOST_PORT = 5555;
 
 	@Override
