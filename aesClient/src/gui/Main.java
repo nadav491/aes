@@ -3,13 +3,12 @@ package gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
-	public static final String HOST_IP = "192.168.56.1";
+	public static final String HOST_IP = "";
 	public static final int HOST_PORT = 5555;
 
 	@Override

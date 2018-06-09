@@ -54,8 +54,11 @@ public class MySqlConnection
 		switch(action)
 		{
 		case QUESIOTN_GET_ALL: return(getAllQuestion()); 
-		case QUESTION_GET_BY_ID: return(getQuestionById((String)obj));
+		case QUESTION_GET_BY_CODE: return(getQuestionByCode((String)obj));
 		case QUESTION_UPDATE: return(updateQuestion((Question)obj));
+		case QUESTION_ADD: return(addQuestion((Question)obj));
+		case QUESTION_REMOVE: return(removeQuestionByCode((String)obj));
+		case QUESTION_GET_BY_OWNER: return(getQuestionByOwner((String)obj));
 		}
 		return null;
 	}
@@ -88,7 +91,7 @@ public class MySqlConnection
 	 * @param code - the question code
 	 * @return the question or null if its not found.
 	 */
-	private static Question getQuestionById(String code)
+	private static Question getQuestionByCode(String code)
 	{
 		Statement stmt;
 		if(code == null)
@@ -120,7 +123,7 @@ public class MySqlConnection
 		try 
 		{
 			PreparedStatement update = conn.prepareStatement("UPDATE question Set code=?, owner=?, body=?"
-					+ ",answer1=? ,answer2=? ,answer3=? ,answer4=? ,correct=? WHERE code=?;");
+					+ ",answer1=? ,answer2=? ,answer3=? ,answer4=? ,correct=?, courseList=?, instruction=? WHERE code=?;");
 			update.setString(1, updatedQuestion.getCode());
 			update.setString(2, updatedQuestion.getOwner());
 			update.setString(3, updatedQuestion.getBody());
@@ -129,12 +132,69 @@ public class MySqlConnection
 			update.setString(6, updatedQuestion.getAnswer3());
 			update.setString(7, updatedQuestion.getAnswer4());
 			update.setInt(8, updatedQuestion.getCorrect());
-			update.setString(9, updatedQuestion.getCode());
+			update.setString(9, updatedQuestion.courseCodeListToString());
+			update.setString(10, updatedQuestion.getInstruction());
+			update.setString(11, updatedQuestion.getCode());
 			update.executeUpdate();
 		} catch (SQLException e) {e.printStackTrace();}
 		return true;
 	}
 
-}
+	private static boolean removeQuestionByCode(String code)
+	{
+		if(code == null)
+			return false;
+		try 
+		{
+			PreparedStatement update = conn.prepareStatement("DELETE  FROM "+QUESTION_DATABASE_NAME+" WHERE code=\""+code+"\";");
+			update.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+	}
+	
+	private static boolean addQuestion(Question question)
+	{
+		if(question == null || !question.checkQuestion())
+			return false;
+		try 
+		{
+			PreparedStatement update = conn.prepareStatement("INSERT into question value(?,?,?,?,?,?,?,?,?,?);");
+			update.setString(1, question.getCode());
+			update.setString(2, question.getOwner());
+			update.setString(3, question.getBody());
+			update.setString(4, question.getAnswer1());
+			update.setString(5, question.getAnswer2());
+			update.setString(6, question.getAnswer3());
+			update.setString(7, question.getAnswer4());
+			update.setInt(8, question.getCorrect());
+			update.setString(9, question.getCode());
+			update.setString(10, question.courseCodeListToString());
+			update.setString(11, question.getInstruction());
+			update.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+	}
 
+	private static ArrayList<Question> getQuestionByOwner(String owner)
+	{
+		Statement stmt;
+		if(owner == null)
+			return null;
+		ArrayList<Question> questionList = new ArrayList<Question>();
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+QUESTION_DATABASE_NAME+" WHERE owner=\""+owner+"\";");
+			while(rs.next())
+			{
+				Question question = new Question(rs.getString(1),rs.getString(2),rs.getString(3)
+						,rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getInt(8));
+				questionList.add(question);			
+			}
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		System.out.println(questionList);
+		return questionList;
+	}
+}
 

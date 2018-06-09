@@ -38,7 +38,7 @@ public class SampleController {
 	int idx_C;
 	public void Q_print()
 	{
-		Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
+		Client client = new Client(Main.HOST_IP,Main.HOST_PORT);		
 		if(start==0) {
 			Q_list = client.getAllQuestion();
 			start++;
@@ -162,7 +162,7 @@ public class SampleController {
         			    		   if(F7.getText().equals("3"))Q_list.get(idx_C).setCorrect(3);
         			    		   if(F7.getText().equals("4"))Q_list.get(idx_C).setCorrect(4);
         			    	   }
-        			    	   client.updateQuestion(Q_list.get(idx_C));
+        			    	   client.modifyQuestion(Q_list.get(idx_C));
         			    	   primaryStage.close();
         			    	   Q_print();
         			    	  

@@ -1,6 +1,7 @@
 package question;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Question implements Serializable{
 	/**
@@ -12,19 +13,31 @@ public class Question implements Serializable{
 	
 	private String code;
 	private String owner;
-	private String instruction;
 	private String body;
 	private String answer1;
 	private String answer2;
 	private String answer3;
 	private String answer4;
-	private Course courseList;
 	private int correct;
+	private ArrayList<Course> courseList;
+	private String instruction;
 	
-
+	/**
+	 * Contractor.
+	 * @param code 
+	 * @param owner
+	 * @param instruction
+	 * @param body
+	 * @param answer1
+	 * @param answer2
+	 * @param answer3
+	 * @param answer4
+	 * @param correct
+	 * @param courseList
+	 */
 	
 	public Question(String code, String owner, String instruction, String body, String answer1, String answer2,
-			String answer3, String answer4, int correct , Course courseList) {
+			String answer3, String answer4, int correct , ArrayList<Course> courseList) {
 		super();
 		this.code = code;
 		this.owner = owner;
@@ -38,6 +51,17 @@ public class Question implements Serializable{
 		this.correct = correct;
 	}
 
+	/**
+	 * Contractor.
+	 * @param code
+	 * @param owner
+	 * @param body
+	 * @param answer1
+	 * @param answer2
+	 * @param answer3
+	 * @param answer4
+	 * @param correct
+	 */
 	public Question(String code, String owner, String body, String answer1, String answer2,
 			String answer3, String answer4,  int correct) {
 		super();
@@ -53,11 +77,19 @@ public class Question implements Serializable{
 		this.correct = correct;
 	}
 	
+	/**
+	 * Default Contractor.
+	 */
 	public Question() {
 		super();
 	}
 
-	public Question(Question question) {
+	/**
+	 * Contractor.
+	 * @param question
+	 */
+	public Question(Question question) 
+	{
 		super();
 		this.code = question.code;
 		this.owner = question.owner;
@@ -70,6 +102,11 @@ public class Question implements Serializable{
 		this.courseList = question.courseList;
 		this.correct = question.correct;
 	}
+	
+	/**
+	 * Check that the question is complete. Recommanded use before updating the database.
+	 * @return true if the question is complete.
+	 */
 	public boolean checkQuestion()
 	{
 		if(this.code.length() != CODE_LENGTH)
@@ -107,13 +144,21 @@ public class Question implements Serializable{
 		return true;
 			
 	}
+	
 	@Override
+	/**
+	 * Show the relevant fields for the question.
+	 */
 	public String toString() {
 		return "[id=" + code + ", teacherName=" + owner + ", questionText=" + body + ", answer1="
 				+ answer1 + ", answer2=" + answer2 + ", answer3=" + answer3 + ", answer4=" + answer4 + ", correct="
 				+ correct + "]";
 	}
 
+	/**
+	 * Similar to toString but only show the body and answers.
+	 * @return
+	 */
 	public String showQuestion() {
 		return body + "\n" + answer1+"\n" + answer2+"\n" + answer3+"\n"+ answer4+"\n";
 	}
@@ -166,11 +211,11 @@ public class Question implements Serializable{
 		this.answer4 = answer4;
 	}
 
-	public Course getCourseList() {
+	public ArrayList<Course> getCourseList() {
 		return courseList;
 	}
 
-	public void setCourseList(Course courseList) {
+	public void setCourseList(ArrayList<Course> courseList) {
 		this.courseList = courseList;
 	}
 
@@ -190,6 +235,21 @@ public class Question implements Serializable{
 		return owner;
 	}
 	
-
-
+	/**
+	 * Get the course list as a string of all the code. 
+	 * Used to store in database.
+	 * @return A string containing all the courses code.
+	 */
+	public String courseCodeListToString()
+	{
+		String courses = "";
+		if(this.courseList == null )
+			return courses;
+		
+		for(Course c: this.courseList)
+		{
+			courses = courses+c.getCode();
+		}
+		return courses;
+	}
 }

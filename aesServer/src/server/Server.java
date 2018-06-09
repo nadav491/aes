@@ -1,12 +1,9 @@
-package server;
+	package server;
 
 import java.io.IOException;
-
 import database.ActionsType;
-import database.ActionsType.ActionNumber;
 import database.MySqlConnection;
 import message.MessageType;
-import question.Question;
 
 public class Server extends AbstractServer 
 {
