@@ -4,4 +4,3 @@ insert into question value("22222","gal","When a burning cigarette is inhaled, w
 insert into question value("33333","ziv","what is the ultimate answer of life the universe and everything?","i think therefore i am","42","god","life is a lie ",2,"","");
 insert into question value("22223","gal","When a burning cigarette is inhaled, what is the temperature at its tip?","50","300","700","1000",3,"","");
 select * from question;
-CREATE TABLE user(id varchar(9),type varchar(10),login boolean, PRIMARY KEY (

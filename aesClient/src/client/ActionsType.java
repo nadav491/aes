@@ -18,6 +18,7 @@ public class ActionsType implements Serializable
 		QUESTION_GET_BY_OWNER,
 		QUESTION_ADD,
 		QUESTION_REMOVE,
+		USER_LOGIN;
 	}
 	
 	public static int getValue(ActionNumber action)
@@ -30,6 +31,7 @@ public class ActionsType implements Serializable
 		case QUESTION_GET_BY_OWNER: return 4;
 		case QUESTION_ADD: return 5;
 		case QUESTION_REMOVE: return 6;
+		case USER_LOGIN: return 7;
 		}
 		return 0;
 	}
@@ -44,6 +46,7 @@ public class ActionsType implements Serializable
 		case 4: return ActionNumber.QUESTION_GET_BY_OWNER;
 		case 5: return ActionNumber.QUESTION_ADD;
 		case 6: return ActionNumber.QUESTION_REMOVE;
+		case 7: return ActionNumber.USER_LOGIN;
 		}
 		return null;
 	}

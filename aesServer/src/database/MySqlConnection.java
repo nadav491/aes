@@ -15,6 +15,8 @@ public class MySqlConnection
 {
 	private static Connection conn; 
 	private final static String QUESTION_DATABASE_NAME = "question";
+	private final static String USER_DATABASE_NAME = "user";
+
 	//private final static int DATABASE_SIZE_QUESTION = 8;
 	
 	public MySqlConnection() 
@@ -59,6 +61,7 @@ public class MySqlConnection
 		case QUESTION_ADD: return(addQuestion((Question)obj));
 		case QUESTION_REMOVE: return(removeQuestionByCode((String)obj));
 		case QUESTION_GET_BY_OWNER: return(getQuestionByOwner((String)obj));
+		case USER_LOGIN: return(userChecklogin((ArrayList<String>)obj));
 		}
 		return null;
 	}
@@ -195,6 +198,26 @@ public class MySqlConnection
 		} catch (SQLException e) {e.printStackTrace();}
 		System.out.println(questionList);
 		return questionList;
+	}
+	
+
+	private static boolean userChecklogin(ArrayList<String> info)
+	{
+		if(info == null)
+			return false;
+		Statement stmt;
+		boolean flag = false;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT password FROM "+USER_DATABASE_NAME+" WHERE id=\""+info.get(0)+"\";");
+			if(rs.next())
+				if(rs.getString(1) == info.get(1))
+					flag=true;
+			System.out.print(rs.getString(1)+"  "+ info.get(1));
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		return flag;
 	}
 }
 
