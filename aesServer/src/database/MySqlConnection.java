@@ -59,9 +59,9 @@ public class MySqlConnection
 		case QUESTION_GET_BY_CODE: return(getQuestionByCode((String)obj));
 		case QUESTION_UPDATE: return(updateQuestion((Question)obj));
 		case QUESTION_ADD: return(addQuestion((Question)obj));
-		case QUESTION_REMOVE: return(removeQuestionByCode((String)obj));
 		case QUESTION_GET_BY_OWNER: return(getQuestionByOwner((String)obj));
 		case USER_LOGIN: return(userChecklogin((ArrayList<String>)obj));
+		case USER_LOGOUT: return(userLogout((String)obj));
 		}
 		return null;
 	}
@@ -125,7 +125,7 @@ public class MySqlConnection
 			return false;
 		try 
 		{
-			PreparedStatement update = conn.prepareStatement("UPDATE question Set code=?, owner=?, body=?"
+			PreparedStatement update = conn.prepareStatement("UPDATE "+QUESTION_DATABASE_NAME+" Set code=?, owner=?, body=?"
 					+ ",answer1=? ,answer2=? ,answer3=? ,answer4=? ,correct=?, courseList=?, instruction=? WHERE code=?;");
 			update.setString(1, updatedQuestion.getCode());
 			update.setString(2, updatedQuestion.getOwner());
@@ -143,25 +143,18 @@ public class MySqlConnection
 		return true;
 	}
 
-	private static boolean removeQuestionByCode(String code)
-	{
-		if(code == null)
-			return false;
-		try 
-		{
-			PreparedStatement update = conn.prepareStatement("DELETE  FROM "+QUESTION_DATABASE_NAME+" WHERE code=\""+code+"\";");
-			update.executeUpdate();
-		} catch (SQLException e) {e.printStackTrace();}
-		return true;
-	}
-	
+	/**
+	 * Add a given question to the database.
+	 * @param question - the given question
+	 * @return true if successes , else false.
+	 */
 	private static boolean addQuestion(Question question)
 	{
 		if(question == null || !question.checkQuestion())
 			return false;
 		try 
 		{
-			PreparedStatement update = conn.prepareStatement("INSERT into question value(?,?,?,?,?,?,?,?,?,?);");
+			PreparedStatement update = conn.prepareStatement("INSERT into "+QUESTION_DATABASE_NAME+" value(?,?,?,?,?,?,?,?,?,?);");
 			update.setString(1, question.getCode());
 			update.setString(2, question.getOwner());
 			update.setString(3, question.getBody());
@@ -178,6 +171,11 @@ public class MySqlConnection
 		return true;
 	}
 
+	/**
+	 * Get a arrayList of all the question created by the given owner.
+	 * @param owner - the owner.
+	 * @return the arrayList
+	 */
 	private static ArrayList<Question> getQuestionByOwner(String owner)
 	{
 		Statement stmt;
@@ -200,24 +198,63 @@ public class MySqlConnection
 		return questionList;
 	}
 	
+	/**
+	 * Update the login field of the user.
+	 * @param userName - the user name.
+	 * @param login - the new status. 
+	 * @return true if success. 
+	 */
+	private static void userUpdateLogin(String userName, boolean login)
+	{
+		if(userName == "" || userName == null)
+			return ;
+		try 
+		{
+			PreparedStatement update = conn.prepareStatement("UPDATE "+USER_DATABASE_NAME+" Set login=? WHERE id=?;");
+			update.setBoolean(1, login);
+			update.setString(2, userName);
+			update.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+	}
 
+	/**
+	 * Check if the user password and check if the user hasn't login yet.
+	 * @param info - ArrayList of user name and password.
+	 * @return true if all the info was correct and the user hasn't login yet.
+	 */
 	private static boolean userChecklogin(ArrayList<String> info)
 	{
-		if(info == null)
+		if(info == null || info.get(0) == "" || info.get(1) == "")
 			return false;
 		Statement stmt;
 		boolean flag = false;
 		try 
 		{
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT password FROM "+USER_DATABASE_NAME+" WHERE id=\""+info.get(0)+"\";");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+USER_DATABASE_NAME+" WHERE id=\""+info.get(0)+"\";");
 			if(rs.next())
-				if(rs.getString(1) == info.get(1))
+				if(rs.getString(2).compareTo(info.get(1)) == 0 && !rs.getBoolean(4))
+				{
 					flag=true;
-			System.out.print(rs.getString(1)+"  "+ info.get(1));
+					userUpdateLogin(info.get(0),true);
+				}
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}
 		return flag;
 	}
+	
+	/**
+	 * Logout the user.
+	 * @param id - the user id.
+	 * @return true if success.
+	 */
+	private static boolean userLogout(String id)
+	{
+		if(id == null)
+			return false;
+		userUpdateLogin(id,false);
+		return true;
+	}
+
 }
 

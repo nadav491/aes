@@ -43,6 +43,14 @@ public abstract class User {
 	public boolean isLogin() {
 		return login;
 	}
+	
+	/**
+	 * Login the user. Check the password and that the user is not login already. 
+	 * @param client - the server to login from.
+	 * @param id - the user id.
+	 * @param password - the user password.
+	 * @return true if the user password match the password in database and the user is not login.
+	 */
 	public static boolean login(Client client, String id, String password)
 	{
 		ArrayList<String> loginData = new ArrayList<String>();
@@ -54,4 +62,17 @@ public abstract class User {
 		return (boolean)client.getAnswer();
 	}
 
+	/**
+	 * Logout the user.
+	 * @param client - the server to login from.
+	 * @param id - the user id.
+	 * @return true if the user was logout.
+	 */
+	public static boolean logout(Client client, String id)
+	{
+		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.USER_LOGOUT),id);
+		client.getChatClient().handleMessageFromClientUI(msg);
+		client.waitForAnswer();
+		return (boolean)client.getAnswer();
+	}
 }

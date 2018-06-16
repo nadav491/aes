@@ -1,0 +1,1 @@
+CREATE TABLE test(code varchar(6), Qs_id varchar(1024), Qs_grades varchar(1024), CommentsForTeacher varchar(256), CommentsForStudent varchar(256), TestOwner varchar(64), TestTime varchar(16), primary key(code));

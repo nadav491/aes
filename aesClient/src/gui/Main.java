@@ -29,6 +29,9 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		//launch(args);
 		Client c = new Client(HOST_IP, HOST_PORT);
-		System.out.println(User.login(c, "123456789", "123"));
+		System.out.println(User.login(c, "111111112", "1234"));
+		System.out.println(User.login(c, "111111112", "1234"));
+		System.out.println(User.logout(c, "111111112"));
+
 	}
 }
