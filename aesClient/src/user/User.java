@@ -13,21 +13,22 @@ import question.Question;
  */
 public abstract class User {
 	private String id;
-	private String password;
 	private String type;
-	private boolean login;
-	
-	public User(String id, String type, boolean login) {
+	private String name;
+
+	public User(String id, String type, String name) {
 		this.id = id;
 		this.type = type;
-		this.login = login;
+		this.name = name;
 	}
-	public String getPassword() {
-		return password;
+	
+	public String getName() {
+		return name;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setName(String name) {
+		this.name = name;
 	}
+	
 	public String getId() {
 		return id;
 	}
@@ -40,18 +41,15 @@ public abstract class User {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public boolean isLogin() {
-		return login;
-	}
 	
 	/**
 	 * Login the user. Check the password and that the user is not login already. 
 	 * @param client - the server to login from.
 	 * @param id - the user id.
 	 * @param password - the user password.
-	 * @return true if the user password match the password in database and the user is not login.
+	 * @return The type and name of the user.
 	 */
-	public static boolean login(Client client, String id, String password)
+	public static ArrayList<String> login(Client client, String id, String password)
 	{
 		ArrayList<String> loginData = new ArrayList<String>();
 		loginData.add(id);
@@ -59,7 +57,7 @@ public abstract class User {
 		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.USER_LOGIN),loginData);
 		client.getChatClient().handleMessageFromClientUI(msg);
 		client.waitForAnswer();
-		return (boolean)client.getAnswer();
+		return((ArrayList<String>)client.getAnswer());
 	}
 
 	/**

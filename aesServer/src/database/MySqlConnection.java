@@ -1,5 +1,6 @@
 package database;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -81,8 +82,8 @@ public class MySqlConnection
 	 		while(rs.next())
 	 		{
 	 			Question buildQuestion = new Question(rs.getString(1),rs.getString(2),rs.getString(3)
-	 					,rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getInt(8));
- 				allQuestions.add(buildQuestion);
+	 					,rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getInt(8),rs.getString(9),rs.getString(10),rs.getString(11));
+				allQuestions.add(buildQuestion);
 			} 
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}
@@ -107,7 +108,7 @@ public class MySqlConnection
 			if(rs.next())
 			{
 				question = new Question(rs.getString(1),rs.getString(2),rs.getString(3)
- 					,rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getInt(8));
+ 					,rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getInt(8),rs.getString(9),rs.getString(10),rs.getString(11));
 			}
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}
@@ -126,7 +127,7 @@ public class MySqlConnection
 		try 
 		{
 			PreparedStatement update = conn.prepareStatement("UPDATE "+QUESTION_DATABASE_NAME+" Set code=?, owner=?, body=?"
-					+ ",answer1=? ,answer2=? ,answer3=? ,answer4=? ,correct=?, courseList=?, instruction=? WHERE code=?;");
+					+ ",answer1=? ,answer2=? ,answer3=? ,answer4=? ,correct=?, courseList=?, Sinstructions=?, Tinstructions=? WHERE code=?;");
 			update.setString(1, updatedQuestion.getCode());
 			update.setString(2, updatedQuestion.getOwner());
 			update.setString(3, updatedQuestion.getBody());
@@ -135,9 +136,10 @@ public class MySqlConnection
 			update.setString(6, updatedQuestion.getAnswer3());
 			update.setString(7, updatedQuestion.getAnswer4());
 			update.setInt(8, updatedQuestion.getCorrect());
-			update.setString(9, updatedQuestion.courseCodeListToString());
-			update.setString(10, updatedQuestion.getInstruction());
-			update.setString(11, updatedQuestion.getCode());
+			update.setString(9, updatedQuestion.getCourseList());
+			update.setString(10, updatedQuestion.getSInstruction());
+			update.setString(11, updatedQuestion.getTInstruction());
+			update.setString(12, updatedQuestion.getCode());
 			update.executeUpdate();
 		} catch (SQLException e) {e.printStackTrace();}
 		return true;
@@ -152,10 +154,13 @@ public class MySqlConnection
 	{
 		if(question == null || !question.checkQuestion())
 			return false;
+		ArrayList<Question> questions = getAllQuestion();
+		String questionNumber = String.format("%3d", questions.size());
+
 		try 
 		{
-			PreparedStatement update = conn.prepareStatement("INSERT into "+QUESTION_DATABASE_NAME+" value(?,?,?,?,?,?,?,?,?,?);");
-			update.setString(1, question.getCode());
+			PreparedStatement update = conn.prepareStatement("INSERT into "+QUESTION_DATABASE_NAME+" value(?,?,?,?,?,?,?,?,?,?,?);");
+			update.setString(1, question.getCode().substring(0, 2)+questionNumber);
 			update.setString(2, question.getOwner());
 			update.setString(3, question.getBody());
 			update.setString(4, question.getAnswer1());
@@ -164,8 +169,9 @@ public class MySqlConnection
 			update.setString(7, question.getAnswer4());
 			update.setInt(8, question.getCorrect());
 			update.setString(9, question.getCode());
-			update.setString(10, question.courseCodeListToString());
-			update.setString(11, question.getInstruction());
+			update.setString(10, question.getCourseList());
+			update.setString(11, question.getSInstruction());
+			update.setString(11, question.getTInstruction());
 			update.executeUpdate();
 		} catch (SQLException e) {e.printStackTrace();}
 		return true;
@@ -189,12 +195,11 @@ public class MySqlConnection
 			while(rs.next())
 			{
 				Question question = new Question(rs.getString(1),rs.getString(2),rs.getString(3)
-						,rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getInt(8));
+	 					,rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getInt(8),rs.getString(9),rs.getString(10),rs.getString(11));
 				questionList.add(question);			
 			}
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}
-		System.out.println(questionList);
 		return questionList;
 	}
 	
@@ -220,14 +225,14 @@ public class MySqlConnection
 	/**
 	 * Check if the user password and check if the user hasn't login yet.
 	 * @param info - ArrayList of user name and password.
-	 * @return true if all the info was correct and the user hasn't login yet.
+	 * @return The type and name of the user.
 	 */
-	private static boolean userChecklogin(ArrayList<String> info)
+	private static ArrayList<String> userChecklogin(ArrayList<String> info)
 	{
 		if(info == null || info.get(0) == "" || info.get(1) == "")
-			return false;
+			return null;
 		Statement stmt;
-		boolean flag = false;
+		ArrayList<String> typeName = new ArrayList<String>();
 		try 
 		{
 			stmt = conn.createStatement();
@@ -235,12 +240,13 @@ public class MySqlConnection
 			if(rs.next())
 				if(rs.getString(2).compareTo(info.get(1)) == 0 && !rs.getBoolean(4))
 				{
-					flag=true;
-					userUpdateLogin(info.get(0),true);
+					typeName.add(rs.getString(3));
+					typeName.add(rs.getString(5));
+				//userUpdateLogin(info.get(0),true);
 				}
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}
-		return flag;
+		return typeName;
 	}
 	
 	/**

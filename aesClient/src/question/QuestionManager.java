@@ -29,6 +29,7 @@ public class QuestionManager {
 	 */
 	public static void addQuestion(Client client, Question questionToAdd)
 	{
+		System.out.println(questionToAdd);
 		if(questionToAdd.checkQuestion())
 		{
 			MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.QUESTION_ADD), questionToAdd);
