@@ -46,6 +46,8 @@ public class Test implements Serializable {
 	public Test()
 	{
 		super();
+		this.questions=new ArrayList<Question>();
+		this.questionGrade=new ArrayList<String>();
 	}
 
 	public String getCommentsForTeacher() {

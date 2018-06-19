@@ -20,6 +20,7 @@ public class studentTest implements Serializable {
 	public studentTest(String student, Test test, int grade, ArrayList<String> answers, String time, String teacher)
 	{
 		super();
+		this.test = test;
 		this.grade = grade;
 		this.answers = answers;
 		this.time = time;
@@ -31,6 +32,7 @@ public class studentTest implements Serializable {
 	public studentTest(studentTest st)
 	{
 		super();
+		this.test = st.test;
 		this.grade = st.grade;
 		this.answers = st.answers;
 		this.time = st.time;

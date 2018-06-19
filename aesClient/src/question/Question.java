@@ -108,6 +108,8 @@ public class Question implements Serializable{
 	}
 
 	public String getSInstruction() {
+		if(Sinstruction == null)
+			Sinstruction = " ";
 		return Sinstruction;
 	}
 	public String getTInstruction() {

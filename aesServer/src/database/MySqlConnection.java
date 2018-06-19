@@ -11,6 +11,7 @@ import Student.Student;
 import java.sql.PreparedStatement;
 
 import database.ActionsType.ActionNumber;
+import question.ExecutedTest;
 import question.Question;
 import test.Test;
 import test.studentTest;
@@ -23,9 +24,10 @@ public class MySqlConnection
 	private final static String TEST_DATABASE_NAME = "test";
 	private final static String STUDENT_DATABASE_NAME = "student";
 	private final static String STUDENT_TEST_DATABASE_NAME = "studentTest";
-		
+	private static ArrayList<ExecutedTest> executedTests;
 	public MySqlConnection() 
 	{
+		executedTests = new ArrayList<ExecutedTest>();
 		MySqlConnection.connect();
 	}
 	/**
@@ -82,6 +84,9 @@ public class MySqlConnection
 		case STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID: return getAllTestsByStudentId((String) obj);
 		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return getAllTestsByTeacherId((String) obj);
 		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return getAllTestsByCourseId((String) obj);
+		
+		case EXECUTED_TEST_ADD: executedTests.add((ExecutedTest)obj); return(" ");
+		case EXECUTED_TEST_GET_ALL: return(executedTests);
 		}
 		return null;
 	}

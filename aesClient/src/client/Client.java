@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 
 import Student.Student;
+import client.ActionsType.ActionNumber;
+import message.MessageType;
+import question.ExecutedTest;
 import question.Question;
 import question.QuestionManager;
 import test.Test;
@@ -218,6 +221,20 @@ public class Client implements ChatIF
 		  studentTestController.getAllTestsByCourseId(course_id, this.chatClient);
 		  waitForAnswer();
 		  return (studentTest[])this.answer;
+	  }
+	  
+	  public void AddToExecutreTest(ExecutedTest test)
+	  {
+		  MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_ADD), test);
+		  this.chatClient.handleMessageFromClientUI(msg);
+	  }
+	  
+	  public ArrayList<ExecutedTest> GetAllExecutreTest()
+	  {
+		  MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_GET_ALL), "");
+		  this.chatClient.handleMessageFromClientUI(msg);
+		  waitForAnswer();
+		  return (ArrayList<ExecutedTest>)this.answer;
 	  }
 	  
 	public ChatClient getChatClient() 

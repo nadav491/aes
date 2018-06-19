@@ -72,16 +72,16 @@ public class StudentController {
 	{
 		signUp_test_list.put(val, new ArrayList<Test>());
 		checkedTests.put(val, new ArrayList<Test>());
+		closestage.add(new Stage());
 		val++;
-		Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
 		primaryStage=new Stage();
 		test_list=new ArrayList<Test>();
 	}
-	public void signUp(String Owner ,int c)
+	public void signUp(String Owner ,int c,Client client)
 	{
 		
 		Owner_name[c]=Owner;
-		Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
+		
 		
 		 BorderPane root = new BorderPane();
 		    Scene scene = new Scene(root, 400, 250, Color.WHITE);
@@ -112,18 +112,18 @@ public class StudentController {
 		        .observableArrayList();
 		    ArrayList<Test> rem=new ArrayList<Test>();
 		    int sign=0;
-		    for(int i=0;i<Main.ExecuteList.size();i++)
+		    for(int i=0;i<client.GetAllExecutreTest().size();i++)
 		    {
 		    	for(int j=0;j<signUp_test_list.get(c).size();j++)
 		    	{
-		    		if(Main.ExecuteList.get(i).getTest().getCode().equals(this.signUp_test_list.get(c).get(j).getCode()) )
+		    		if(client.GetAllExecutreTest().get(i).getTest().getCode().equals(this.signUp_test_list.get(c).get(j).getCode()) )
 		    			{
 		    			    sign++;
 		    			}
 		    		
 		    	}
 		    	if(sign==0) {
-		    		if(Main.ExecuteList.get(i).getSign()==0)rem.add(Main.ExecuteList.get(i).getTest());
+		    		if(client.GetAllExecutreTest().get(i).getSign()==0)rem.add(client.GetAllExecutreTest().get(i).getTest());
 		    	}
 		    	sign=0;
 		    }
@@ -208,18 +208,15 @@ public class StudentController {
 					    	   int index;
 					    	   for(int i=0;i<selected.size();i++)
 					    	   {
-					    		   for(int j=0;j<Main.ExecuteList.size();j++)
+					    		   for(int j=0;j<client.GetAllExecutreTest().size();j++)
 					    		   {
-					    			   if(!Main.ExecuteList.get(j).getSignUpList().contains(Owner_name[c])){
-					    			   if(selected.get(i).equals(Main.ExecuteList.get(j).getTest().getCode())) {
-					    				   Main.ExecuteList.get(j).getSignUpList().add(Owner_name[c]);
-					    				   for(int d=0;d< Main.ExecuteList.get(j).getSignUpList().size();d++)
-					    				   {
-					    					   System.out.println( Main.ExecuteList.get(j).getSignUpList());
-					    				   }
-					    				   Main.ExecuteList.get(j).setStudentNumber(1);
-					    				   Main.ExecuteList.get(j).getTest().setCode(Main.ExecuteList.get(j).getExe_code());
-					    				   signUp_test_list.get(c).add(Main.ExecuteList.get(j).getTest());
+					    			   if(!client.GetAllExecutreTest().get(j).getSignUpList().contains(Owner_name[c])){
+					    			   if(selected.get(i).equals(client.GetAllExecutreTest().get(j).getTest().getCode())) {
+					    				   client.GetAllExecutreTest().get(j).getSignUpList().add(Owner_name[c]);
+					    				   
+					    				   client.GetAllExecutreTest().get(j).setStudentNumber(1);
+					    				   client.GetAllExecutreTest().get(j).getTest().setCode(client.GetAllExecutreTest().get(j).getExe_code());
+					    				   signUp_test_list.get(c).add(client.GetAllExecutreTest().get(j).getTest());
 					    				   break;
 					    			   }
 					    			   }
@@ -262,7 +259,7 @@ public class StudentController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	public void loadTestChoiceWindow(int c)
+	public void loadTestChoiceWindow(int c, Client client)
 	{
 		
 		primaryStage=new Stage();
@@ -407,9 +404,11 @@ public class StudentController {
 									  {
 								    	   if(F1.getText().equals(signUp_test_list.get(c).get(idx).getCode()))
 								    	   {
-								    		        Main.ExecuteList.get(idx).setrSign(Main.ExecuteList.get(idx).getrSign()+1);
+								    		        client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()+1);
 								    		        BorderPane window=new BorderPane();
-											        final studentTest sav1=new studentTest(Owner_name[c],signUp_test_list.get(c).get(idx),0,null,signUp_test_list.get(c).get(idx).getTime(),signUp_test_list.get(c).get(idx).getOwner());
+											        final studentTest sav1=new studentTest(Owner_name[c],client.GetAllExecutreTest().get(idx).getTest(),0,new ArrayList<String>(),client.GetAllExecutreTest().get(idx).getTest().getTime(),
+											        		client.GetAllExecutreTest().get(idx).getTest().getOwner());
+											        System.out.println(client.GetAllExecutreTest().get(idx).getTest());
   										    	    ScrollPane pane=new ScrollPane();
 											      	GridPane Text_edit=new GridPane();
 											      	Text_edit.setHgap(10);
@@ -490,14 +489,14 @@ public class StudentController {
 																		    	   signUp_test_list.get(c).remove(idx);
 																		    	  
 										
-																		    	   Main.ExecuteList.get(idx).setFInishedNum(Main.ExecuteList.get(idx).getFInishedNum()+1);
-																		    	   Main.ExecuteList.get(idx).setrSign(-1);
-																		    	   Main.ExecuteList.get(idx).setSign(1);
+																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
+																		    	   client.GetAllExecutreTest().get(idx).setrSign(-1);
+																		    	   client.GetAllExecutreTest().get(idx).setSign(1);
 																		    	   int k=0;
 																		    	   for(int i=0;i<Main.TController.length;i++)
 																		    	   {
 																		    		   
-																		    		   if(Main.TController[i].Owner_name[i].equals(Main.ExecuteList.get(idx).getexecuter()))
+																		    		   if(Main.TController[i].Owner_name[i].equals(client.GetAllExecutreTest().get(idx).getexecuter()))
 																		    	       {
 																		    			   k=i;
 																		    			  
@@ -717,20 +716,20 @@ public class StudentController {
 																		    	   }
 																		    	   
 																		    	  
-																		    	   Main.ExecuteList.get(idx).setFInishedNum(Main.ExecuteList.get(idx).getFInishedNum()+1);
-																		    	   Main.ExecuteList.get(idx).setrSign(Main.ExecuteList.get(idx).getrSign()-1);
-																		    	   if(Main.ExecuteList.get(idx).getrSign()==0)
+																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
+																		    	   client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()-1);
+																		    	   if(client.GetAllExecutreTest().get(idx).getrSign()==0)
 																		    	   {
-																		    		   Main.ExecuteList.get(idx).setSign(1);
-																		    		   Main.ExecuteList.get(idx).setrSign(-1);
-																		    		   for(int i=0;i<Main.ExecuteList.get(idx).getSignUpList().size();i++)
+																		    		   client.GetAllExecutreTest().get(idx).setSign(1);
+																		    		   client.GetAllExecutreTest().get(idx).setrSign(-1);
+																		    		   for(int i=0;i<client.GetAllExecutreTest().get(idx).getSignUpList().size();i++)
 																		    		   {
 																		    			   for(int p=0;p<signUp_test_list.size();p++)
 																		    			   {
 																		    				   for(int u=0;u<signUp_test_list.get(p).size();u++)
 																		    				   {
 																		    					   if(signUp_test_list.get(p).get(u).getCode().
-																		    							   equals(Main.ExecuteList.get(idx).getTest().getCode()))
+																		    							   equals(client.GetAllExecutreTest().get(idx).getTest().getCode()))
 																		    					   {
 																		    						   signUp_test_list.get(p).remove(u);
 																		    						   break;
@@ -742,22 +741,22 @@ public class StudentController {
 																		    	   int k=0;
 																		    	   for(int i=0;i<Main.TController.length;i++)
 																		    	   {
-																		    		   if(Main.TController[i].Owner_name[i].equals(Main.ExecuteList.get(idx).getexecuter()))
+																		    		   if(Main.TController[i].Owner_name[i].equals(client.GetAllExecutreTest().get(idx).getexecuter()))
 																		    	       {
 																		    			   k=i;
 																		    			  
 																		    	       }
 																		    	   }
 																		    	   int sign1=0;
-																		    	   int q=Main.ExecuteList.get(idx).gradelog.size();
-																		    	   Main.ExecuteList.get(idx).gradelog.put(Main.ExecuteList.get(idx).gradelog.size(), sav1.getAnswers());
-																		    	   System.out.println(Main.ExecuteList.get(idx).gradelog);
-																		    	   for(int f=0;f<Main.ExecuteList.get(idx).gradelog.size();f++)
+																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
+																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
+																		    	   
+																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).gradelog.size();f++)
 																		    	   {
 																		    		   
-																		    		   for(int s=0;s<Main.ExecuteList.get(idx).getTest().getQuestions().size();s++)
+																		    		   for(int s=0;s<client.GetAllExecutreTest().get(idx).getTest().getQuestions().size();s++)
 																		    		   {
-																		    			   if(sav1.getAnswers().get(s)==Main.ExecuteList.get(idx).gradelog.get(f).get(s))
+																		    			   if(sav1.getAnswers().get(s)==client.GetAllExecutreTest().get(idx).gradelog.get(f).get(s))
 																		    			   {
 																		    				   sign1++;
 																		    			   }
@@ -842,20 +841,20 @@ public class StudentController {
 																		    	   }
 																		    	  
 																		 
-																		    	   Main.ExecuteList.get(idx).setFInishedNum(Main.ExecuteList.get(idx).getFInishedNum()+1);
-																		    	   Main.ExecuteList.get(idx).setrSign(Main.ExecuteList.get(idx).getrSign()-1);
-																		    	   if(Main.ExecuteList.get(idx).getrSign()==0)
+																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
+																		    	   client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()-1);
+																		    	   if(client.GetAllExecutreTest().get(idx).getrSign()==0)
 																		    	   {
-																		    		   Main.ExecuteList.get(idx).setSign(1);
-																		    		   Main.ExecuteList.get(idx).setrSign(-1);
-																		    		   for(int i=0;i<Main.ExecuteList.get(idx).getSignUpList().size();i++)
+																		    		   client.GetAllExecutreTest().get(idx).setSign(1);
+																		    		   client.GetAllExecutreTest().get(idx).setrSign(-1);
+																		    		   for(int i=0;i<client.GetAllExecutreTest().get(idx).getSignUpList().size();i++)
 																		    		   {
 																		    			   for(int p=0;p<signUp_test_list.size();p++)
 																		    			   {
 																		    				   for(int u=0;u<signUp_test_list.get(p).size();u++)
 																		    				   {
 																		    					   if(signUp_test_list.get(p).get(u).getCode().
-																		    							   equals(Main.ExecuteList.get(idx).getTest().getCode()))
+																		    							   equals(client.GetAllExecutreTest().get(idx).getTest().getCode()))
 																		    					   {
 																		    						   signUp_test_list.get(p).remove(u);
 																		    						   break;
@@ -867,22 +866,22 @@ public class StudentController {
 																		    	   int k=0;
 																		    	   for(int i=0;i<Main.TController.length;i++)
 																		    	   {
-																		    		   if(Main.TController[i].Owner_name[i].equals(Main.ExecuteList.get(idx).getexecuter()))
+																		    		   if(Main.TController[i].Owner_name[i].equals(client.GetAllExecutreTest().get(idx).getexecuter()))
 																		    	       {
 																		    			   k=i;
 																		    			  
 																		    	       }
 																		    	   }
 																		    	   int sign1=0;
-																		    	   int q=Main.ExecuteList.get(idx).gradelog.size();
-																		    	   Main.ExecuteList.get(idx).gradelog.put(Main.ExecuteList.get(idx).gradelog.size(), sav1.getAnswers());
-																		    	   System.out.println(Main.ExecuteList.get(idx).gradelog);
-																		    	   for(int f=0;f<Main.ExecuteList.get(idx).gradelog.size();f++)
+																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
+																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
+																		    	   System.out.println(client.GetAllExecutreTest().get(idx).gradelog);
+																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).gradelog.size();f++)
 																		    	   {
 					
-																		    		   for(int s=0;s<Main.ExecuteList.get(idx).getTest().getQuestions().size();s++)
+																		    		   for(int s=0;s<client.GetAllExecutreTest().get(idx).getTest().getQuestions().size();s++)
 																		    		   {
-																		    			   if(sav1.getAnswers().get(s)==Main.ExecuteList.get(idx).gradelog.get(f).get(s))
+																		    			   if(sav1.getAnswers().get(s)==client.GetAllExecutreTest().get(idx).gradelog.get(f).get(s))
 																		    			   {
 																		    				   sign1++;
 																		    			   }

@@ -552,6 +552,11 @@ public class SampleController {
     	Owner_name[c]=Owner;
     	primaryStage=new Stage();
     	test_list=client.getAllTests();
+    	for(int i=test_list.size()-1;i>=0;i--)
+    	{
+    		if(!test_list.get(i).getOwner().equals(Owner))
+    			test_list.remove(i);
+    	}
 		SplitPane root = new SplitPane();
 		Scroll=new ScrollPane();
 		Scroll=addTestScrollPane();
@@ -561,12 +566,14 @@ public class SampleController {
 		       @Override
 		       public void handle(ActionEvent e)
 			  {
+		    	   
 		    	   if(Question_select!="0")
 		    	   {
 		    		   for(int i=0;i<test_list.size();i++)
 		    		   {
 		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
+		    		   System.out.println(idx_C);
 		    		   view_test(test_list.get(idx_C));
 		           }
 			  }
@@ -983,6 +990,16 @@ public class SampleController {
                      		        	    	gridpane.add(matrix[i], 1, j);
                      		        	    	j++;
                      		        	    }
+                     		        	   TextArea generalS=new TextArea();
+                     		        	    generalS.setPrefSize(30, 1);
+                     		        	    generalS.setPromptText("you may eneter general instructions for students here");
+                     		        	    gridpane.add(generalS, 0, j);
+                     		        	    j++;
+                     		        	   TextArea generalT=new TextArea();
+                  		        	       generalT.setPrefSize(30, 1);
+                  		        	       generalT.setPromptText("you may eneter general instructions for teachers here");
+                  		        	       gridpane.add(generalT, 0, j);
+                  		        	       j++;
                      		        	    Button B1=new Button("Cancel");
                      		        	    B1.setOnAction(new EventHandler<ActionEvent>()
                                 	        {
@@ -1049,10 +1066,13 @@ public class SampleController {
                                     		    		   j++;
                                 		    		   }
                                 		    	   }
+                                		    	   
                                 		    	   if(j==1+test_add.getQuestions().size())
                                 		    	   {
                                 		    		  if(sum==100) {
-                                 		    		   test_list.add(test_add);
+                                		    		   test_add.setCommentsForStudent(generalS.getText());
+                                		    		   test_add.setCommentsForTeacher(generalT.getText());
+                                 		    		   client.createTest(test_add);
                                 		    		   primaryStage.close();
                                 		    		   T_print(Owner_name[c],c,client);
                                 		    		   }
@@ -1121,6 +1141,16 @@ public class SampleController {
                    		        	    	gridpane.add(matrix[i][2], 1, j);
                    		        	    	j++;
                    		        	    }
+                   		        	    TextArea generalS=new TextArea();
+                   		        	    generalS.setPrefSize(30, 1);
+                   		        	    generalS.setPromptText("you may eneter general instructions for students here");
+                   		        	    gridpane.add(generalS, 0, j);
+                   		        	    j++;
+                   		        	 TextArea generalT=new TextArea();
+                		        	    generalT.setPrefSize(30, 1);
+                		        	    generalT.setPromptText("you may eneter general instructions for teachers here");
+                		        	    gridpane.add(generalT, 0, j);
+                		        	    j++;
                    		        	    Button B1=new Button("Cancel");
                    		        	    B1.setOnAction(new EventHandler<ActionEvent>()
                               	        {
@@ -1203,7 +1233,10 @@ public class SampleController {
                               		    	   {
                               		    		   if(sum==100)
                               		    		   {
-                              		    			 test_list.add(test_add);
+                              		    			   
+                              		    			 test_add.setCommentsForStudent(generalS.getText());
+                              		    		   test_add.setCommentsForTeacher(generalT.getText());
+                              		    			   client.createTest(test_add);
                                 		    		   primaryStage.close();
                                 		    		   T_print(Owner_name[c],c,client);
                               		    		   }
@@ -1246,48 +1279,31 @@ public class SampleController {
     public void modify_test(Test Chosen,int c,Client client)
     {
        Test Update=new Test();
+       
  	   Q_list=client.getAllQuestion();
- 	   for(int i=0;i<Q_list.size();i++)
- 	   {
- 		   for(int j=0;j<Q_list.size();j++)
- 		   {
- 			   if(Integer.parseInt(Q_list.get(i).getCode())<Integer.parseInt(Q_list.get(j).getCode()))
- 			   {
- 				   Question save=Q_list.get(i);
- 				   Q_list.set(i,Q_list.get(j));
- 				   Q_list.set(j, save);
- 			   }
- 		   }
- 	   }
- 	  for(int i=0;i<Chosen.getQuestions().size();i++)
-	   {
-		   for(int j=0;j<Chosen.getQuestions().size();j++)
-		   {
-			   if(Integer.parseInt(Chosen.getQuestions().get(i).getCode())<Integer.parseInt(Chosen.getQuestions().get(j).getCode()))
-			   {
-				   Question save=Chosen.getQuestions().get(i);
-				   Chosen.getQuestions().set(i,Chosen.getQuestions().get(j));
-				   Chosen.getQuestions().set(j, save);
-			   }
-		   }
-	   }
+ 	  
+ 	  
  	  ArrayList<Question> rem1=new ArrayList<Question>();
+ 	  for(int h=0;h<Q_list.size();h++) {
  	   for(int i=Chosen.getQuestions().size()-1;i>=0;i--)
  	   {
- 		   if(Q_list.get(i).getCode().equals(Chosen.getQuestions().get(i).getCode()))
+ 		   if(Q_list.get(h).getCode().equals(Chosen.getQuestions().get(i).getCode()))
  			   {
  			   }
  		   else
  		   {
- 			   rem1.add(Q_list.get(i));
+ 			   rem1.add(Q_list.get(h));
  		   }
  	   }
+ 	  }
+ 	  
  	   ArrayList<Question> rem2=new ArrayList<Question>();
  	   for(int i=0;i<rem1.size();i++)
  	   {
  		   if((rem1.get(i).getCode().charAt(0)+rem1.get(i).getCode().charAt(1)+"").equals
  				   (Chosen.getCode().charAt(0)+Chosen.getCode().charAt(1)+""))rem2.add(rem1.get(i));
  	   }
+ 	  
  	   BorderPane root = new BorderPane();
  	    Scene scene = new Scene(root, 400, 250, Color.WHITE);
 
@@ -1410,10 +1426,12 @@ public class SampleController {
  		    		   {
  		    			   for(int j=0;j<Q_list.size();j++)
  		    			   {
- 		    				   if(Q_list.get(j).getCode().equals(candidates.get(i)))Update.getQuestions().add(Q_list.get(j));
+ 		    				   if(Q_list.get(j).getCode().equals(candidates.get(i)))
+ 		    					   Update.getQuestions().add(Q_list.get(j));
  		    			   }
  		    			   
  		    		   }
+ 		    		   System.out.println(Update.getQuestions());
  		    		   Update.setTime(Chosen.getTime());
         		    	    TextArea matrix[][]=new TextArea[Update.getQuestions().size()][9];
         		    	    ScrollPane pane=new ScrollPane();
@@ -1623,7 +1641,7 @@ public class SampleController {
                		    			   Update.setCode(Chosen.getCode());
                		    			   
                		    			   Update.setOwner(Owner_name[c]);
-               		    			 test_list.add(Update);
+               		    			   client.updateTest(Update);
                  		    		   primaryStage.close();
                  		    		   T_print(Owner_name[c],c,client);
                		    		   }
@@ -1670,18 +1688,15 @@ public class SampleController {
         // Horizontal scroll bar is only displayed when needed
 		return sp;
 	}
-   public void Run_test(String Owner,int c)
+    public void Run_test(String Owner,int c, Client client)
     {
-	   /*
+	   
     	Question_select="0";
     	primaryStage=new Stage();
     	BorderPane pane=new BorderPane();
-    	Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
-    	if(start==0) {
-    		test_list=new ArrayList<Test>();
+    	
+    		test_list=client.getAllTests();
     		
-    		start++;
-    		}
     	Scroll=new ScrollPane();
     	Scroll=addTestScrollPane();
     	pane.setLeft(Scroll);
@@ -1725,23 +1740,23 @@ public class SampleController {
 		    				    		   final ExecutedTest add=new ExecutedTest(test_list.get(idx_C),date, test_list.get(idx_C).getTime());
 		    				    		   add.setExe_code(F1.getText());
 		    				    		   add.getTest().getQuestionGrade().add("45");
-		    				    		   add.getTest()..add("55");
+		    				    		   add.getTest().getQuestionGrade().add("55");
 		    				    		   add.setexecuter(Owner_name[c]);
 		    				    		   System.out.println(add.getexecuter());
 		    				    		   add.setrSign(0);
 		    				    		   int check=0;
-		    				    		   for(int h=0;h< Main.ExecuteList.size();h++)
+		    				    		   for(int h=0;h< client.GetAllExecutreTest().size();h++)
 		    				    		   {
-		    				    			   if(Main.ExecuteList.get(h).getTest().getCode().equals(test_list.get(idx_C).getCode()))
+		    				    			   if(client.GetAllExecutreTest().get(h).getTest().getCode().equals(test_list.get(idx_C).getCode()))
 		    				    			   {
-		    				    				   if(Main.ExecuteList.get(h).getSign()==0)
+		    				    				   if(client.GetAllExecutreTest().get(h).getSign()==0)
 		    				    				   {
-		    				    					   if(Main.ExecuteList.get(h).getexecuter().equals(Owner_name[c]))check++;
+		    				    					   if(client.GetAllExecutreTest().get(h).getexecuter().equals(Owner_name[c]))check++;
 		    				    					   
 		    				    				   }
 		    				    			   }
 		    				    		   }
-		    				    		   if(check==0)Main.ExecuteList.add(add);
+		    				    		   if(check==0)client.AddToExecutreTest(add);
 		    				    		   SecondStage.close();
 		    				    	   }
 		    				    	   
@@ -1771,7 +1786,7 @@ public class SampleController {
 		  		    listView.setPrefSize(300, 250);
 		  		  for(int i=0;i<Main.ExecuteList.size();i++) {
 		  		    	if(Main.ExecuteList.get(i).getexecuter().equals(Main.TController[c].Owner_name[c]))
-		  		    			data.add(Main.ExecuteList.get(i).getTest().getcode());
+		  		    			data.add(Main.ExecuteList.get(i).getTest().getCode());
 		  		    }
 		  		    listView.setItems(data);
 		  		    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -1791,7 +1806,7 @@ public class SampleController {
 		  		    	   if(Question_select!="0") {
 		  		    	   for(int i=0;i<Main.ExecuteList.size();i++)
 		  		    	   {
-		  		    		   if(Main.ExecuteList.get(i).getTest().getcode().equals(Question_select))idx_C=i;
+		  		    		   if(Main.ExecuteList.get(i).getTest().getCode().equals(Question_select))idx_C=i;
 		  		    	   }
 		  		    	   Stage second1=new Stage();
 		  		    	   GridPane grid = new GridPane();
@@ -1818,7 +1833,7 @@ public class SampleController {
 							    			  Main.Controller[0].closestage.get(0).close();
 							    			  for(int j=0;j<StudentController.signUp_test_list.get(0).size();j++)
 							    			 {
-							    				 if(Main.ExecuteList.get(idx_C).getTest().getcode().equals(StudentController.signUp_test_list.get(0).get(j).getcode()))
+							    				 if(Main.ExecuteList.get(idx_C).getTest().getCode().equals(StudentController.signUp_test_list.get(0).get(j).getCode()))
 							    				 {
 							    					 StudentController.signUp_test_list.get(0).remove(j);
 							    				 }
@@ -1830,7 +1845,7 @@ public class SampleController {
 							    			  Main.Controller[1].closestage.get(1).close();
 							    			  for(int j=0;j<StudentController.signUp_test_list.get(1).size();j++)
 								    			 {
-								    				 if(Main.ExecuteList.get(idx_C).getTest().getcode().equals(StudentController.signUp_test_list.get(1).get(j).getcode()))
+								    				 if(Main.ExecuteList.get(idx_C).getTest().getCode().equals(StudentController.signUp_test_list.get(1).get(j).getCode()))
 								    				 {
 								    					 StudentController.signUp_test_list.get(1).remove(j);
 								    				 }
@@ -1838,7 +1853,7 @@ public class SampleController {
 							    		  }
 							    	   }
 							    	   Main.ExecuteList.remove(idx_C);
-							    	   Run_test(Owner,c);
+							    	   Run_test(Owner,c,client);
 								  }
 						    });
 					       Button B2=new Button("No");
@@ -1881,7 +1896,7 @@ public class SampleController {
 			  		    listView.setPrefSize(300, 250);
 			  		    for(int i=0;i<Main.ExecuteList.size();i++) {
 			  		    	if(Main.ExecuteList.get(i).getexecuter().equals(Main.TController[c].Owner_name[c]))
-			  		    			data.add(Main.ExecuteList.get(i).getTest().getcode());
+			  		    			data.add(Main.ExecuteList.get(i).getTest().getCode());
 			  		    }
 
 			  		    listView.setItems(data);
@@ -2026,7 +2041,7 @@ public class SampleController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
     	
-    	*/
+    	
     }
     public void CheckTests(int c)
     {
