@@ -1,7 +1,7 @@
 package Student;
 import java.io.Serializable;
 
-import Test.*;
+import test.*;
 public class Student  implements Serializable{
 
 	/**

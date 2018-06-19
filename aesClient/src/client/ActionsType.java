@@ -32,15 +32,16 @@ public class ActionsType implements Serializable
 		TEST_GET_BY_ID,//done
 		
 		/* TEST DATA ACTION NUMBERS */
-		TEST_GET_ALL_TEST_BY_OWNER,
-		TEST_GET_ALL_TESTS_BY_STUDENT,
+		
+		TEST_GET_ALL_TESTS_BY_STUDENT, //done
 		
 		
 		/* STUDENT TEST ACTION NUMBERS */
 		START_TEST,
-		TEST_APPROVE_GRADE,
-		TEST_ASK_FOR_TIME_EXCHANGE,
-		TEST_LOCK_TEST;
+		STUDENT_TEST_CREATE,
+		STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID,
+		STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID,
+		STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID;
 	}
 	
 	public static int getValue(ActionNumber action)
@@ -66,7 +67,10 @@ public class ActionsType implements Serializable
 		case TEST_GET_ALL: return 112;
 		case TEST_GET_BY_ID: return 113;	
 		
-		case START_TEST: return 120;
+		case STUDENT_TEST_CREATE: return 120;
+		case STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID: return 121;
+		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return 122;
+		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return 123;
 		}
 		return 0;
 	}
@@ -93,7 +97,10 @@ public class ActionsType implements Serializable
 		case 112: return ActionNumber.TEST_GET_ALL;
 		case 113: return ActionNumber.TEST_GET_BY_ID;
 		
-		case 120: return ActionNumber.START_TEST;
+		case 120: return ActionNumber.STUDENT_TEST_CREATE;
+		case 121: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID;
+		case 122: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID;
+		case 123: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID;
 		}
 		return null;
 	}

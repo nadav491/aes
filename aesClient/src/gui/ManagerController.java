@@ -36,7 +36,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import question.Question;
-import question.Test;
+import test.Test;
 
 
 public class ManagerController {
@@ -113,16 +113,16 @@ public class ManagerController {
     	for(int k=0;k<test_list.size();k++) {
     	Test Chosen=new Test();
     	Chosen=test_list.get(k);
-    	Label L1=new Label("Test: "+Chosen.getcode());
+    	Label L1=new Label("Test: "+Chosen.getCode());
     	Text_edit.add(L1, 0, j);
     	j++;
     	L1=new Label("Written by: "+Chosen.getOwner());
     	Text_edit.add(L1, 0, j);
     	j++;
-    	L1=new Label("Test duration: "+Chosen.getLength()+" minuts");
+    	L1=new Label("Test duration: "+Chosen.getTime()+" minuts");
     	Text_edit.add(L1, 0, j);
     	j++;
-    	for(int i=0;i<Chosen.getQuestionlist().size();i++)
+    	for(int i=0;i<Chosen.getQuestions().size();i++)
     	{
     		L1=new Label("Question"+(i+1)+":");
     		L1.setFont(Font.font( "", FontWeight.BOLD, 17));
@@ -131,36 +131,36 @@ public class ManagerController {
         	L1=new Label("Student instructions: ");
         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
         	Text_edit.add(L1, 0, j);
-        	L1=new Label(Chosen.getQuestionlist().get(i).getSInstruction());
+        	L1=new Label(Chosen.getQuestions().get(i).getSInstruction());
         	Text_edit.add(L1, 1, j);
         	j++;
         	L1=new Label("Teacher instructions: ");
         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
         	Text_edit.add(L1, 0, j);
-        	L1=new Label(Chosen.getQuestionlist().get(i).getTInstruction());
+        	L1=new Label(Chosen.getQuestions().get(i).getTInstruction());
         	Text_edit.add(L1, 1, j);
         	j++;
         	L1=new Label("Question: ");
         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label(Chosen.getQuestionlist().get(i).getBody());
+        	L1=new Label(Chosen.getQuestions().get(i).getBody());
         	Text_edit.add(L1, 0, j);
         	j=j+2;
         	L1=new Label("Answers: ");
         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label("1)"+Chosen.getQuestionlist().get(i).getAnswer1());
+        	L1=new Label("1)"+Chosen.getQuestions().get(i).getAnswer1());
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label("2)"+Chosen.getQuestionlist().get(i).getAnswer2());
+        	L1=new Label("2)"+Chosen.getQuestions().get(i).getAnswer2());
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label("3)"+Chosen.getQuestionlist().get(i).getAnswer3());
+        	L1=new Label("3)"+Chosen.getQuestions().get(i).getAnswer3());
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label("4)"+Chosen.getQuestionlist().get(i).getAnswer4());
+        	L1=new Label("4)"+Chosen.getQuestions().get(i).getAnswer4());
         	Text_edit.add(L1, 0, j);
         	j++;
         	j++;
@@ -223,7 +223,7 @@ public class ManagerController {
 								    			 if(Main.ExecuteList.get(i).getSign()==0)
 								    			 {
 								    				 TitledPane tp = new TitledPane();
-								    				 tp.setText(Main.ExecuteList.get(i).getTest().getcode());
+								    				 tp.setText(Main.ExecuteList.get(i).getTest().getCode());
 								    				 GridPane p=new GridPane();
 								    				 int avarage=0;
 								    				 for(int b=0;b<Main.ExecuteList.get(i).getGradeList().size();b++)
@@ -388,12 +388,12 @@ public class ManagerController {
 						    	 int j=0;
 						    	 for(int i=0;i<Main.ExecuteList.size();i++)
 						    	 {
-						    		 if((Main.ExecuteList.get(i).getTest().getcode().charAt(2)+""+Main.ExecuteList.get(i).getTest().getcode().charAt(3)).equals(Question_select))
+						    		 if((Main.ExecuteList.get(i).getTest().getCode().charAt(2)+""+Main.ExecuteList.get(i).getTest().getCode().charAt(3)).equals(Question_select))
 						    		 {
 						    			 if(Main.ExecuteList.get(i).getSign()==0)
 						    			 {
 						    				 TitledPane tp = new TitledPane();
-						    				 tp.setText(Main.ExecuteList.get(i).getTest().getcode());
+						    				 tp.setText(Main.ExecuteList.get(i).getTest().getCode());
 						    				 GridPane p=new GridPane();
 						    				 int avarage=0;
 						    				 for(int b=0;b<Main.ExecuteList.get(i).getGradeList().size();b++)
@@ -565,7 +565,7 @@ public class ManagerController {
 						    			 if(Main.ExecuteList.get(i).getSign()==0)
 						    			 {
 						    				 TitledPane tp = new TitledPane();
-						    				 tp.setText(Main.ExecuteList.get(i).getTest().getcode());
+						    				 tp.setText(Main.ExecuteList.get(i).getTest().getCode());
 						    				 GridPane p=new GridPane();
 						    				 int avarage=0;
 						    				 for(int b=0;b<Main.ExecuteList.get(i).getGradeList().size();b++)
@@ -724,7 +724,7 @@ public class ManagerController {
     public void handleTimeChangeRequest(int idx , String explenation , String time)
     {
     	GridPane grid=new GridPane();
-    	Label L1=new Label("Time change request for test: "+Main.ExecuteList.get(idx).getTest().getcode());
+    	Label L1=new Label("Time change request for test: "+Main.ExecuteList.get(idx).getTest().getCode());
     	grid.add(L1, 0, 0);
         L1=new Label("Reason: "+explenation);
     	grid.add(L1, 0, 1);
@@ -1003,7 +1003,7 @@ public class ManagerController {
 		    			 if(Main.ExecuteList.get(i).getSign()==0)
 		    			 {
 		    				 TitledPane tp = new TitledPane();
-		    				 tp.setText(Main.ExecuteList.get(i).getexecuter()+" "+Main.ExecuteList.get(i).getTest().getcode());
+		    				 tp.setText(Main.ExecuteList.get(i).getexecuter()+" "+Main.ExecuteList.get(i).getTest().getCode());
 		    				 GridPane p=new GridPane();
 		    				 int avarage=0;
 		    				 for(int b=0;b<Main.ExecuteList.get(i).getGradeList().size();b++)
@@ -1125,12 +1125,12 @@ public class ManagerController {
 			    	 {
 			    	 for(int i=0;i<Main.ExecuteList.size();i++)
 			    	 {
-			    		 if((Main.ExecuteList.get(i).getTest().getcode().charAt(2)+""+Main.ExecuteList.get(i).getTest().getcode().charAt(3)).equals(selected1.get(g)))
+			    		 if((Main.ExecuteList.get(i).getTest().getCode().charAt(2)+""+Main.ExecuteList.get(i).getTest().getCode().charAt(3)).equals(selected1.get(g)))
 			    		 {
 			    			 if(Main.ExecuteList.get(i).getSign()==0)
 			    			 {
 			    				 TitledPane tp = new TitledPane();
-			    				 tp.setText(selected.get(g)+" "+Main.ExecuteList.get(i).getTest().getcode());
+			    				 tp.setText(selected.get(g)+" "+Main.ExecuteList.get(i).getTest().getCode());
 			    				 GridPane p=new GridPane();
 			    				 int avarage=0;
 			    				 for(int b=0;b<Main.ExecuteList.get(i).getGradeList().size();b++)
@@ -1258,7 +1258,7 @@ public class ManagerController {
 					    			 if(Main.ExecuteList.get(i).getSign()==0)
 					    			 {
 					    				 TitledPane tp = new TitledPane();
-					    				 tp.setText(Main.ExecuteList.get(i).getSignUpList().get(k)+" "+Main.ExecuteList.get(i).getTest().getcode());
+					    				 tp.setText(Main.ExecuteList.get(i).getSignUpList().get(k)+" "+Main.ExecuteList.get(i).getTest().getCode());
 					    				 GridPane p=new GridPane();
 					    				 int avarage=0;
 					    				 for(int b=0;b<Main.ExecuteList.get(i).getGradeList().size();b++)

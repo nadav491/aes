@@ -12,24 +12,33 @@ public class testData implements Serializable{
 	
 	String date;
 	Time time;
-	int studentNumber;
 	int startedNumber;
 	int finishedNumber;
 	float avg;
 	float midean;
 	float distributionOfScore[];
 	
-	public testData(String date, Time time,int studentNumber, int startedNumber, int finishedNumber,float avg, float midean, float distributionOfScore[] )
+	public testData(String date, Time time, int startedNumber, int finishedNumber,float avg, float midean, float distributionOfScore[] )
 	{
 		super();
 		this.date = date;
 		this.time = time;
-		this.studentNumber = studentNumber;
 		this.startedNumber = startedNumber;
 		this.finishedNumber = finishedNumber;
 		this.avg = avg;
 		this.midean = midean;
 		this.distributionOfScore = distributionOfScore;
+	}
+	public testData(testData td)
+	{
+		super();
+		this.date = td.date;
+		this.time = td.time;
+		this.startedNumber = td.startedNumber;
+		this.finishedNumber = td.finishedNumber;
+		this.avg = td.avg;
+		this.midean = td.midean;
+		this.distributionOfScore = td.distributionOfScore;
 	}
 	public testData()
 	{
@@ -46,12 +55,6 @@ public class testData implements Serializable{
 	}
 	public void setTime(Time time) {
 		this.time = time;
-	}
-	public int getStudentNumber() {
-		return studentNumber;
-	}
-	public void setStudentNumber(int studentNumber) {
-		this.studentNumber = studentNumber;
 	}
 	public int getStartedNumber() {
 		return startedNumber;

@@ -47,7 +47,9 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import question.ExecutedTest;
-import question.Test;
+import test.Test;
+import test.studentTest;
+
 
 public class StudentController {
 	public final String Owner_name[]=new String[2];
@@ -74,25 +76,6 @@ public class StudentController {
 		Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
 		primaryStage=new Stage();
 		test_list=new ArrayList<Test>();
-		Test T1=new Test("1","204301","","120");
-		T1.getQuestionlist().addAll(client.getAllQuestion());
-		ArrayList<String> pointList=new ArrayList<String>();
-		pointList.add("50");
-		pointList.add("10");
-		pointList.add("10");
-		pointList.add("30");
-		T1.setPointsList(pointList);
-		T1.setExe_code("1234");
-		Test T2=new Test("1","204401","","160");
-		T2.getQuestionlist().addAll(client.getAllQuestion());
-		T2.getQuestionlist().remove(1);
-		pointList.add("50");
-		pointList.add("10");
-		pointList.add("40");
-		T2.setPointsList(pointList);
-		T2.setExe_code("1234");
-		test_list.add(T1);
-		test_list.add(T2);
 	}
 	public void signUp(String Owner ,int c)
 	{
@@ -133,7 +116,7 @@ public class StudentController {
 		    {
 		    	for(int j=0;j<signUp_test_list.get(c).size();j++)
 		    	{
-		    		if(Main.ExecuteList.get(i).getTest().getcode().equals(this.signUp_test_list.get(c).get(j).getcode()) )
+		    		if(Main.ExecuteList.get(i).getTest().getCode().equals(this.signUp_test_list.get(c).get(j).getCode()) )
 		    			{
 		    			    sign++;
 		    			}
@@ -146,7 +129,7 @@ public class StudentController {
 		    }
 		    for(int i=0;i<rem.size();i++)
 		    {
-		    	 candidates.add(rem.get(i).getcode());
+		    	 candidates.add(rem.get(i).getCode());
 		    }
 		    final ListView<String> candidatesListView = new ListView<>(candidates);
 		    gridpane.add(candidatesListView, 0, 1);
@@ -228,14 +211,14 @@ public class StudentController {
 					    		   for(int j=0;j<Main.ExecuteList.size();j++)
 					    		   {
 					    			   if(!Main.ExecuteList.get(j).getSignUpList().contains(Owner_name[c])){
-					    			   if(selected.get(i).equals(Main.ExecuteList.get(j).getTest().getcode())) {
+					    			   if(selected.get(i).equals(Main.ExecuteList.get(j).getTest().getCode())) {
 					    				   Main.ExecuteList.get(j).getSignUpList().add(Owner_name[c]);
 					    				   for(int d=0;d< Main.ExecuteList.get(j).getSignUpList().size();d++)
 					    				   {
 					    					   System.out.println( Main.ExecuteList.get(j).getSignUpList());
 					    				   }
 					    				   Main.ExecuteList.get(j).setStudentNumber(1);
-					    				   Main.ExecuteList.get(j).getTest().setExe_code(Main.ExecuteList.get(j).getExe_code());
+					    				   Main.ExecuteList.get(j).getTest().setCode(Main.ExecuteList.get(j).getExe_code());
 					    				   signUp_test_list.get(c).add(Main.ExecuteList.get(j).getTest());
 					    				   break;
 					    			   }
@@ -264,7 +247,7 @@ public class StudentController {
 
 	    ListView<String> listView = new ListView<String>(data);
 	    listView.setPrefSize(300, 250);
-	    for(int i=0;i<signUp_test_list.get(c).size();i++)data.add(signUp_test_list.get(c).get(i).getcode());
+	    for(int i=0;i<signUp_test_list.get(c).size();i++)data.add(signUp_test_list.get(c).get(i).getCode());
 
 	    listView.setItems(data);
 	    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -289,7 +272,7 @@ public class StudentController {
 
 	    ListView<String> listView = new ListView<String>(data);
 	    listView.setPrefSize(300, 250);
-	    for(int i=0;i<signUp_test_list.get(c).size();i++)data.add(signUp_test_list.get(c).get(i).getcode());
+	    for(int i=0;i<signUp_test_list.get(c).size();i++)data.add(signUp_test_list.get(c).get(i).getCode());
 
 	    listView.setItems(data);
 	    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -325,7 +308,7 @@ public class StudentController {
 					    	   enter_pass.add(F1, 0, 0);
 					    	   for(int i=0;i<signUp_test_list.get(c).size();i++)
 						    	  {
-						    		  if(signUp_test_list.get(c).get(i).getcode().equals(Question_select))
+						    		  if(signUp_test_list.get(c).get(i).getCode().equals(Question_select))
 						    			  {
 						    			      idx=i;
 						    			  }
@@ -336,43 +319,43 @@ public class StudentController {
 								       @Override
 								       public void handle(ActionEvent e)
 									  {
-								    	   if(F1.getText().equals(signUp_test_list.get(c).get(idx).getExe_code()))
+								    	   if(F1.getText().equals(signUp_test_list.get(c).get(idx).getCode()))
 								    	   {
 								    		  File file = new File("C:\\Users\\tomer_000\\Desktop\\test.txt");
 								    		   BufferedWriter writer;
 											try {
 												writer = new BufferedWriter(new FileWriter(file, true));
-												writer.append("Test: "+signUp_test_list.get(c).get(idx).getcode());
+												writer.append("Test: "+signUp_test_list.get(c).get(idx).getCode());
 												writer.newLine();
 												writer.append("Written by: "+signUp_test_list.get(c).get(idx).getOwner());
 												writer.newLine();
-												writer.append("test duration: "+signUp_test_list.get(c).get(idx).getLength());
+												writer.append("test duration: "+signUp_test_list.get(c).get(idx).getTime());
 												writer.newLine();
 												writer.newLine();
-												for(int i=0;i<signUp_test_list.get(c).get(idx).getQuestionlist().size();i++)
+												for(int i=0;i<signUp_test_list.get(c).get(idx).getQuestions().size();i++)
 												{
 													writer.append("Question "+(i+1)+":");
 													writer.newLine();
-													writer.append("Question points: "+signUp_test_list.get(c).get(idx).getPointsList().get(i));
+													writer.append("Question points: "+signUp_test_list.get(c).get(idx).getQuestionGrade().get(i));
 													writer.newLine();
 													writer.newLine();
 													writer.append("question:");
 													writer.newLine();
-													writer.append(signUp_test_list.get(c).get(idx).getQuestionlist().get(i).getBody());
+													writer.append(signUp_test_list.get(c).get(idx).getQuestions().get(i).getBody());
 													writer.newLine();
 													writer.newLine();
-													writer.append("instructions: "+signUp_test_list.get(c).get(idx).getQuestionlist().get(i).getSInstruction());
+													writer.append("instructions: "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getSInstruction());
 													writer.newLine();
 													writer.newLine();
 													writer.append("Answers:");
 													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestionlist().get(i).getAnswer1());
+													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getAnswer1());
 													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestionlist().get(i).getAnswer2());
+													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getAnswer2());
 													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestionlist().get(i).getAnswer3());
+													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getAnswer3());
 													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestionlist().get(i).getAnswer4());
+													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getAnswer4());
 													writer.newLine();
 													writer.newLine();
 													writer.newLine();
@@ -411,7 +394,7 @@ public class StudentController {
 					    	   enter_pass.add(F1, 0, 0);
 					    	   for(int i=0;i<signUp_test_list.get(c).size();i++)
 						    	  {
-						    		  if(signUp_test_list.get(c).get(i).getcode().equals(Question_select))
+						    		  if(signUp_test_list.get(c).get(i).getCode().equals(Question_select))
 						    			  {
 						    			      idx=i;
 						    			  }
@@ -422,11 +405,11 @@ public class StudentController {
 								       @Override
 								       public void handle(ActionEvent e)
 									  {
-								    	   if(F1.getText().equals(signUp_test_list.get(c).get(idx).getExe_code()))
+								    	   if(F1.getText().equals(signUp_test_list.get(c).get(idx).getCode()))
 								    	   {
 								    		        Main.ExecuteList.get(idx).setrSign(Main.ExecuteList.get(idx).getrSign()+1);
 								    		        BorderPane window=new BorderPane();
-											        final Test sav1=new Test(signUp_test_list.get(c).get(idx));
+											        final studentTest sav1=new studentTest(Owner_name[c],signUp_test_list.get(c).get(idx),0,null,signUp_test_list.get(c).get(idx).getTime(),signUp_test_list.get(c).get(idx).getOwner());
   										    	    ScrollPane pane=new ScrollPane();
 											      	GridPane Text_edit=new GridPane();
 											      	Text_edit.setHgap(10);
@@ -435,7 +418,7 @@ public class StudentController {
 											      	TextArea ID=new TextArea();
 											      	TextArea pass=new TextArea();
 											      	HBox b=new HBox();
-											      	CheckBox select[][]=new CheckBox[sav1.getQuestionlist().size()][4];
+											      	CheckBox select[][]=new CheckBox[sav1.getTest().getQuestions().size()][4];
 											      	Button do1=new Button("start");
 											      	do1.setOnAction(new EventHandler<ActionEvent>()
 												    {
@@ -464,49 +447,49 @@ public class StudentController {
 													    			   pane.setVisible(true);
 													    			   b.setVisible(false);
 													    			     time1[c]=new Timeline(new KeyFrame(
-													    					   Duration.minutes(Integer.parseInt(sav1.getLength())),
+													    					   Duration.minutes(Integer.parseInt(sav1.getTime())),
 													    					   ae->{
 													    						   int j=0;
-																		    	   for(int i=0;i<sav1.getQuestionlist().size();i++)
+																		    	   for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 																		    	   {
 																		    		   if(select[i][0].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==1) {
-																		    				  sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==1) {
+																		    				  sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				  j++;
 																		    			   }
 																		    		   }
 																		    		    if(select[i][1].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==2) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==2) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    		   }
 																		    		    if(select[i][2].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==3) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==3) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    		   }
 																		    		   if(select[i][3].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==4) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==4) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    				   
 																		    		   }
 																		    		   if(j==0)
 																		    		   {
-																		    			   sav1.getAnswers().add(0);
+																		    			   sav1.getAnswers().add(0+"");
 																		    		   }
 																		    		   j=0;
 																		    	   }
 																		    	   signUp_test_list.get(c).remove(idx);
-																		    	   sav1.setName(Owner_name[c]);
-																		    	   sav1.setC(c);
+																		    	  
+										
 																		    	   Main.ExecuteList.get(idx).setFInishedNum(Main.ExecuteList.get(idx).getFInishedNum()+1);
 																		    	   Main.ExecuteList.get(idx).setrSign(-1);
 																		    	   Main.ExecuteList.get(idx).setSign(1);
@@ -520,7 +503,7 @@ public class StudentController {
 																		    			  
 																		    	       }
 																		    	   }
-																		    	   SampleController.solved_Tests.get(k).add(sav1);
+																		    	   SampleController.solved_Tests.get(k).add(sav1.getTest());
 													    						   closestage.get(c).close();
 													    					   }));
 													    			   time1[c].play();
@@ -537,16 +520,16 @@ public class StudentController {
 											      	pass.setPrefColumnCount(20);
 											      	pass.setPrefRowCount(1);
 											    	b.getChildren().addAll(ID,pass,do1);
-											      	Label L1=new Label("Test: "+sav1.getcode());
+											      	Label L1=new Label("Test: "+sav1.getTest().getCode());
 											      	Text_edit.add(L1, 0, 0);
-											      	L1=new Label("Written by: "+sav1.getOwner());
+											      	L1=new Label("Written by: "+sav1.getTest().getOwner());
 											      	Text_edit.add(L1, 0, 1);
-											      	L1=new Label("Test duration: "+sav1.getLength()+" minuts");
+											      	L1=new Label("Test duration: "+sav1.getTest().getTime()+" minuts");
 											      	Text_edit.add(L1, 0, 2);
 											      	int j=3;
 											      	int k ,l;
 											      	
-											      	for(int i=0;i<sav1.getQuestionlist().size();i++)
+											      	for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 											      	{
 											      		select[i][0]=new CheckBox();
 											      		select[i][1]=new CheckBox();
@@ -554,7 +537,7 @@ public class StudentController {
 											      		select[i][3]=new CheckBox();
 											      	}
 											      	
-											      	for(int i=0;i<sav1.getQuestionlist().size();i++)
+											      	for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 											      	{
 											      		final int val=i;
 											      		select[i][0].setOnAction(new EventHandler<ActionEvent>()
@@ -610,26 +593,26 @@ public class StudentController {
 											    				  }
 											    		});
 											      	}
-											      	for(int i=0;i<sav1.getQuestionlist().size();i++)
+											      	for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 											      	{
 											      		L1=new Label("Question"+(i+1)+":");
 											      		L1.setFont(Font.font( "", FontWeight.BOLD, 17));
 											          	Text_edit.add(L1, 0, j);
 											          	j++;
-											          	L1=new Label("Question points:"+sav1.getPointsList().get(i));
+											          	L1=new Label("Question points:"+sav1.getTest().getQuestionGrade().get(i));
 											          	Text_edit.add(L1, 0, j);
 											          	j=j+2;
 											          	L1=new Label("Instructions: ");
 											          	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
 											          	Text_edit.add(L1, 0, j);
-											          	L1=new Label(sav1.getQuestionlist().get(i).getSInstruction());
+											          	L1=new Label(sav1.getTest().getQuestions().get(i).getSInstruction());
 											          	Text_edit.add(L1, 1, j);
 											          	j++;
 											          	L1=new Label("Question: ");
 											          	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
 											          	Text_edit.add(L1, 0, j);
 											          	j++;
-											          	L1=new Label(sav1.getQuestionlist().get(i).getBody());
+											          	L1=new Label(sav1.getTest().getQuestions().get(i).getBody());
 											          	Text_edit.add(L1, 0, j);
 											          	j=j+2;
 											          	L1=new Label("Answers: ");
@@ -637,32 +620,32 @@ public class StudentController {
 											          	Text_edit.add(L1, 0, j);
 											          	j++;
 														 
-											          	L1=new Label(sav1.getQuestionlist().get(i).getAnswer1());
+											          	L1=new Label(sav1.getTest().getQuestions().get(i).getAnswer1());
 											          	HBox box1=new HBox();
 											          	box1.getChildren().addAll(select[i][0],L1);
 											          	Text_edit.add(box1, 0, j);
 											          	j++;
 											          	
-											          	L1=new Label(sav1.getQuestionlist().get(i).getAnswer2());
+											          	L1=new Label(sav1.getTest().getQuestions().get(i).getAnswer2());
 											          	box1=new HBox();
 											          	box1.getChildren().addAll(select[i][1],L1);
 											          	Text_edit.add(box1, 0, j);
 											          	j++;
 											          	
-											          	L1=new Label(sav1.getQuestionlist().get(i).getAnswer3());
+											          	L1=new Label(sav1.getTest().getQuestions().get(i).getAnswer3());
 											          	box1=new HBox();
 											          	box1.getChildren().addAll(select[i][2],L1);
 											          	Text_edit.add(box1, 0, j);
 											          	j++;
 											          	
-											          	L1=new Label(sav1.getQuestionlist().get(i).getAnswer4());
+											          	L1=new Label(sav1.getTest().getQuestions().get(i).getAnswer4());
 											          	box1=new HBox();
 											          	box1.getChildren().addAll(select[i][3],L1);
 											          	Text_edit.add(box1, 0, j);
 											          	j++;
 											         
 											      	}
-											        sav1.setAnswers();
+											        sav1.setAnswers(new ArrayList<String>());
 											     	Button Submit=new Button("Submit");
 										          	Submit.setOnAction(new EventHandler<ActionEvent>()
 										     		{
@@ -670,14 +653,14 @@ public class StudentController {
 										     			  public void handle(ActionEvent e)
 										     				  {
 										     				      int check=0;
-										     				      for(int i=0;i<sav1.getQuestionlist().size();i++)
+										     				      for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 										     				      {
 										     				    	  if(select[i][0].selectedProperty().get()==true) check++;
 										     				    	  if(select[i][1].selectedProperty().get()==true) check++;
 										     				    	  if(select[i][2].selectedProperty().get()==true) check++;
 										     				    	  if(select[i][3].selectedProperty().get()==true) check++;
 										     				      }
-										     				      if(check<sav1.getQuestionlist().size())
+										     				      if(check<sav1.getTest().getQuestions().size())
 										     				      {
 										     				    	  Stage SecondStage=new Stage();
 															    	   GridPane grid = new GridPane();
@@ -695,46 +678,45 @@ public class StudentController {
 																		    	   SecondStage.close();
 																		    	   closestage.get(c).close();
 																		    	   int j=0;
-																		    	   for(int i=0;i<sav1.getQuestionlist().size();i++)
+																		    	   for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 																		    	   {
 																		    		   if(select[i][0].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==1) {
-																		    				  sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==1) {
+																		    				  sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				  j++;
 																		    			   }
 																		    		   }
 																		    		    if(select[i][1].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==2) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==2) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    		   }
 																		    		    if(select[i][2].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==3) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==3) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    		   }
 																		    		   if(select[i][3].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==4) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==4) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    				   
 																		    		   }
 																		    		   if(j==0)
 																		    		   {
-																		    			   sav1.getAnswers().add(0);
+																		    			   sav1.getAnswers().add(0+"");
 																		    		   }
 																		    		   j=0;
 																		    	   }
 																		    	   
-																		    	   sav1.setName(Owner_name[c]);
-																		    	   sav1.setC(c);
+																		    	  
 																		    	   Main.ExecuteList.get(idx).setFInishedNum(Main.ExecuteList.get(idx).getFInishedNum()+1);
 																		    	   Main.ExecuteList.get(idx).setrSign(Main.ExecuteList.get(idx).getrSign()-1);
 																		    	   if(Main.ExecuteList.get(idx).getrSign()==0)
@@ -747,8 +729,8 @@ public class StudentController {
 																		    			   {
 																		    				   for(int u=0;u<signUp_test_list.get(p).size();u++)
 																		    				   {
-																		    					   if(signUp_test_list.get(p).get(u).getcode().
-																		    							   equals(Main.ExecuteList.get(idx).getTest().getcode()))
+																		    					   if(signUp_test_list.get(p).get(u).getCode().
+																		    							   equals(Main.ExecuteList.get(idx).getTest().getCode()))
 																		    					   {
 																		    						   signUp_test_list.get(p).remove(u);
 																		    						   break;
@@ -773,7 +755,7 @@ public class StudentController {
 																		    	   for(int f=0;f<Main.ExecuteList.get(idx).gradelog.size();f++)
 																		    	   {
 																		    		   
-																		    		   for(int s=0;s<Main.ExecuteList.get(idx).getTest().getQuestionlist().size();s++)
+																		    		   for(int s=0;s<Main.ExecuteList.get(idx).getTest().getQuestions().size();s++)
 																		    		   {
 																		    			   if(sav1.getAnswers().get(s)==Main.ExecuteList.get(idx).gradelog.get(f).get(s))
 																		    			   {
@@ -781,8 +763,8 @@ public class StudentController {
 																		    			   }
 																		    		   }																		    		   
 																		    	   }
-																		    	   if(sign1>0)sav1.setcop(1);
-																		    	   SampleController.solved_Tests.get(k).add(sav1);
+																		    	   //if(sign1>0)sav1.setcop(1);
+																		    	   SampleController.solved_Tests.get(k).add(sav1.getTest());
 																		    	   System.out.println(SampleController.solved_Tests.get(k));
 																		    	  
 																			  }
@@ -821,45 +803,44 @@ public class StudentController {
 																		    	   SecondStage.close();
 																		    	   closestage.get(c).close();
 																		    	   int j=0;
-																		    	   for(int i=0;i<sav1.getQuestionlist().size();i++)
+																		    	   for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 																		    	   {
 																		    		   if(select[i][0].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==1) {
-																		    				  sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==1) {
+																		    				  sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				  j++;
 																		    			   }
 																		    		   }
 																		    		    if(select[i][1].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==2) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==2) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    		   }
 																		    		    if(select[i][2].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==3) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==3) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    		   }
 																		    		   if(select[i][3].selectedProperty().get()==true)
 																		    		   {
-																		    			   if(sav1.getQuestionlist().get(i).getCorrect()==4) {
-																		    				   sav1.getAnswers().add(Integer.parseInt(sav1.getPointsList().get(i)));
+																		    			   if(sav1.getTest().getQuestions().get(i).getCorrect()==4) {
+																		    				   sav1.getAnswers().add(sav1.getTest().getQuestionGrade().get(i));
 																		    				   j++;
 																		    			   }
 																		    				   
 																		    		   }
 																		    		   if(j==0)
 																		    		   {
-																		    			   sav1.getAnswers().add(0);
+																		    			   sav1.getAnswers().add(0+"");
 																		    		   }
 																		    		   j=0;
 																		    	   }
-																		    	   sav1.setName(Owner_name[c]);
-																		    	   sav1.setC(c);
+																		    	  
 																		 
 																		    	   Main.ExecuteList.get(idx).setFInishedNum(Main.ExecuteList.get(idx).getFInishedNum()+1);
 																		    	   Main.ExecuteList.get(idx).setrSign(Main.ExecuteList.get(idx).getrSign()-1);
@@ -873,8 +854,8 @@ public class StudentController {
 																		    			   {
 																		    				   for(int u=0;u<signUp_test_list.get(p).size();u++)
 																		    				   {
-																		    					   if(signUp_test_list.get(p).get(u).getcode().
-																		    							   equals(Main.ExecuteList.get(idx).getTest().getcode()))
+																		    					   if(signUp_test_list.get(p).get(u).getCode().
+																		    							   equals(Main.ExecuteList.get(idx).getTest().getCode()))
 																		    					   {
 																		    						   signUp_test_list.get(p).remove(u);
 																		    						   break;
@@ -899,7 +880,7 @@ public class StudentController {
 																		    	   for(int f=0;f<Main.ExecuteList.get(idx).gradelog.size();f++)
 																		    	   {
 					
-																		    		   for(int s=0;s<Main.ExecuteList.get(idx).getTest().getQuestionlist().size();s++)
+																		    		   for(int s=0;s<Main.ExecuteList.get(idx).getTest().getQuestions().size();s++)
 																		    		   {
 																		    			   if(sav1.getAnswers().get(s)==Main.ExecuteList.get(idx).gradelog.get(f).get(s))
 																		    			   {
@@ -908,8 +889,8 @@ public class StudentController {
 																		    		   
 																		    		   }
 																		    	   }
-																		    	   if(sign1>0)sav1.setcop(1);
-																		    	   SampleController.solved_Tests.get(k).add(sav1);
+																		    	   //if(sign1>0)sav1.setcop(1);
+																		    	   SampleController.solved_Tests.get(k).add(sav1.getTest());
 																		    	   System.out.println(SampleController.solved_Tests.get(k));
 																		    	   
 																		    	   
@@ -992,7 +973,7 @@ public class StudentController {
 
 			    ListView<String> listView = new ListView<String>(data);
 			    listView.setPrefSize(300, 250);
-			    for(int i=0;i<test_list.size();i++)data.add(test_list.get(i).getcode());
+			    for(int i=0;i<test_list.size();i++)data.add(test_list.get(i).getCode());
 
 			    listView.setItems(data);
 			    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -1015,7 +996,7 @@ public class StudentController {
 
 	    ListView<String> listView = new ListView<String>(data);
 	    listView.setPrefSize(300, 250);
-	    for(int i=0;i<checkedTests.get(c).size();i++)data.add(checkedTests.get(c).get(i).getcode());
+	    for(int i=0;i<checkedTests.get(c).size();i++)data.add(checkedTests.get(c).get(i).getCode());
 
 	    listView.setItems(data);
 	    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -1036,9 +1017,9 @@ public class StudentController {
 				     int idx=0;
 				     for(int i=0;i<checkedTests.get(c).size();i++)
 				     {
-				    	 if(checkedTests.get(c).get(i).getcode().equals(Question_select))idx=i;
+				    	 if(checkedTests.get(c).get(i).getCode().equals(Question_select))idx=i;
 				     }
-				     Label L1=new Label("Grade :"+checkedTests.get(c).get(idx).getGrade());
+				     Label L1=new Label("Grade :"+checkedTests.get(c).get(idx).getQuestionGrade().get(0));//change after madafaker
 				     pane.add(L1, 1, 0);
 				     Scene scene = new Scene(pane,300,200);
 				     scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -1057,28 +1038,28 @@ public class StudentController {
 				     int idx=0,idx2=0;
 			         for(int i=0;i<checkedTests.get(c).size();i++)
 			         {
-			    	 if(checkedTests.get(c).get(i).getcode().equals(Question_select))idx=i;
+			    	 if(checkedTests.get(c).get(i).getCode().equals(Question_select))idx=i;
 			         }
 			         for(int i=0;i<Main.ExecuteList.size();i++)
 			         {
-			        	 if(Main.ExecuteList.get(i).getTest().getcode().equals(Question_select))idx2=i;
+			        	 if(Main.ExecuteList.get(i).getTest().getCode().equals(Question_select))idx2=i;
 			         }
-			         Test Chosen=new Test();
-			         Chosen=checkedTests.get(c).get(idx);
+			         studentTest Chosen=new studentTest();
+			         Chosen.setTest(checkedTests.get(c).get(idx));
 				    ScrollPane pane=new ScrollPane();
 			     	GridPane Text_edit=new GridPane();
 			     	Text_edit.setHgap(10);
 			     	Text_edit.setVgap(10);
 			     	Text_edit.setPadding(new Insets(25, 25, 25, 25));
-			     	Label L1=new Label("Test: "+Chosen.getcode());
+			     	Label L1=new Label("Test: "+Chosen.getTest().getCode());
 			     	Text_edit.add(L1, 0, 0);
-			     	L1=new Label("Taken by: "+Chosen.getName());
+			     	L1=new Label("Taken by: "+Owner_name[c]);
 			     	Text_edit.add(L1, 0, 1);
 			     	L1=new Label("On date: "+Main.ExecuteList.get(idx2).getDate());
 			     	Text_edit.add(L1, 0, 2);
-			     	L1=new Label("Test duration: "+Chosen.getLength()+" minuts");
+			     	L1=new Label("Test duration: "+Chosen.getTime()+" minuts");
 			     	Text_edit.add(L1, 0, 3);
-			     	L1=new Label("Test grade: "+Chosen.getGrade());
+			     	L1=new Label("Test grade: "+Chosen.getTest().getQuestionGrade());
 			     	Text_edit.add(L1, 0, 4);
 			     	if(!Chosen.getReason().isEmpty())
 			     	{
@@ -1086,10 +1067,10 @@ public class StudentController {
 				     	Text_edit.add(L1, 0, 5);
 			     	}
 			     	int j=6;
-			     	for(int i=0;i<Chosen.getQuestionlist().size();i++)
+			     	for(int i=0;i<Chosen.getTest().getQuestions().size();i++)
 			     	{
 			     		final int val=i;
-			     		if(Chosen.getAnswers().get(i)!=0) {
+			     		if(Chosen.getAnswers().get(i)!="0") {
 			     		L1=new Label("Question"+(i+1)+":");
 			     		L1.setFont(Font.font( "", FontWeight.BOLD, 17));
 			         	Text_edit.add(L1, 0, j);
@@ -1097,36 +1078,36 @@ public class StudentController {
 			         	L1=new Label("Student instructions: ");
 			         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
 			         	Text_edit.add(L1, 0, j);
-			         	L1=new Label(Chosen.getQuestionlist().get(i).getSInstruction());
+			         	L1=new Label(Chosen.getTest().getQuestions().get(i).getSInstruction());
 			         	Text_edit.add(L1, 1, j);
 			         	j++;
 			         	L1=new Label("Teacher instructions: ");
 			         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
 			         	Text_edit.add(L1, 0, j);
-			         	L1=new Label(Chosen.getQuestionlist().get(i).getTInstruction());
+			         	L1=new Label(Chosen.getTest().getQuestions().get(i).getTInstruction());
 			         	Text_edit.add(L1, 1, j);
 			         	j++;
 			         	L1=new Label("Question: ");
 			         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
 			         	Text_edit.add(L1, 0, j);
 			         	j++;
-			         	L1=new Label(Chosen.getQuestionlist().get(i).getBody());
+			         	L1=new Label(Chosen.getTest().getQuestions().get(i).getBody());
 			         	Text_edit.add(L1, 0, j);
 			         	j=j+2;
 			         	L1=new Label("Answers: ");
 			         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
 			         	Text_edit.add(L1, 0, j);
 			         	j++;
-			         	L1=new Label("1)"+Chosen.getQuestionlist().get(i).getAnswer1());
+			         	L1=new Label("1)"+Chosen.getTest().getQuestions().get(i).getAnswer1());
 			         	Text_edit.add(L1, 0, j);
 			         	j++;
-			         	L1=new Label("2)"+Chosen.getQuestionlist().get(i).getAnswer2());
+			         	L1=new Label("2)"+Chosen.getTest().getQuestions().get(i).getAnswer2());
 			         	Text_edit.add(L1, 0, j);
 			         	j++;
-			         	L1=new Label("3)"+Chosen.getQuestionlist().get(i).getAnswer3());
+			         	L1=new Label("3)"+Chosen.getTest().getQuestions().get(i).getAnswer3());
 			         	Text_edit.add(L1, 0, j);
 			         	j++;
-			         	L1=new Label("4)"+Chosen.getQuestionlist().get(i).getAnswer4());
+			         	L1=new Label("4)"+Chosen.getTest().getQuestions().get(i).getAnswer4());
 			         	Text_edit.add(L1, 0, j);
 			         	j++;
 			     		}
@@ -1140,7 +1121,7 @@ public class StudentController {
 				         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
-				         	L1=new Label(Chosen.getQuestionlist().get(i).getSInstruction());
+				         	L1=new Label(Chosen.getTest().getQuestions().get(i).getSInstruction());
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 1, j);
 				         	j++;
@@ -1148,7 +1129,7 @@ public class StudentController {
 				         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
-				         	L1=new Label(Chosen.getQuestionlist().get(i).getTInstruction());
+				         	L1=new Label(Chosen.getTest().getQuestions().get(i).getTInstruction());
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 1, j);
 				         	j++;
@@ -1157,7 +1138,7 @@ public class StudentController {
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
 				         	j++;
-				         	L1=new Label(Chosen.getQuestionlist().get(i).getBody());
+				         	L1=new Label(Chosen.getTest().getQuestions().get(i).getBody());
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
 				         	j=j+2;
@@ -1166,26 +1147,26 @@ public class StudentController {
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
 				         	j++;
-				         	L1=new Label("1)"+Chosen.getQuestionlist().get(i).getAnswer1());
+				         	L1=new Label("1)"+Chosen.getTest().getQuestions().get(i).getAnswer1());
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
 				         	j++;
-				         	L1=new Label("2)"+Chosen.getQuestionlist().get(i).getAnswer2());
+				         	L1=new Label("2)"+Chosen.getTest().getQuestions().get(i).getAnswer2());
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
 				         	j++;
-				         	L1=new Label("3)"+Chosen.getQuestionlist().get(i).getAnswer3());
+				         	L1=new Label("3)"+Chosen.getTest().getQuestions().get(i).getAnswer3());
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
 				         	j++;
-				         	L1=new Label("4)"+Chosen.getQuestionlist().get(i).getAnswer4());
+				         	L1=new Label("4)"+Chosen.getTest().getQuestions().get(i).getAnswer4());
 				         	L1.setTextFill(Color.RED);
 				         	Text_edit.add(L1, 0, j);
 				         	j++;
 			     		}
-			     		if(!Chosen.getremarks().get(i).isEmpty())
+			     		if(!Chosen.getRemark().get(i).isEmpty())
 			     		{
-			     			L1=new Label("Teacher remarks:"+Chosen.getremarks().get(i));
+			     			L1=new Label("Teacher remarks:"+Chosen.getRemark().get(i));
 			     			Text_edit.add(L1, 0, j);
 			     			j++;
 			     		}

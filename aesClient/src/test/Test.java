@@ -1,6 +1,7 @@
 package test;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import question.*;
 public class Test implements Serializable {
@@ -11,24 +12,26 @@ public class Test implements Serializable {
 	private static final long serialVersionUID = -8046372034304566997L;
 	
 	private static final int CODE_LENGTH = 6;
-	private Question questions[];
-	private String questionGrade[];
+	private ArrayList<Question> questions;
+	private ArrayList<String> questionGrade;
 	private String commentsForTeacher;
 	private String commentsForStudent;
 	private String code;
 	private String owner;
 	private String time;
-	public Test(String code, Question questions[], String questionGrade[], String commentsForTeacher, String commentsForStudent, String owner, String time)
-	{
+
+	public Test(String code, ArrayList<Question> questions, ArrayList<String> questionGrade, String commentsForTeacher,
+			String commentsForStudent, String owner, String time) {
 		super();
-		this.code = code;
 		this.questions = questions;
+		this.questionGrade = questionGrade;
 		this.commentsForTeacher = commentsForTeacher;
 		this.commentsForStudent = commentsForStudent;
-		this.questionGrade = questionGrade;
+		this.code = code;
 		this.owner = owner;
 		this.time = time;
 	}
+
 	public Test(Test test)
 	{
 		super();
@@ -44,12 +47,7 @@ public class Test implements Serializable {
 	{
 		super();
 	}
-	public Question[] getQuestions() {
-		return questions;
-	}
-	public void setQuestions(Question[] questions) {
-		this.questions = questions;
-	}
+
 	public String getCommentsForTeacher() {
 		return commentsForTeacher;
 	}
@@ -80,12 +78,8 @@ public class Test implements Serializable {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-	public String[] getQuestionGrade() {
-		return questionGrade;
-	}
-	public void setQuestionGrade(String[] questionGrade) {
-		this.questionGrade = questionGrade;
-	}
+
+
 	@Override
 	public String toString() {
 		return "[code = " + code + ", Owner = " + owner + ", Time = " + time + "(min)" + ", comments for teacher= " + commentsForTeacher + 
@@ -93,11 +87,24 @@ public class Test implements Serializable {
 				"\nQuestions = [" + FromQuestionArrayToString(questions, questionGrade) +
 				 "]\n";
 	}
-	public static String FromQuestionArrayToString(Question q[], String grades[])
+	public static String FromQuestionArrayToString(ArrayList<Question> questions2, ArrayList<String> questionGrade2)
 	{
 		String str="\n  ";
-		for(int i=0; i<q.length; i++)
-			str = str.concat(q[i].toString() + " | Grade = " +grades[i] + "\n  ");
+		for(int i=0; i<questions2.size(); i++)
+			str = str.concat(questions2.get(i).toString() + " | Grade = " +questionGrade2.get(i) + "\n  ");
 		return str;
+	}
+
+	public ArrayList<Question> getQuestions() {
+		return questions;
+	}
+	public void setQuestions(ArrayList<Question> questions) {
+		this.questions = questions;
+	}
+	public ArrayList<String> getQuestionGrade() {
+		return questionGrade;
+	}
+	public void setQuestionGrade(ArrayList<String> questionGrade) {
+		this.questionGrade = questionGrade;
 	}
 }

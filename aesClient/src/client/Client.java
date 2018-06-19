@@ -2,8 +2,14 @@ package client;
 
 import java.io.*;
 import java.util.ArrayList;
+
+import Student.Student;
 import question.Question;
 import question.QuestionManager;
+import test.Test;
+import test.studentTest;
+import test.studentTestController;
+import test.testController;
 
 public class Client implements ChatIF
 {
@@ -131,7 +137,6 @@ public class Client implements ChatIF
 		return QuestionManager.getQuestionByCode(this, code);
 	}
 
-	
 	/**
 	 * Return an arraylist of all the questio in the database of a given owner.
 	 * @param owner - the questions owner.
@@ -142,6 +147,79 @@ public class Client implements ChatIF
 		return QuestionManager.getQuestionListByOwner(this, owner);
 	}
 	
+	public boolean createTest(Test test)
+	  {
+		  testController.createTest(test, this.chatClient);
+		  waitForAnswer();
+		  return (boolean)this.answer;
+	  }
+	  public boolean updateQuestionsForTest(Test test)
+	  {
+		  testController.updateQuestionsForTest(test, this.chatClient);
+		  waitForAnswer();
+		  return (boolean)this.answer;
+	  }
+	  public boolean updateTest(Test test)
+	  {
+		  testController.updateTest(test, this.chatClient);
+		  waitForAnswer();
+		  return (boolean)this.answer;
+	  }
+	  public boolean addCommentsForTeacher(Test test, String comments)
+	  {
+		  testController.addCommentsForTeacher(test, comments, this.chatClient);
+		  waitForAnswer();
+		  return (boolean)this.answer;
+	  }
+	  public boolean addCommentsForStudent(Test test, String comments)
+	  {
+		  testController.addCommentsForStudent(test, comments, this.chatClient);
+		  waitForAnswer();
+		  return (boolean)this.answer;
+	  }
+	  public ArrayList<Test> getAllTests()
+	  {
+		  testController.getAllTests(this.chatClient);
+		  waitForAnswer();
+		  return (ArrayList<Test>)this.answer;
+	  }
+	  public Test getTestById(String id)
+	  {
+		  testController.getTestById(id, this.chatClient);
+		  waitForAnswer();
+		  return (Test)this.answer;
+	  }
+	  public boolean deleteTest(String code)
+	  {
+		  testController.deleteTest(code, this.chatClient);
+		  waitForAnswer();
+		  return (boolean)this.answer;
+	  }
+	  public boolean submitStudentTest(studentTest st)
+	  {
+		  studentTestController.submitStudentTest(st, this.chatClient);
+		  waitForAnswer();
+		  return (boolean)this.answer;
+	  }
+	  public Student getAllTestsByStudentId(String stud_id)
+	  {
+		  studentTestController.getAllTestsByStudentId(stud_id, this.chatClient);
+		  waitForAnswer();
+		  return (Student)this.answer;
+	  }
+	  public studentTest[] getAllTestsByTeacherId(String teacher_id)
+	  {
+		  studentTestController.getAllTestsByTeacherId(teacher_id, this.chatClient);
+		  waitForAnswer();
+		  return (studentTest[])this.answer;
+	  }
+	  public studentTest[] getAllTestsByCourseId(String course_id)
+	  {
+		  studentTestController.getAllTestsByCourseId(course_id, this.chatClient);
+		  waitForAnswer();
+		  return (studentTest[])this.answer;
+	  }
+	  
 	public ChatClient getChatClient() 
 	{
 		return chatClient;

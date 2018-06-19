@@ -14,7 +14,7 @@ import client.Client;
 import question.Course;
 import question.ExecutedTest;
 import question.Question;
-import question.Test;
+import test.Test;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -547,11 +547,11 @@ public class SampleController {
 		Stage closer=(Stage) ((Node) event.getSource()).getScene().getWindow();
 		closer.close();
 	}
-    public void T_print(String Owner,int c)
+    public void T_print(String Owner,int c,Client client)
     {
     	Owner_name[c]=Owner;
     	primaryStage=new Stage();
-    	Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
+    	test_list=client.getAllTests();
 		SplitPane root = new SplitPane();
 		Scroll=new ScrollPane();
 		Scroll=addTestScrollPane();
@@ -565,7 +565,7 @@ public class SampleController {
 		    	   {
 		    		   for(int i=0;i<test_list.size();i++)
 		    		   {
-		    			   if(test_list.get(i).getcode().equals(Question_select)) idx_C=i;
+		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
 		    		   view_test(test_list.get(idx_C));
 		           }
@@ -577,7 +577,7 @@ public class SampleController {
 		       @Override
 		       public void handle(ActionEvent e)
 			  {
-		    	   Add_test(c);
+		    	   Add_test(c,client);
 			  }
 	    });
 		Button B3=new Button("modify test");
@@ -590,9 +590,9 @@ public class SampleController {
 		    	   {
 		    		   for(int i=0;i<test_list.size();i++)
 		    		   {
-		    			   if(test_list.get(i).getcode().equals(Question_select)) idx_C=i;
+		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
-		    		   modify_test(test_list.get(idx_C),c);
+		    		   modify_test(test_list.get(idx_C),c,client);
 		           }
 			  }
 	    });
@@ -606,7 +606,7 @@ public class SampleController {
 		    	   {
 		    		   for(int i=0;i<test_list.size();i++)
 		    		   {
-		    			   if(test_list.get(i).getcode().equals(Question_select)) idx_C=i;
+		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
 		    		   Stage secondStage=new Stage();
 		    		   GridPane grid = new GridPane();
@@ -624,7 +624,7 @@ public class SampleController {
 						    	   test_list.remove(idx_C);
 						    	   secondStage.close();
 						    	   primaryStage.close();
-						    	   T_print(Owner_name[c],c);
+						    	   T_print(Owner_name[c],c,client);
 							  }
 					    });
 				       Button B2=new Button("No");
@@ -661,14 +661,14 @@ public class SampleController {
     	Text_edit.setHgap(10);
     	Text_edit.setVgap(10);
     	Text_edit.setPadding(new Insets(25, 25, 25, 25));
-    	Label L1=new Label("Test: "+Chosen.getcode());
+    	Label L1=new Label("Test: "+Chosen.getCode());
     	Text_edit.add(L1, 0, 0);
     	L1=new Label("Written by: "+Chosen.getOwner());
     	Text_edit.add(L1, 0, 1);
-    	L1=new Label("Test duration: "+Chosen.getLength()+" minuts");
+    	L1=new Label("Test duration: "+Chosen.getTime()+" minuts");
     	Text_edit.add(L1, 0, 2);
     	int j=3;
-    	for(int i=0;i<Chosen.getQuestionlist().size();i++)
+    	for(int i=0;i<Chosen.getQuestions().size();i++)
     	{
     		L1=new Label("Question"+(i+1)+":");
     		L1.setFont(Font.font( "", FontWeight.BOLD, 17));
@@ -677,36 +677,36 @@ public class SampleController {
         	L1=new Label("Student instructions: ");
         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
         	Text_edit.add(L1, 0, j);
-        	L1=new Label(Chosen.getQuestionlist().get(i).getSInstruction());
+        	L1=new Label(Chosen.getQuestions().get(i).getSInstruction());
         	Text_edit.add(L1, 1, j);
         	j++;
         	L1=new Label("Teacher instructions: ");
         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
         	Text_edit.add(L1, 0, j);
-        	L1=new Label(Chosen.getQuestionlist().get(i).getTInstruction());
+        	L1=new Label(Chosen.getQuestions().get(i).getTInstruction());
         	Text_edit.add(L1, 1, j);
         	j++;
         	L1=new Label("Question: ");
         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label(Chosen.getQuestionlist().get(i).getBody());
+        	L1=new Label(Chosen.getQuestions().get(i).getBody());
         	Text_edit.add(L1, 0, j);
         	j=j+2;
         	L1=new Label("Answers: ");
         	L1.setFont(Font.font( "", FontWeight.BOLD, 15));
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label("1)"+Chosen.getQuestionlist().get(i).getAnswer1());
+        	L1=new Label("1)"+Chosen.getQuestions().get(i).getAnswer1());
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label("2)"+Chosen.getQuestionlist().get(i).getAnswer2());
+        	L1=new Label("2)"+Chosen.getQuestions().get(i).getAnswer2());
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label("3)"+Chosen.getQuestionlist().get(i).getAnswer3());
+        	L1=new Label("3)"+Chosen.getQuestions().get(i).getAnswer3());
         	Text_edit.add(L1, 0, j);
         	j++;
-        	L1=new Label("4)"+Chosen.getQuestionlist().get(i).getAnswer4());
+        	L1=new Label("4)"+Chosen.getQuestions().get(i).getAnswer4());
         	Text_edit.add(L1, 0, j);
         	j++;
     	}
@@ -716,7 +716,7 @@ public class SampleController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
     }
-    public void Add_test(int c)
+    public void Add_test(int c,Client client)
     {
     	Test test_add=new Test();
     	GridPane Text_edit=new GridPane();
@@ -749,7 +749,7 @@ public class SampleController {
 					       public void handle(ActionEvent e)
 						  {
 					    	   primaryStage.close();
-					    	   T_print(Owner_name[c],c);
+					    	   T_print(Owner_name[c],c,client);
 						  }
 				    });
 			       Button B2=new Button("No");
@@ -759,7 +759,7 @@ public class SampleController {
 					       public void handle(ActionEvent e)
 						  {
 					    	   primaryStage.close();
-					    	   Add_test(c);
+					    	   Add_test(c,client);
 						  }
 				    });
 			       grid.add(B1, 1, 1);
@@ -818,8 +818,8 @@ public class SampleController {
 		        			   add.add(Q_list.get(i));
 		        		   }
 		        	   }
-		        	   test_add.setId((test_list.size()+1)+"");
-		        	   test_add.setcode(Subjects.getValue()+""+Courses.getValue()+""+Test_number.getValue()+"");
+		        	   
+		        	   test_add.setCode(Subjects.getValue()+""+Courses.getValue()+""+Test_number.getValue()+"");
 		        	   test_add.setOwner(Owner_name[c]);
 		        	   BorderPane root = new BorderPane();
 		        	    Scene scene = new Scene(root, 400, 250, Color.WHITE);
@@ -905,7 +905,7 @@ public class SampleController {
                 						  {
                 					    	   SecondStage.close();
                 					    	   primaryStage.close();
-                					    	   T_print(Owner_name[c],c);
+                					    	   T_print(Owner_name[c],c,client);
                 						  }
                 				    });
                 			       Button B2=new Button("No");
@@ -938,7 +938,7 @@ public class SampleController {
                 		    		   {
                 		    			   for(int j=0;j<Q_list.size();j++)
                 		    			   {
-                		    				   if(Q_list.get(j).getCode().equals(selected.get(i)))test_add.getQuestionlist().add(Q_list.get(j));
+                		    				   if(Q_list.get(j).getCode().equals(selected.get(i)))test_add.getQuestions().add(Q_list.get(j));
                 		    			   }
                 		    			   
                 		    		   }
@@ -954,7 +954,7 @@ public class SampleController {
                          		       @Override
                          		       public void handle(ActionEvent e)
                          			  {
-                         		    	    TextArea matrix[]=new TextArea[test_add.getQuestionlist().size()];
+                         		    	    TextArea matrix[]=new TextArea[test_add.getQuestions().size()];
                          		    	    ScrollPane pane=new ScrollPane();
                          		    	    GridPane gridpane = new GridPane();
                      		        	    gridpane.setPadding(new Insets(5));
@@ -968,7 +968,7 @@ public class SampleController {
                      		        	    F1.setPrefRowCount(1);
                      		        	    gridpane.add(F1, 1, 0);
                      		        	    int j=1;
-                     		        	    for(int i=0;i<test_add.getQuestionlist().size();i++)
+                     		        	    for(int i=0;i<test_add.getQuestions().size();i++)
                      		        	    {
                      		        	    	L1=new Label("Question "+(i+1)+":");
                      		        	    	L1.setFont(Font.font( "", FontWeight.BOLD, 17));
@@ -1004,7 +1004,7 @@ public class SampleController {
                                 						  {
                                 					    	   SecondStage.close();
                                 					    	   primaryStage.close();
-                                					    	   T_print(Owner_name[c],c);
+                                					    	   T_print(Owner_name[c],c,client);
                                 						  }
                                 				    });
                                 			       Button B2=new Button("No");
@@ -1034,27 +1034,27 @@ public class SampleController {
                                 		    	   int j=0;
                                 		    	   if(F1.getText().isEmpty())F1.setBlendMode(BlendMode.RED);
                                 		    	   else {
-                                		    		   test_add.setLength(F1.getText());
+                                		    		   test_add.setTime(F1.getText());
                                 		    		   F1.setBlendMode(BlendMode.SRC_OVER);
                                 		    		   j++;
                                 		    	   }
                                 		    	   int sum=0;
-                                		    	   for(int i=0;i<test_add.getQuestionlist().size();i++)
+                                		    	   for(int i=0;i<test_add.getQuestions().size();i++)
                                 		    	   {
                                 		    		   if(matrix[i].getText().isEmpty())matrix[i].setBlendMode(BlendMode.RED);
                                 		    		   else {
-                                		    			   test_add.getPointsList().add(matrix[i].getText());
+                                		    			   test_add.getQuestionGrade().add(matrix[i].getText());
                                 		    			   sum+=Integer.parseInt(matrix[i].getText());
                                 		    			   matrix[i].setBlendMode(BlendMode.SRC_OVER);
                                     		    		   j++;
                                 		    		   }
                                 		    	   }
-                                		    	   if(j==1+test_add.getQuestionlist().size())
+                                		    	   if(j==1+test_add.getQuestions().size())
                                 		    	   {
                                 		    		  if(sum==100) {
                                  		    		   test_list.add(test_add);
                                 		    		   primaryStage.close();
-                                		    		   T_print(Owner_name[c],c);
+                                		    		   T_print(Owner_name[c],c,client);
                                 		    		   }
                                 		    	
                                 		    	   }
@@ -1076,7 +1076,7 @@ public class SampleController {
                        		       @Override
                        		       public void handle(ActionEvent e)
                        			  {
-                       		    	    TextArea matrix[][]=new TextArea[test_add.getQuestionlist().size()][3];
+                       		    	    TextArea matrix[][]=new TextArea[test_add.getQuestions().size()][3];
                        		    	    ScrollPane pane=new ScrollPane();
                        		    	    GridPane gridpane = new GridPane();
                    		        	    gridpane.setPadding(new Insets(5));
@@ -1090,7 +1090,7 @@ public class SampleController {
                    		        	    F1.setPrefRowCount(1);
                    		        	    gridpane.add(F1, 1, 0);
                    		        	    int j=1;
-                   		        	    for(int i=0;i<test_add.getQuestionlist().size();i++)
+                   		        	    for(int i=0;i<test_add.getQuestions().size();i++)
                    		        	    {
                    		        	    	L1=new Label("Question "+(i+1)+":");
                    		        	    	L1.setFont(Font.font( "", FontWeight.BOLD, 17));
@@ -1142,7 +1142,7 @@ public class SampleController {
                               						  {
                               					    	   SecondStage.close();
                               					    	   primaryStage.close();
-                              					    	   T_print(Owner_name[c],c);
+                              					    	   T_print(Owner_name[c],c,client);
                               						  }
                               				    });
                               			       Button B2=new Button("No");
@@ -1172,40 +1172,40 @@ public class SampleController {
                               		    	   int j=0;
                               		    	   if(F1.getText().isEmpty())F1.setBlendMode(BlendMode.RED);
                               		    	   else {
-                              		    		   test_add.setLength(F1.getText());
+                              		    		   test_add.setTime(F1.getText());
                               		    		   F1.setBlendMode(BlendMode.SRC_OVER);
                               		    		   j++;
                               		    	   }
                               		    	   int sum=0;
-                              		    	   for(int i=0;i<test_add.getQuestionlist().size();i++)
+                              		    	   for(int i=0;i<test_add.getQuestions().size();i++)
                               		    	   {
                               		    		   if(matrix[i][0].getText().isEmpty())matrix[i][0].setBlendMode(BlendMode.RED);
                               		    		   else {
-                              		    			   test_add.getPointsList().add(matrix[i][0].getText());
+                              		    			   test_add.getQuestionGrade().add(matrix[i][0].getText());
                               		    			   sum+=Integer.parseInt(matrix[i][0].getText());
                               		    			   matrix[i][0].setBlendMode(BlendMode.SRC_OVER);
                                   		    		   j++;
                               		    		   }
                               		    		 if(matrix[i][1].getText().isEmpty())matrix[i][1].setBlendMode(BlendMode.RED);
                             		    		   else {
-                            		    			   test_add.getQuestionlist().get(i).setSInstruction(matrix[i][1].getText());
+                            		    			   test_add.getQuestions().get(i).setSInstruction(matrix[i][1].getText());
                             		    			   matrix[i][1].setBlendMode(BlendMode.SRC_OVER);
                                 		    		   j++;
                             		    		   }
                               		    		 if(matrix[i][2].getText().isEmpty())matrix[i][2].setBlendMode(BlendMode.RED);
                           		    		   else {
-                          		    			   test_add.getQuestionlist().get(i).setTInstruction(matrix[i][2].getText());
+                          		    			   test_add.getQuestions().get(i).setTInstruction(matrix[i][2].getText());
                           		    			   matrix[i][2].setBlendMode(BlendMode.SRC_OVER);
                               		    		   j++;
                           		    		   }
                               		    	   }
-                              		    	   if(j==1+test_add.getQuestionlist().size()*3)
+                              		    	   if(j==1+test_add.getQuestions().size()*3)
                               		    	   {
                               		    		   if(sum==100)
                               		    		   {
                               		    			 test_list.add(test_add);
                                 		    		   primaryStage.close();
-                                		    		   T_print(Owner_name[c],c);
+                                		    		   T_print(Owner_name[c],c,client);
                               		    		   }
                               		    		  
                               		    	   }
@@ -1243,10 +1243,9 @@ public class SampleController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
     }
-    public void modify_test(Test Chosen,int c)
+    public void modify_test(Test Chosen,int c,Client client)
     {
        Test Update=new Test();
-       Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
  	   Q_list=client.getAllQuestion();
  	   for(int i=0;i<Q_list.size();i++)
  	   {
@@ -1260,22 +1259,22 @@ public class SampleController {
  			   }
  		   }
  	   }
- 	  for(int i=0;i<Chosen.getQuestionlist().size();i++)
+ 	  for(int i=0;i<Chosen.getQuestions().size();i++)
 	   {
-		   for(int j=0;j<Chosen.getQuestionlist().size();j++)
+		   for(int j=0;j<Chosen.getQuestions().size();j++)
 		   {
-			   if(Integer.parseInt(Chosen.getQuestionlist().get(i).getCode())<Integer.parseInt(Chosen.getQuestionlist().get(j).getCode()))
+			   if(Integer.parseInt(Chosen.getQuestions().get(i).getCode())<Integer.parseInt(Chosen.getQuestions().get(j).getCode()))
 			   {
-				   Question save=Chosen.getQuestionlist().get(i);
-				   Chosen.getQuestionlist().set(i,Chosen.getQuestionlist().get(j));
-				   Chosen.getQuestionlist().set(j, save);
+				   Question save=Chosen.getQuestions().get(i);
+				   Chosen.getQuestions().set(i,Chosen.getQuestions().get(j));
+				   Chosen.getQuestions().set(j, save);
 			   }
 		   }
 	   }
  	  ArrayList<Question> rem1=new ArrayList<Question>();
- 	   for(int i=Chosen.getQuestionlist().size()-1;i>=0;i--)
+ 	   for(int i=Chosen.getQuestions().size()-1;i>=0;i--)
  	   {
- 		   if(Q_list.get(i).getCode().equals(Chosen.getQuestionlist().get(i).getCode()))
+ 		   if(Q_list.get(i).getCode().equals(Chosen.getQuestions().get(i).getCode()))
  			   {
  			   }
  		   else
@@ -1287,7 +1286,7 @@ public class SampleController {
  	   for(int i=0;i<rem1.size();i++)
  	   {
  		   if((rem1.get(i).getCode().charAt(0)+rem1.get(i).getCode().charAt(1)+"").equals
- 				   (Chosen.getcode().charAt(0)+Chosen.getcode().charAt(1)+""))rem2.add(rem1.get(i));
+ 				   (Chosen.getCode().charAt(0)+Chosen.getCode().charAt(1)+""))rem2.add(rem1.get(i));
  	   }
  	   BorderPane root = new BorderPane();
  	    Scene scene = new Scene(root, 400, 250, Color.WHITE);
@@ -1315,9 +1314,9 @@ public class SampleController {
  	    // Candidates
  	    final ObservableList<String> candidates = FXCollections
  	        .observableArrayList();
- 	    for(int i=0;i<Chosen.getQuestionlist().size();i++)
+ 	    for(int i=0;i<Chosen.getQuestions().size();i++)
  	    {
- 	    	candidates.add(Chosen.getQuestionlist().get(i).getCode());
+ 	    	candidates.add(Chosen.getQuestions().get(i).getCode());
  	    }
  	    final ListView<String> candidatesListView = new ListView<>(candidates);
  	    gridpane.add(candidatesListView, 0, 1);
@@ -1377,7 +1376,7 @@ public class SampleController {
  						  {
  					    	   SecondStage.close();
  					    	   primaryStage.close();
- 					    	   T_print(Owner_name[c],c);
+ 					    	   T_print(Owner_name[c],c,client);
  						  }
  				    });
  			       Button B2=new Button("No");
@@ -1411,12 +1410,12 @@ public class SampleController {
  		    		   {
  		    			   for(int j=0;j<Q_list.size();j++)
  		    			   {
- 		    				   if(Q_list.get(j).getCode().equals(candidates.get(i)))Update.getQuestionlist().add(Q_list.get(j));
+ 		    				   if(Q_list.get(j).getCode().equals(candidates.get(i)))Update.getQuestions().add(Q_list.get(j));
  		    			   }
  		    			   
  		    		   }
- 		    		   Update.setLength(Chosen.getLength());
-        		    	    TextArea matrix[][]=new TextArea[Update.getQuestionlist().size()][9];
+ 		    		   Update.setTime(Chosen.getTime());
+        		    	    TextArea matrix[][]=new TextArea[Update.getQuestions().size()][9];
         		    	    ScrollPane pane=new ScrollPane();
         		    	    GridPane gridpane = new GridPane();
     		        	    gridpane.setPadding(new Insets(5));
@@ -1425,12 +1424,12 @@ public class SampleController {
     		        	    Label L1=new Label("Time");
     		        	    gridpane.add(L1,0, 0);
     		        	    TextArea F1=new TextArea();
-    		        	    F1.setText(Update.getLength());
+    		        	    F1.setText(Update.getTime());
     		        	    F1.setPrefColumnCount(15);
     		        	    F1.setPrefRowCount(1);
     		        	    gridpane.add(F1, 1, 0);
     		        	    int j=1;
-    		        	    for(int i=0;i<Update.getQuestionlist().size();i++)
+    		        	    for(int i=0;i<Update.getQuestions().size();i++)
     		        	    {
     		        	    	L1=new Label("Question "+(i+1)+":");
     		        	    	L1.setFont(Font.font( "", FontWeight.BOLD, 17));
@@ -1447,7 +1446,7 @@ public class SampleController {
     		        	    	L1=new Label("Student instructions");
     		        	    	gridpane.add(L1, 0, j);
     		        	    	matrix[i][1]=new TextArea();
-    		        	    	matrix[i][1].setText(Update.getQuestionlist().get(i).getSInstruction());
+    		        	    	matrix[i][1].setText(Update.getQuestions().get(i).getSInstruction());
     		        	    	matrix[i][1].setPrefColumnCount(15);
     		        	    	matrix[i][1].setPrefRowCount(1);
     		        	    	gridpane.add(matrix[i][1], 1, j);
@@ -1455,7 +1454,7 @@ public class SampleController {
     		        	    	L1=new Label("Teacher instructions");
     		        	    	gridpane.add(L1, 0, j);
     		        	    	matrix[i][2]=new TextArea();
-    		        	    	matrix[i][2].setText(Update.getQuestionlist().get(i).getTInstruction());
+    		        	    	matrix[i][2].setText(Update.getQuestions().get(i).getTInstruction());
     		        	    	matrix[i][2].setPrefColumnCount(15);
     		        	    	matrix[i][2].setPrefRowCount(1);
     		        	    	gridpane.add(matrix[i][2], 1, j);
@@ -1463,7 +1462,7 @@ public class SampleController {
     		        	    	L1=new Label("Question bBody");
     		        	    	gridpane.add(L1, 0, j);
     		        	    	matrix[i][3]=new TextArea();
-    		        	    	matrix[i][3].setText(Update.getQuestionlist().get(i).getBody());
+    		        	    	matrix[i][3].setText(Update.getQuestions().get(i).getBody());
     		        	    	matrix[i][3].setPrefColumnCount(15);
     		        	    	matrix[i][3].setPrefRowCount(1);
     		        	    	gridpane.add(matrix[i][3], 1, j);
@@ -1471,7 +1470,7 @@ public class SampleController {
     		        	    	L1=new Label("Answer 1");
     		        	    	gridpane.add(L1, 0, j);
     		        	    	matrix[i][4]=new TextArea();
-    		        	    	matrix[i][4].setText(Update.getQuestionlist().get(i).getAnswer1());
+    		        	    	matrix[i][4].setText(Update.getQuestions().get(i).getAnswer1());
     		        	    	matrix[i][4].setPrefColumnCount(15);
     		        	    	matrix[i][4].setPrefRowCount(1);
     		        	    	gridpane.add(matrix[i][4], 1, j);
@@ -1479,7 +1478,7 @@ public class SampleController {
     		        	    	L1=new Label("Answer 2");
     		        	    	gridpane.add(L1, 0, j);
     		        	    	matrix[i][5]=new TextArea();
-    		        	    	matrix[i][5].setText(Update.getQuestionlist().get(i).getAnswer2());
+    		        	    	matrix[i][5].setText(Update.getQuestions().get(i).getAnswer2());
     		        	    	matrix[i][5].setPrefColumnCount(15);
     		        	    	matrix[i][5].setPrefRowCount(1);
     		        	    	gridpane.add(matrix[i][5], 1, j);
@@ -1487,7 +1486,7 @@ public class SampleController {
     		        	    	L1=new Label("Answer 3");
     		        	    	gridpane.add(L1, 0, j);
     		        	    	matrix[i][6]=new TextArea();
-    		        	    	matrix[i][6].setText(Update.getQuestionlist().get(i).getAnswer3());
+    		        	    	matrix[i][6].setText(Update.getQuestions().get(i).getAnswer3());
     		        	    	matrix[i][6].setPrefColumnCount(15);
     		        	    	matrix[i][6].setPrefRowCount(1);
     		        	    	gridpane.add(matrix[i][6], 1, j);
@@ -1495,7 +1494,7 @@ public class SampleController {
     		        	    	L1=new Label("Answer 4");
     		        	    	gridpane.add(L1, 0, j);
     		        	    	matrix[i][7]=new TextArea();
-    		        	    	matrix[i][7].setText(Update.getQuestionlist().get(i).getAnswer4());
+    		        	    	matrix[i][7].setText(Update.getQuestions().get(i).getAnswer4());
     		        	    	matrix[i][7].setPrefColumnCount(15);
     		        	    	matrix[i][7].setPrefRowCount(1);
     		        	    	gridpane.add(matrix[i][7], 1, j);
@@ -1503,7 +1502,7 @@ public class SampleController {
     		        	    	L1=new Label("Correct Answer");
     		        	    	gridpane.add(L1, 0, j);
     		        	    	matrix[i][8]=new TextArea();
-    		        	    	matrix[i][8].setText(Update.getQuestionlist().get(i).getCorrect()+"");
+    		        	    	matrix[i][8].setText(Update.getQuestions().get(i).getCorrect()+"");
     		        	    	matrix[i][8].setPrefColumnCount(15);
     		        	    	matrix[i][8].setPrefRowCount(1);
     		        	    	gridpane.add(matrix[i][8], 1, j);
@@ -1530,7 +1529,7 @@ public class SampleController {
                						  {
                					    	   SecondStage.close();
                					    	   primaryStage.close();
-               					    	   T_print(Owner_name[c],c);
+               					    	   T_print(Owner_name[c],c,client);
                						  }
                				    });
                			       Button B2=new Button("No");
@@ -1560,73 +1559,73 @@ public class SampleController {
                		    	   int j=0;
                		    	   if(F1.getText().isEmpty())F1.setBlendMode(BlendMode.RED);
                		    	   else {
-               		    		   Update.setLength(F1.getText());
+               		    		   Update.setTime(F1.getText());
                		    		   F1.setBlendMode(BlendMode.SRC_OVER);
                		    		   j++;
                		    	   }
                		    	   int sum=0;
-               		    	   for(int i=0;i<Update.getQuestionlist().size();i++)
+               		    	   for(int i=0;i<Update.getQuestions().size();i++)
                		    	   {
                		    		   if(matrix[i][0].getText().isEmpty())matrix[i][0].setBlendMode(BlendMode.RED);
                		    		   else {
-               		    			   Update.getPointsList().add(matrix[i][0].getText());
+               		    			   Update.getQuestionGrade().add(matrix[i][0].getText());
                		    			   sum+=Integer.parseInt(matrix[i][0].getText());
                		    			   matrix[i][0].setBlendMode(BlendMode.SRC_OVER);
                    		    		   j++;
                		    		   }
-             		    		   Update.getQuestionlist().get(i).setSInstruction(matrix[i][1].getText());
+             		    		   Update.getQuestions().get(i).setSInstruction(matrix[i][1].getText());
              		    		   matrix[i][1].setBlendMode(BlendMode.SRC_OVER);
                  		    	   j++;
-           		    			   Update.getQuestionlist().get(i).setTInstruction(matrix[i][2].getText());
+           		    			   Update.getQuestions().get(i).setTInstruction(matrix[i][2].getText());
            		    			   matrix[i][2].setBlendMode(BlendMode.SRC_OVER);
                		    		   j++;
                		    		 if(matrix[i][3].getText().isEmpty())matrix[i][3].setBlendMode(BlendMode.RED);
              		    		   else {
-             		    			   Update.getQuestionlist().get(i).setBody(matrix[i][3].getText());
+             		    			   Update.getQuestions().get(i).setBody(matrix[i][3].getText());
              		    			   matrix[i][3].setBlendMode(BlendMode.SRC_OVER);
                  		    		   j++;
              		    		   }
                		    		if(matrix[i][4].getText().isEmpty())matrix[i][4].setBlendMode(BlendMode.RED);
           		    		   else {
-          		    			   Update.getQuestionlist().get(i).setAnswer1(matrix[i][4].getText());
+          		    			   Update.getQuestions().get(i).setAnswer1(matrix[i][4].getText());
           		    			   matrix[i][4].setBlendMode(BlendMode.SRC_OVER);
               		    		   j++;
           		    		   }
                		    		if(matrix[i][5].getText().isEmpty())matrix[i][5].setBlendMode(BlendMode.RED);
            		    		   else {
-           		    			   Update.getQuestionlist().get(i).setAnswer2(matrix[i][5].getText());
+           		    			   Update.getQuestions().get(i).setAnswer2(matrix[i][5].getText());
            		    			   matrix[i][5].setBlendMode(BlendMode.SRC_OVER);
                		    		   j++;
            		    		   }
                		    		if(matrix[i][6].getText().isEmpty())matrix[i][6].setBlendMode(BlendMode.RED);
            		    		   else {
-           		    			   Update.getQuestionlist().get(i).setAnswer3(matrix[i][6].getText());
+           		    			   Update.getQuestions().get(i).setAnswer3(matrix[i][6].getText());
            		    			   matrix[i][6].setBlendMode(BlendMode.SRC_OVER);
                		    		   j++;
            		    		   }
                		    		if(matrix[i][7].getText().isEmpty())matrix[i][7].setBlendMode(BlendMode.RED);
            		    		   else {
-           		    			   Update.getQuestionlist().get(i).setAnswer4(matrix[i][7].getText());
+           		    			   Update.getQuestions().get(i).setAnswer4(matrix[i][7].getText());
            		    			   matrix[i][7].setBlendMode(BlendMode.SRC_OVER);
                		    		   j++;
            		    		   }
                		    		if(matrix[i][8].getText().isEmpty())matrix[i][8].setBlendMode(BlendMode.RED);
            		    		   else {
-           		    			   Update.getQuestionlist().get(i).setCorrect(Integer.parseInt(matrix[i][8].getText()));
+           		    			   Update.getQuestions().get(i).setCorrect(Integer.parseInt(matrix[i][8].getText()));
            		    			   matrix[i][8].setBlendMode(BlendMode.SRC_OVER);
                		    		   j++;
            		    		   }
                		    	   }
-               		    	   if(j==1+Update.getQuestionlist().size()*9)
+               		    	   if(j==1+Update.getQuestions().size()*9)
                		    	   {
                		    		   if(sum==100)
                		    		   {
-               		    			   Update.setcode(Chosen.getcode());
-               		    			   Update.setId(test_list.size()+"");
+               		    			   Update.setCode(Chosen.getCode());
+               		    			   
                		    			   Update.setOwner(Owner_name[c]);
                		    			 test_list.add(Update);
                  		    		   primaryStage.close();
-                 		    		   T_print(Owner_name[c],c);
+                 		    		   T_print(Owner_name[c],c,client);
                		    		   }
                		    		  
                		    	   }
@@ -1657,7 +1656,7 @@ public class SampleController {
 
 		    ListView<String> listView = new ListView<String>(data);
 		    listView.setPrefSize(300, 250);
-		    for(int i=0;i<test_list.size();i++)data.add(test_list.get(i).getcode());
+		    for(int i=0;i<test_list.size();i++)data.add(test_list.get(i).getCode());
 
 		    listView.setItems(data);
 		    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -1671,24 +1670,16 @@ public class SampleController {
         // Horizontal scroll bar is only displayed when needed
 		return sp;
 	}
-    public void Run_test(String Owner,int c)
+   public void Run_test(String Owner,int c)
     {
+	   /*
     	Question_select="0";
     	primaryStage=new Stage();
     	BorderPane pane=new BorderPane();
     	Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
     	if(start==0) {
     		test_list=new ArrayList<Test>();
-    		Test T1=new Test("1","201201",Owner,"120");
-    		T1.getQuestionlist().addAll(client.getAllQuestion());
-    		T1.getQuestionlist().remove(3);
-    		T1.getQuestionlist().remove(1);
-    		test_list.add(T1);
-    		Test T2=new Test("1","202001",Owner,"30");
-    		T2.getQuestionlist().addAll(client.getAllQuestion());
-    		T2.getQuestionlist().remove(2);
-    		T2.getQuestionlist().remove(1);
-    		test_list.add(T2);
+    		
     		start++;
     		}
     	Scroll=new ScrollPane();
@@ -1704,7 +1695,7 @@ public class SampleController {
 		    	   {
 		    		   for(int i=0;i<test_list.size();i++)
 		    		   {
-		    			   if(test_list.get(i).getcode().equals(Question_select)) idx_C=i;
+		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
 		    			    Stage SecondStage=new Stage();
 		    			    GridPane Text_edit=new GridPane();
@@ -1731,17 +1722,17 @@ public class SampleController {
 		    				    	   else {
 		    				    		   F1.setBlendMode(BlendMode.SRC_OVER);
 		    				    		   Date date=new Date();
-		    				    		   final ExecutedTest add=new ExecutedTest(test_list.get(idx_C),date, test_list.get(idx_C).getLength());
+		    				    		   final ExecutedTest add=new ExecutedTest(test_list.get(idx_C),date, test_list.get(idx_C).getTime());
 		    				    		   add.setExe_code(F1.getText());
-		    				    		   add.getTest().getPointsList().add("45");
-		    				    		   add.getTest().getPointsList().add("55");
+		    				    		   add.getTest().getQuestionGrade().add("45");
+		    				    		   add.getTest()..add("55");
 		    				    		   add.setexecuter(Owner_name[c]);
 		    				    		   System.out.println(add.getexecuter());
 		    				    		   add.setrSign(0);
 		    				    		   int check=0;
 		    				    		   for(int h=0;h< Main.ExecuteList.size();h++)
 		    				    		   {
-		    				    			   if(Main.ExecuteList.get(h).getTest().getcode().equals(test_list.get(idx_C).getcode()))
+		    				    			   if(Main.ExecuteList.get(h).getTest().getCode().equals(test_list.get(idx_C).getCode()))
 		    				    			   {
 		    				    				   if(Main.ExecuteList.get(h).getSign()==0)
 		    				    				   {
@@ -2035,10 +2026,11 @@ public class SampleController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
     	
-    	
+    	*/
     }
     public void CheckTests(int c)
     {
+    	/*
         primaryStage=new Stage();
         BorderPane pane=new BorderPane();
 		ScrollPane sp=new ScrollPane();
@@ -2047,7 +2039,7 @@ public class SampleController {
 		    ListView<String> listView = new ListView<String>(data);
 		    listView.setPrefSize(300, 250);
 		   
-		    for(int i=0;i<solved_Tests.get(c).size();i++)data.add(solved_Tests.get(c).get(i).getcode());
+		    for(int i=0;i<solved_Tests.get(c).size();i++)data.add(solved_Tests.get(c).get(i).getCode());
 
 		    listView.setItems(data);
 		    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -2145,9 +2137,9 @@ public class SampleController {
 					     		p.setVisible(true);
 					     	}
 					     	int j=8;
-					     	CheckBox decision[]=new CheckBox[Chosen.getQuestionlist().size()];
-					     	TextArea instructions[]=new TextArea[Chosen.getQuestionlist().size()];
-					     	for(int i=0;i<Chosen.getQuestionlist().size();i++)
+					     	CheckBox decision[]=new CheckBox[Chosen.getQuestions().size()];
+					     	TextArea instructions[]=new TextArea[Chosen.getQuestions().size()];
+					     	for(int i=0;i<Chosen.getQuestions().size();i++)
 					     	{
 					     		final int val=i;
 					     		if(Chosen.getAnswers().get(i)!=0) {
@@ -2403,9 +2395,11 @@ public class SampleController {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			*/
     }
     public void Check_test_statistics(int c)
     {
+    	/*
     	Stage second=new Stage();
  	   BorderPane p1=new BorderPane();
 	    	 ScrollPane sp=new ScrollPane();
@@ -2565,5 +2559,6 @@ public class SampleController {
 		  		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		  		second.setScene(scene);
 		  		second.show();
+		  		*/
     }
 }

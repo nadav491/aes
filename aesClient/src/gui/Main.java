@@ -209,7 +209,7 @@ public class Main extends Application {
 				    							 @Override
 				    							  public void handle(ActionEvent e)
 				    								  {
-				    								    TController[0].T_print(TController[0].Owner_name[0],0);
+				    								    TController[0].T_print(TController[0].Owner_name[0],0,client);
 				    							    	
 				    								    
 				    							      }

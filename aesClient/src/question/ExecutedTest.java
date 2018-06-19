@@ -1,11 +1,12 @@
 package question;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import test.Test;
 
 public class ExecutedTest {
 
@@ -22,7 +23,7 @@ public class ExecutedTest {
 	private ArrayList<String> gradeList;
 	private int sign;
 	private int run_sign;
-	public Map<Integer , ArrayList<Integer>> gradelog;
+	public Map<Integer , ArrayList<String>> gradelog;
 	public ExecutedTest(Test T1,Date currentDate,String Length)
 	{
 		Execute=new Test();

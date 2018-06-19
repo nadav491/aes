@@ -1,25 +1,29 @@
 package database;
-
-import java.awt.image.AreaAveragingScaleFilter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import Student.Student;
+
 import java.sql.PreparedStatement;
 
 import database.ActionsType.ActionNumber;
 import question.Question;
+import test.Test;
+import test.studentTest;
 
 public class MySqlConnection
 {
 	private static Connection conn; 
 	private final static String QUESTION_DATABASE_NAME = "question";
 	private final static String USER_DATABASE_NAME = "user";
-
-	//private final static int DATABASE_SIZE_QUESTION = 8;
-	
+	private final static String TEST_DATABASE_NAME = "test";
+	private final static String STUDENT_DATABASE_NAME = "student";
+	private final static String STUDENT_TEST_DATABASE_NAME = "studentTest";
+		
 	public MySqlConnection() 
 	{
 		MySqlConnection.connect();
@@ -63,6 +67,21 @@ public class MySqlConnection
 		case QUESTION_GET_BY_OWNER: return(getQuestionByOwner((String)obj));
 		case USER_LOGIN: return(userChecklogin((ArrayList<String>)obj));
 		case USER_LOGOUT: return(userLogout((String)obj));
+		
+		
+		case TEST_CREATE: return createTest((Test) obj);
+		case TEST_SET_QUESTIONS: return setQuestionsForTest((Test) obj);
+		case TEST_UPDATE: return ( deleteTest(((Test) obj).getCode()) && createTest((Test) obj) );
+		case TEST_UPDATE_COMMENTS_TEACHER: return addCommentsForTeacher((Test) obj);
+		case TEST_UPDATE_COMMENTS_STUDENT: return addCommentsForStudent((Test) obj);
+		case TEST_GET_ALL: return getAllTests();
+		case TEST_GET_BY_ID: return getTestById((String) obj);
+		case TEST_DELETE: return deleteTest((String) obj);
+		
+		case STUDENT_TEST_CREATE: return createStudentTest((studentTest) obj);
+		case STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID: return getAllTestsByStudentId((String) obj);
+		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return getAllTestsByTeacherId((String) obj);
+		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return getAllTestsByCourseId((String) obj);
 		}
 		return null;
 	}
@@ -155,8 +174,7 @@ public class MySqlConnection
 		if(question == null || !question.checkQuestion())
 			return false;
 		ArrayList<Question> questions = getAllQuestion();
-		String questionNumber = String.format("%3d", questions.size());
-
+		String questionNumber = String.format("%3d", questions.size()).replace(' ', '0');
 		try 
 		{
 			PreparedStatement update = conn.prepareStatement("INSERT into "+QUESTION_DATABASE_NAME+" value(?,?,?,?,?,?,?,?,?,?,?);");
@@ -262,5 +280,347 @@ public class MySqlConnection
 		return true;
 	}
 
+	public static boolean createTest(Test test)
+	{
+		if(test.getCode() == null)
+			return false;
+		try
+		{
+			String state = "insert into " + TEST_DATABASE_NAME + " values (?,?,?,?,?,?,?);";
+			String questions_id = "";
+			String questions_grades = "";
+			String zero_prefix = "0";
+			PreparedStatement add_test = conn.prepareStatement(state);
+			if(test.getQuestions() !=null)
+				for(int i=0; i<test.getQuestions().size(); i++)
+					questions_id = questions_id.concat(test.getQuestions().get(i).getCode());
+			if(test.getQuestionGrade() != null)
+				for(int i=0; i<test.getQuestionGrade().size(); i++)
+					if(test.getQuestionGrade().get(i).length()<3)
+					{
+						zero_prefix = zero_prefix.concat(test.getQuestionGrade().get(i));
+						questions_grades = questions_grades.concat(zero_prefix);
+						zero_prefix = "0";
+					}
+					else
+						questions_grades = questions_grades.concat(test.getQuestionGrade().get(i));
+			add_test.setString(1, test.getCode());
+			add_test.setString(2, questions_id);
+			add_test.setString(3, questions_grades);
+			add_test.setString(4, test.getCommentsForTeacher());
+			add_test.setString(5, test.getCommentsForStudent());
+			add_test.setString(6, test.getOwner());
+			add_test.setString(7, test.getTime());
+			add_test.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+	}
+	public static boolean setQuestionsForTest(Test test)
+	{
+		String questions_id = "";
+		String questions_grades = "";
+		String zero_prefix = "0";
+		if(test.getCode() == null)
+			return false;
+		if(test.getQuestions() !=null)
+			for(int i=0; i<test.getQuestions().size(); i++)
+				questions_id = questions_id.concat(test.getQuestions().get(i).getCode());
+		if(test.getQuestionGrade() != null)
+			for(int i=0; i<test.getQuestionGrade().size(); i++)
+				if(test.getQuestionGrade().get(i).length()<3)
+				{
+					zero_prefix = zero_prefix.concat(test.getQuestionGrade().get(i));
+					questions_grades = questions_grades.concat(zero_prefix);
+					zero_prefix = "0";
+				}
+				else
+					questions_grades = questions_grades.concat(test.getQuestionGrade().get(i));
+		try {
+			String state = "update " + TEST_DATABASE_NAME + 
+					" set " + 
+					" Qs_id = \'" + questions_id + "\'" + 
+					" , " + 
+					" Qs_grades = \'" + questions_grades + "\'" + 
+					" where code = " + "\'" + test.getCode() + "\'" + ";";
+			PreparedStatement add_comment = conn.prepareStatement(state);
+			add_comment.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+	}
+	public static boolean updateTest(Test test)
+	{
+		if(test.getCode() == null)
+			return false;
+		deleteTest(test.getCode());
+		createTest(test);
+		return true;
+	}
+	public static boolean addCommentsForTeacher(Test t)
+	{
+		if(t.getCode() == null)
+			return false;
+		try {
+			String state = "update " + TEST_DATABASE_NAME + " set CommentsForTeacher = \'" + t.getCommentsForTeacher()
+			+ "\' where code = \'" + t.getCode() + "\'";
+			PreparedStatement add_comment = conn.prepareStatement(state);
+			add_comment.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+	}
+	public static boolean addCommentsForStudent(Test t)
+	{
+		if(t.getCode() == null)
+			return false;
+		try {
+			String state = "update " + TEST_DATABASE_NAME + " set CommentsForStudent = \'" + t.getCommentsForStudent()
+			+ "\' where code = \'" + t.getCode() + "\'";
+			PreparedStatement add_comment = conn.prepareStatement(state);
+			add_comment.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+	}
+	public static ArrayList<Test> getAllTests()
+	{
+		ArrayList<Test> allTests = new ArrayList<Test>();
+		Test t = new Test();
+		Statement stmt;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+ TEST_DATABASE_NAME+";");
+	 		while(rs.next())
+	 		{
+	 			ArrayList<Question> qs = fromStringToQuestionArray((rs.getString(2)));
+	 			ArrayList<String> grades = fromStringToStringArray(rs.getString(3));
+	 			t = new Test(rs.getString(1), qs, grades,rs.getString(4),rs.getString(5), rs.getString(6), rs.getString(7));
+	 			allTests.add(t);
+			} 
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		return allTests;
+	}
+	public static Test getTestById(String code)
+	{
+		Test test = new Test();
+		Statement stmt;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+ TEST_DATABASE_NAME +" where code = \'" + code + "\';");
+	 		if(rs.next())
+	 		{
+	 			ArrayList<Question> qs = fromStringToQuestionArray(rs.getString(2));
+	 			ArrayList<String> grades = fromStringToStringArray(rs.getString(3));
+	 			test = new Test(rs.getString(1), qs, grades,rs.getString(4),rs.getString(5), rs.getString(6), rs.getString(7));
+	 		}
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		return test;
+	}
+	public static ArrayList<Question> fromStringToQuestionArray(String qs_id)
+	{
+		ArrayList<Question> questions = new ArrayList<Question>();
+		for(int i=0; i<=qs_id.length()-5; i+=5)
+			questions.add(getQuestionByCode((qs_id.substring(i,i+5))));
+		return questions;
+	}
+	public static ArrayList<String> fromStringToStringArray(String g)
+	{
+		ArrayList<String> grades = new ArrayList<String>();
+		for(int i=0; i<=g.length()-3; i+=3)
+			grades.add(g.substring(i,i+3));
+		return grades;
+	}
+	public static boolean deleteTest(String code)
+	{
+		if(code == null)
+			return false;
+		try
+		{
+			String state = "delete from " + TEST_DATABASE_NAME + " where code = \'" + code +"\';";
+			PreparedStatement del_test = conn.prepareStatement(state);		
+			del_test.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+		
+	}
+	public static boolean createStudentTest(studentTest std_test)
+	{
+		if(std_test.getTest().getCode() == null || std_test.getStudent() == null)
+			return false;
+		try
+		{
+			String state = "insert into " + STUDENT_TEST_DATABASE_NAME + " values (?,?,?,?,?);";
+			String answers = "";
+			PreparedStatement add_student_test = conn.prepareStatement(state);
+			if(std_test.getAnswers() !=null)
+				for(int i=0; i<std_test.getAnswers().size(); i++)
+					answers = answers.concat(std_test.getAnswers().get(i));
+			add_student_test.setString(1, std_test.getStudent() + std_test.getTest().getCode() );
+			add_student_test.setString(2, std_test.getStudent());
+			add_student_test.setString(3, std_test.getTest().getCode());
+			add_student_test.setString(4, answers);
+			add_student_test.setString(5, Integer.toString(std_test.getGrade()));
+			add_student_test.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		
+		return updateStudentTable(std_test.getStudent(), std_test.getTest().getCode(), std_test.fromIntToString(std_test.getGrade()));
+	}
+	public static boolean updateStudentTable(String id, String code, String grade)
+	{
+		Statement stmt;
+		String tests="";
+		String grades="";
+		String state;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+ STUDENT_DATABASE_NAME +" where id = \'" + id + "\';");
+	 		if(rs.next())
+	 		{
+	 			if(rs.getString(2) != null)
+	 				tests = rs.getString(2);
+	 			tests = tests.concat(code);
+	 			if(rs.getString(3) != null)
+	 				grades = rs.getString(3);
+	 			grades = grades.concat(grade); 
+	 		}
+			rs.close();
+			state = " update " + STUDENT_DATABASE_NAME +
+					" set " +
+					" tests_id = \'" + tests + "\' " +
+					" , " +
+					" tests_grades = \'" + grades + "\' " +
+					" where id = \'" + id + "\' " +
+					";";
+			PreparedStatement add_comment = conn.prepareStatement(state);
+			add_comment.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		
+		return true;
+	}
+	public static boolean createStudent(Student std)
+	{
+		if(std.getId() == null)
+			return false;
+		try
+		{
+			String state = "insert into " + STUDENT_DATABASE_NAME + " values (?,?,?);";
+			PreparedStatement add_student = conn.prepareStatement(state);
+			add_student.setString(1, std.getId());
+			add_student.setString(2, std.fromStudentTestsArrayToString(std.getTests()));
+			add_student.setString(3, std.fromIntArrayToString(std.getGrades()));
+			add_student.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+	}
+	public static boolean deleteStudent(String std_id)
+	{
+		if(std_id == null)
+			return false;
+		try
+		{
+			String state = "delete from " + STUDENT_DATABASE_NAME + " where id = \'" + std_id +"\';";
+			PreparedStatement del_student = conn.prepareStatement(state);		
+			del_student.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+	}
+	public static studentTest[] fromStringToStudentTestArray(String stud_id, String test_code)
+	{
+		studentTest tests[] = new studentTest[test_code.length()/6];
+		for(int i=0, j=0; i<=test_code.length()-6; i+=6)
+			tests[j++] = getStudentTestByIdAndCode(stud_id, test_code.substring(i,i+6));
+		return tests;
+	}
+	public static studentTest getStudentTestByIdAndCode(String id, String code)
+	{
+		studentTest std_test = new studentTest();
+		Statement state;
+		try 
+		{
+			state = conn.createStatement();
+			ResultSet rs = state.executeQuery("SELECT * FROM "+ STUDENT_TEST_DATABASE_NAME +
+					" where id = \'" + id + "\'" +
+					" and test_code = \'" + code + "\'" +";");
+	 		if(rs.next())
+	 		{
+	 			std_test.setStudent(rs.getString(2));
+	 			std_test.setTest(getTestById(code));
+	 			char g[];
+	 			g = rs.getString(4).toCharArray();
+	 			ArrayList<String> answers= new ArrayList<String>();
+	 			for(int i=0; i<g.length; i++)
+	 				answers.add(g[i]+"");
+	 			std_test.setAnswers(answers);
+	 			std_test.setGrade(Integer.parseInt(rs.getString(5)));
+	 		}
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		return std_test;
+	}
+	public static int[] fromStringToIntArray(String str)
+	{
+		int grades[] = new int[str.length()/3];
+		for(int i=0, j=0; i<=str.length()-3; i+=3)
+			grades[j++] = Integer.parseInt(str.substring(i,i+3));
+		return grades;
+	}
+	public static Student getAllTestsByStudentId(String std_id)
+	{
+		Student s = new Student();
+		s.setId(std_id);
+		Statement stmt;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+ STUDENT_DATABASE_NAME +" where id = \'" + std_id + "\';");
+	 		if(rs.next())
+	 		{
+	 			s.setTests(fromStringToStudentTestArray(s.getId(), rs.getString(2)));
+	 			s.setGrades(fromStringToIntArray(rs.getString(3)));
+	 		}
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		return s;
+	}
+	public static studentTest[] getAllTestsByTeacherId(String teacher_id)
+	{
+		ArrayList<studentTest> st_arr = new ArrayList<studentTest>();
+		studentTest st[];
+		Statement stmt;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+ STUDENT_TEST_DATABASE_NAME + 
+					" left join " + TEST_DATABASE_NAME + " on test_code = code where TestOwner = \'" + teacher_id + "\';");
+			while(rs.next())
+				st_arr.add(getStudentTestByIdAndCode(rs.getString(2),rs.getString(3)));
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		st = new studentTest[st_arr.size()];
+		for(int i=0; i<st.length; i++)
+			st[i] = st_arr.get(i);
+		return st;
+	}
+	public static studentTest[] getAllTestsByCourseId(String course_id)
+	{
+		ArrayList<studentTest> st_arr = new ArrayList<studentTest>();
+		studentTest st[];
+		Statement stmt;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM " + STUDENT_TEST_DATABASE_NAME + 
+					" where test_code like \'" + course_id + "%\';");
+			while(rs.next())
+				st_arr.add(getStudentTestByIdAndCode(rs.getString(2),rs.getString(3)));
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		st = new studentTest[st_arr.size()];
+		for(int i=0; i<st.length; i++)
+			st[i] = st_arr.get(i);
+		return st;
+	}
 }
 
