@@ -161,7 +161,7 @@ public class Main extends Application {
 				    							 @Override
 				    							  public void handle(ActionEvent e)
 				    								  {
-				    								 Controller[0].viewSignUpList(0);
+				    								 Controller[0].viewSignUpList(0,client);
 		    								         
 				    								     
 				    								  }

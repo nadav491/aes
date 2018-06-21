@@ -56,7 +56,7 @@ public class StudentController {
 	private Stage primaryStage;
 	public static final ArrayList<Stage> closestage=new  ArrayList<Stage>();
 	public static final ArrayList<Stage> Messagestage=new  ArrayList<Stage>();
-	public static Map <Integer,ArrayList<Test>> signUp_test_list=new HashMap();
+	public static ArrayList<Test> signUp_test_list=new ArrayList<Test>();
 	private ArrayList<Test> test_list;
 	private String Question_select="0";
 	private Test save=new Test();
@@ -70,7 +70,6 @@ public class StudentController {
 
 	public StudentController()
 	{
-		signUp_test_list.put(val, new ArrayList<Test>());
 		checkedTests.put(val, new ArrayList<Test>());
 		closestage.add(new Stage());
 		val++;
@@ -81,7 +80,17 @@ public class StudentController {
 	{
 		
 		Owner_name[c]=Owner;
-		
+		signUp_test_list=new ArrayList<Test>();
+		for(int i=0;i<client.GetAllExecutreTest().size();i++)
+		{
+			if(client.GetAllExecutreTest().get(i).getSign()==0)
+			{
+				if(client.GetAllExecutreTest().get(i).getSignUpList().contains(Owner_name[c]))
+				{
+					signUp_test_list.add(client.GetAllExecutreTest().get(i).getTest());
+				}
+			}
+		}
 		
 		 BorderPane root = new BorderPane();
 		    Scene scene = new Scene(root, 400, 250, Color.WHITE);
@@ -114,9 +123,9 @@ public class StudentController {
 		    int sign=0;
 		    for(int i=0;i<client.GetAllExecutreTest().size();i++)
 		    {
-		    	for(int j=0;j<signUp_test_list.get(c).size();j++)
+		    	for(int j=0;j<signUp_test_list.size();j++)
 		    	{
-		    		if(client.GetAllExecutreTest().get(i).getTest().getCode().equals(this.signUp_test_list.get(c).get(j).getCode()) )
+		    		if(client.GetAllExecutreTest().get(i).getTest().getCode().equals(this.signUp_test_list.get(j).getCode()) )
 		    			{
 		    			    sign++;
 		    			}
@@ -213,10 +222,11 @@ public class StudentController {
 					    			   if(!client.GetAllExecutreTest().get(j).getSignUpList().contains(Owner_name[c])){
 					    			   if(selected.get(i).equals(client.GetAllExecutreTest().get(j).getTest().getCode())) {
 					    				   client.GetAllExecutreTest().get(j).getSignUpList().add(Owner_name[c]);
-					    				   
 					    				   client.GetAllExecutreTest().get(j).setStudentNumber(1);
-					    				   client.GetAllExecutreTest().get(j).getTest().setCode(client.GetAllExecutreTest().get(j).getExe_code());
-					    				   signUp_test_list.get(c).add(client.GetAllExecutreTest().get(j).getTest());
+					    				   client.GetAllExecutreTest().get(j).getTest().setCode(client.GetAllExecutreTest().get(j).getTest().getCode());
+					    				   client.GetAllExecutreTest().get(j).setExe_code(client.GetAllExecutreTest().get(j).getExe_code());
+					    				   signUp_test_list.add(client.GetAllExecutreTest().get(j).getTest());
+					    				   client.UpdateExecutreTest(client.GetAllExecutreTest().get(j));
 					    				   break;
 					    			   }
 					    			   }
@@ -236,15 +246,27 @@ public class StudentController {
 		    primaryStage.show();
     	
 	}
-	public void viewSignUpList(int c)
+	public void viewSignUpList(int c , Client client)
 	{
 		primaryStage=new Stage();
+		
+		signUp_test_list=new ArrayList<Test>();
+		for(int i=0;i<client.GetAllExecutreTest().size();i++)
+		{
+			if(client.GetAllExecutreTest().get(i).getSign()==0)
+			{
+				if(client.GetAllExecutreTest().get(i).getSignUpList().contains(Owner_name[c]))
+				{
+					signUp_test_list.add(client.GetAllExecutreTest().get(i).getTest());
+				}
+			}
+		}
 		ScrollPane pane=new ScrollPane();
 		ObservableList<String> data = FXCollections.observableArrayList();
 
 	    ListView<String> listView = new ListView<String>(data);
 	    listView.setPrefSize(300, 250);
-	    for(int i=0;i<signUp_test_list.get(c).size();i++)data.add(signUp_test_list.get(c).get(i).getCode());
+	    for(int i=0;i<signUp_test_list.size();i++)data.add(signUp_test_list.get(i).getCode());
 
 	    listView.setItems(data);
 	    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -261,15 +283,28 @@ public class StudentController {
 	}
 	public void loadTestChoiceWindow(int c, Client client)
 	{
-		
+		ArrayList<String> exeCodes=new ArrayList<String>();
 		primaryStage=new Stage();
+		signUp_test_list=new ArrayList<Test>();
+		for(int i=0;i<client.GetAllExecutreTest().size();i++)
+		{
+			if(client.GetAllExecutreTest().get(i).getSign()==0)
+			{
+				if(client.GetAllExecutreTest().get(i).getSignUpList().contains(Owner_name[c]))
+				{
+					signUp_test_list.add(client.GetAllExecutreTest().get(i).getTest());
+					exeCodes.add(client.GetAllExecutreTest().get(i).getExe_code());
+					
+				}
+			}
+		}
 		BorderPane Test_form=new BorderPane();
 		ScrollPane pane=new ScrollPane();
 		ObservableList<String> data = FXCollections.observableArrayList();
 
 	    ListView<String> listView = new ListView<String>(data);
 	    listView.setPrefSize(300, 250);
-	    for(int i=0;i<signUp_test_list.get(c).size();i++)data.add(signUp_test_list.get(c).get(i).getCode());
+	    for(int i=0;i<signUp_test_list.size();i++)data.add(signUp_test_list.get(i).getCode());
 
 	    listView.setItems(data);
 	    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -303,56 +338,57 @@ public class StudentController {
 					    	   F1.setPrefColumnCount(30);
 					    	   F1.setPrefRowCount(1);
 					    	   enter_pass.add(F1, 0, 0);
-					    	   for(int i=0;i<signUp_test_list.get(c).size();i++)
+					    	   for(int i=0;i<signUp_test_list.size();i++)
 						    	  {
-						    		  if(signUp_test_list.get(c).get(i).getCode().equals(Question_select))
+						    		  if(signUp_test_list.get(i).getCode().equals(Question_select))
 						    			  {
 						    			      idx=i;
 						    			  }
 						    	  }
+					    	   
 					    	   Button B1=new Button("Start");
 					    	   B1.setOnAction(new EventHandler<ActionEvent>()
 							    {
 								       @Override
 								       public void handle(ActionEvent e)
 									  {
-								    	   if(F1.getText().equals(signUp_test_list.get(c).get(idx).getCode()))
+								    	   if(F1.getText().equals(exeCodes.get(idx)))
 								    	   {
 								    		  File file = new File("C:\\Users\\tomer_000\\Desktop\\test.txt");
 								    		   BufferedWriter writer;
 											try {
 												writer = new BufferedWriter(new FileWriter(file, true));
-												writer.append("Test: "+signUp_test_list.get(c).get(idx).getCode());
+												writer.append("Test: "+signUp_test_list.get(idx).getCode());
 												writer.newLine();
-												writer.append("Written by: "+signUp_test_list.get(c).get(idx).getOwner());
+												writer.append("Written by: "+signUp_test_list.get(idx).getOwner());
 												writer.newLine();
-												writer.append("test duration: "+signUp_test_list.get(c).get(idx).getTime());
+												writer.append("test duration: "+signUp_test_list.get(idx).getTime());
 												writer.newLine();
 												writer.newLine();
-												for(int i=0;i<signUp_test_list.get(c).get(idx).getQuestions().size();i++)
+												for(int i=0;i<signUp_test_list.get(idx).getQuestions().size();i++)
 												{
 													writer.append("Question "+(i+1)+":");
 													writer.newLine();
-													writer.append("Question points: "+signUp_test_list.get(c).get(idx).getQuestionGrade().get(i));
+													writer.append("Question points: "+signUp_test_list.get(idx).getQuestionGrade().get(i));
 													writer.newLine();
 													writer.newLine();
 													writer.append("question:");
 													writer.newLine();
-													writer.append(signUp_test_list.get(c).get(idx).getQuestions().get(i).getBody());
+													writer.append(signUp_test_list.get(idx).getQuestions().get(i).getBody());
 													writer.newLine();
 													writer.newLine();
-													writer.append("instructions: "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getSInstruction());
+													writer.append("instructions: "+signUp_test_list.get(idx).getQuestions().get(i).getSInstruction());
 													writer.newLine();
 													writer.newLine();
 													writer.append("Answers:");
 													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getAnswer1());
+													writer.append("_ "+signUp_test_list.get(idx).getQuestions().get(i).getAnswer1());
 													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getAnswer2());
+													writer.append("_ "+signUp_test_list.get(idx).getQuestions().get(i).getAnswer2());
 													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getAnswer3());
+													writer.append("_ "+signUp_test_list.get(idx).getQuestions().get(i).getAnswer3());
 													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(c).get(idx).getQuestions().get(i).getAnswer4());
+													writer.append("_ "+signUp_test_list.get(idx).getQuestions().get(i).getAnswer4());
 													writer.newLine();
 													writer.newLine();
 													writer.newLine();
@@ -389,9 +425,9 @@ public class StudentController {
 					    	   F1.setPrefColumnCount(30);
 					    	   F1.setPrefRowCount(1);
 					    	   enter_pass.add(F1, 0, 0);
-					    	   for(int i=0;i<signUp_test_list.get(c).size();i++)
+					    	   for(int i=0;i<signUp_test_list.size();i++)
 						    	  {
-						    		  if(signUp_test_list.get(c).get(i).getCode().equals(Question_select))
+						    		  if(signUp_test_list.get(i).getCode().equals(Question_select))
 						    			  {
 						    			      idx=i;
 						    			  }
@@ -402,13 +438,13 @@ public class StudentController {
 								       @Override
 								       public void handle(ActionEvent e)
 									  {
-								    	   if(F1.getText().equals(signUp_test_list.get(c).get(idx).getCode()))
+								    	   if(F1.getText().equals(exeCodes.get(idx)))
 								    	   {
 								    		        client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()+1);
 								    		        BorderPane window=new BorderPane();
+								    		       
 											        final studentTest sav1=new studentTest(Owner_name[c],client.GetAllExecutreTest().get(idx).getTest(),0,new ArrayList<String>(),client.GetAllExecutreTest().get(idx).getTest().getTime(),
 											        		client.GetAllExecutreTest().get(idx).getTest().getOwner());
-											        System.out.println(client.GetAllExecutreTest().get(idx).getTest());
   										    	    ScrollPane pane=new ScrollPane();
 											      	GridPane Text_edit=new GridPane();
 											      	Text_edit.setHgap(10);
@@ -486,7 +522,7 @@ public class StudentController {
 																		    		   }
 																		    		   j=0;
 																		    	   }
-																		    	   signUp_test_list.get(c).remove(idx);
+																		    	   signUp_test_list.remove(idx);
 																		    	  
 										
 																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
@@ -726,12 +762,12 @@ public class StudentController {
 																		    		   {
 																		    			   for(int p=0;p<signUp_test_list.size();p++)
 																		    			   {
-																		    				   for(int u=0;u<signUp_test_list.get(p).size();u++)
+																		    				   for(int u=0;u<signUp_test_list.size();u++)
 																		    				   {
-																		    					   if(signUp_test_list.get(p).get(u).getCode().
+																		    					   if(signUp_test_list.get(u).getCode().
 																		    							   equals(client.GetAllExecutreTest().get(idx).getTest().getCode()))
 																		    					   {
-																		    						   signUp_test_list.get(p).remove(u);
+																		    						   signUp_test_list.remove(u);
 																		    						   break;
 																		    					   }
 																		    				   }
@@ -851,12 +887,12 @@ public class StudentController {
 																		    		   {
 																		    			   for(int p=0;p<signUp_test_list.size();p++)
 																		    			   {
-																		    				   for(int u=0;u<signUp_test_list.get(p).size();u++)
+																		    				   for(int u=0;u<signUp_test_list.size();u++)
 																		    				   {
-																		    					   if(signUp_test_list.get(p).get(u).getCode().
+																		    					   if(signUp_test_list.get(u).getCode().
 																		    							   equals(client.GetAllExecutreTest().get(idx).getTest().getCode()))
 																		    					   {
-																		    						   signUp_test_list.get(p).remove(u);
+																		    						   signUp_test_list.remove(u);
 																		    						   break;
 																		    					   }
 																		    				   }

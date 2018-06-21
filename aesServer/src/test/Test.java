@@ -5,10 +5,6 @@ import java.util.ArrayList;
 
 import question.*;
 public class Test implements Serializable {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8046372034304566997L;
 	
 	private static final int CODE_LENGTH = 6;

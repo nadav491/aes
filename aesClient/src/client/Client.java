@@ -237,6 +237,14 @@ public class Client implements ChatIF
 		  return (ArrayList<ExecutedTest>)this.answer;
 	  }
 	  
+	  public ArrayList<ExecutedTest> UpdateExecutreTest(ExecutedTest test)
+	  {
+		  MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_UPDATE), test);
+		  this.chatClient.handleMessageFromClientUI(msg);
+		  waitForAnswer();
+		  return (ArrayList<ExecutedTest>)this.answer;
+	  }
+	  
 	public ChatClient getChatClient() 
 	{
 		return chatClient;

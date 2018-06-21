@@ -44,7 +44,8 @@ public class ActionsType implements Serializable
 		STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID,
 		
 		EXECUTED_TEST_ADD,
-		EXECUTED_TEST_GET_ALL;
+		EXECUTED_TEST_GET_ALL,
+		EXECUTED_TEST_UPDATE;
 	}
 	
 	public static int getValue(ActionNumber action)
@@ -76,6 +77,7 @@ public class ActionsType implements Serializable
 
 		case EXECUTED_TEST_ADD: return 1000;
 		case EXECUTED_TEST_GET_ALL: return 1001;
+		case EXECUTED_TEST_UPDATE: return 1002;
 		}
 		return 0;
 	}
@@ -109,6 +111,7 @@ public class ActionsType implements Serializable
 		
 		case 1000: return ActionNumber.EXECUTED_TEST_ADD;
 		case 1001: return ActionNumber.EXECUTED_TEST_GET_ALL;
+		case 1002: return ActionNumber.EXECUTED_TEST_UPDATE;
 		}
 		return null;
 	}

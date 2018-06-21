@@ -85,8 +85,9 @@ public class MySqlConnection
 		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return getAllTestsByTeacherId((String) obj);
 		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return getAllTestsByCourseId((String) obj);
 		
-		case EXECUTED_TEST_ADD: executedTests.add((ExecutedTest)obj); return(" ");
-		case EXECUTED_TEST_GET_ALL: return(executedTests);
+		case EXECUTED_TEST_ADD: executedTests.add((ExecutedTest)obj); return " ";
+		case EXECUTED_TEST_GET_ALL: System.out.println(executedTests); return(executedTests);
+		case EXECUTED_TEST_UPDATE: UpdateExecutedTests((ExecutedTest)obj); return(executedTests);
 		}
 		return null;
 	}
@@ -622,10 +623,21 @@ public class MySqlConnection
 				st_arr.add(getStudentTestByIdAndCode(rs.getString(2),rs.getString(3)));
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}
-		st = new studentTest[st_arr.size()];
+		st = new studentTest[st_arr.size()]; 
 		for(int i=0; i<st.length; i++)
 			st[i] = st_arr.get(i);
 		return st;
+	}
+	
+	public static void UpdateExecutedTests(ExecutedTest updatedTest)
+	{
+		for(int i=0; i<executedTests.size();i++)
+		{
+			if(executedTests.get(i).getTest().getCode().equals(updatedTest.getTest().getCode()))
+			{
+				executedTests.get(i).setSignUpList(updatedTest.getSignUpList());
+			}
+		}
 	}
 }
 

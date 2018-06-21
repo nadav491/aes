@@ -1739,8 +1739,8 @@ public class SampleController {
 		    				    		   Date date=new Date();
 		    				    		   final ExecutedTest add=new ExecutedTest(test_list.get(idx_C),date, test_list.get(idx_C).getTime());
 		    				    		   add.setExe_code(F1.getText());
-		    				    		   add.getTest().getQuestionGrade().add("45");
-		    				    		   add.getTest().getQuestionGrade().add("55");
+		    				    		   add.getTest().setQuestionGrade(test_list.get(idx_C).getQuestionGrade());
+		    				    		   System.out.println(add.getTest().getQuestionGrade());
 		    				    		   add.setexecuter(Owner_name[c]);
 		    				    		   System.out.println(add.getexecuter());
 		    				    		   add.setrSign(0);
@@ -1756,7 +1756,10 @@ public class SampleController {
 		    				    				   }
 		    				    			   }
 		    				    		   }
-		    				    		   if(check==0)client.AddToExecutreTest(add);
+		    				    		   if(check==0) {
+		    				    			   client.AddToExecutreTest(add);
+		    				    		   }
+
 		    				    		   SecondStage.close();
 		    				    	   }
 		    				    	   
@@ -1831,11 +1834,11 @@ public class SampleController {
 							    		  {
 							    			  
 							    			  Main.Controller[0].closestage.get(0).close();
-							    			  for(int j=0;j<StudentController.signUp_test_list.get(0).size();j++)
+							    			  for(int j=0;j<StudentController.signUp_test_list.size();j++)
 							    			 {
-							    				 if(Main.ExecuteList.get(idx_C).getTest().getCode().equals(StudentController.signUp_test_list.get(0).get(j).getCode()))
+							    				 if(Main.ExecuteList.get(idx_C).getTest().getCode().equals(StudentController.signUp_test_list.get(j).getCode()))
 							    				 {
-							    					 StudentController.signUp_test_list.get(0).remove(j);
+							    					 StudentController.signUp_test_list.remove(j);
 							    				 }
 							    			 }
 							    		 }
@@ -1843,11 +1846,11 @@ public class SampleController {
 							    		  if(Main.ExecuteList.get(idx_C).getSignUpList().get(i).equals(Main.Controller[1].Owner_name[1]))
 							    		  {
 							    			  Main.Controller[1].closestage.get(1).close();
-							    			  for(int j=0;j<StudentController.signUp_test_list.get(1).size();j++)
+							    			  for(int j=0;j<StudentController.signUp_test_list.size();j++)
 								    			 {
-								    				 if(Main.ExecuteList.get(idx_C).getTest().getCode().equals(StudentController.signUp_test_list.get(1).get(j).getCode()))
+								    				 if(Main.ExecuteList.get(idx_C).getTest().getCode().equals(StudentController.signUp_test_list.get(j).getCode()))
 								    				 {
-								    					 StudentController.signUp_test_list.get(1).remove(j);
+								    					 StudentController.signUp_test_list.remove(j);
 								    				 }
 								    			 }
 							    		  }

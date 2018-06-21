@@ -113,4 +113,7 @@ public class ExecutedTest implements Serializable {
     {
     	 StudentNumForceFinished=num;
     }
+	public void setSignUpList(ArrayList<String> signUpList2) {
+		this.SignUplist = signUpList2;	
+	}
 }
