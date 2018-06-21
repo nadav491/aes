@@ -17,6 +17,8 @@ public class studentTest implements Serializable {
 	String student;
 	String reason;
 	ArrayList<String> remarks;
+	boolean check;
+	boolean cheat;
 	public studentTest(String student, Test test, int grade, ArrayList<String> answers, String time, String teacher)
 	{
 		super();
@@ -25,9 +27,12 @@ public class studentTest implements Serializable {
 		this.time = time;
 		this.teacher = teacher;
 		this.student = student;
-		reason=null;
-		remarks=new ArrayList<String>();
-	}
+		this.reason=" ";
+		this.remarks=new ArrayList<String>();
+		this.test = test;
+		this.check = false;
+		this.cheat = false;
+}
 	public studentTest(studentTest st)
 	{
 		super();
@@ -36,13 +41,36 @@ public class studentTest implements Serializable {
 		this.time = st.time;
 		this.teacher = st.teacher;
 		this.student = st.student;
-		reason=null;
-		remarks=new ArrayList<String>();
+		this.reason=" ";
+		this.remarks=new ArrayList<String>();
+		this.check = false;
+		this.cheat = false;
+	}
+	
+	public studentTest() {
+		super();
+		this.remarks=new ArrayList<String>();
+	}
+	public void setremarks()
+	{
+		this.remarks=new ArrayList<String>();
 	}
 	public ArrayList<String> getRemark() {
 		return remarks;
 	}
 	
+	public boolean isCheck() {
+		return check;
+	}
+	public void setCheck(boolean check) {
+		this.check = check;
+	}
+	public boolean isCheat() {
+		return cheat;
+	}
+	public void setCheat(boolean cheat) {
+		this.cheat = cheat;
+	}
 	public String getReason() {
 		return reason;
 	}
@@ -55,10 +83,7 @@ public class studentTest implements Serializable {
 	public void setStudent(String student) {
 		this.student = student;
 	}
-	public studentTest()
-	{
-		super();
-	}
+
 	public int getGrade() {
 		return grade;
 	}

@@ -84,9 +84,10 @@ public class MySqlConnection
 		case STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID: return getAllTestsByStudentId((String) obj);
 		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return getAllTestsByTeacherId((String) obj);
 		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return getAllTestsByCourseId((String) obj);
+		case STUDENT_TEST_UPDATE: deleteStudentTest(((studentTest) obj).getStudent() + ((studentTest) obj).getTest().getCode() ); return createStudentTest((studentTest) obj);
 		
 		case EXECUTED_TEST_ADD: executedTests.add((ExecutedTest)obj); return " ";
-		case EXECUTED_TEST_GET_ALL: System.out.println(executedTests); return(executedTests);
+		case EXECUTED_TEST_GET_ALL: return(executedTests);
 		case EXECUTED_TEST_UPDATE: UpdateExecutedTests((ExecutedTest)obj); return(executedTests);
 		}
 		return null;
@@ -437,26 +438,14 @@ public class MySqlConnection
 			grades.add(g.substring(i,i+3));
 		return grades;
 	}
-	public static boolean deleteTest(String code)
-	{
-		if(code == null)
-			return false;
-		try
-		{
-			String state = "delete from " + TEST_DATABASE_NAME + " where code = \'" + code +"\';";
-			PreparedStatement del_test = conn.prepareStatement(state);		
-			del_test.executeUpdate();
-		} catch (SQLException e) {e.printStackTrace();}
-		return true;
-		
-	}
+
 	public static boolean createStudentTest(studentTest std_test)
 	{
 		if(std_test.getTest().getCode() == null || std_test.getStudent() == null)
 			return false;
 		try
 		{
-			String state = "insert into " + STUDENT_TEST_DATABASE_NAME + " values (?,?,?,?,?);";
+			String state = "insert into " + STUDENT_TEST_DATABASE_NAME + " values (?,?,?,?,?,?,?,?);";
 			String answers = "";
 			PreparedStatement add_student_test = conn.prepareStatement(state);
 			if(std_test.getAnswers() !=null)
@@ -467,6 +456,9 @@ public class MySqlConnection
 			add_student_test.setString(3, std_test.getTest().getCode());
 			add_student_test.setString(4, answers);
 			add_student_test.setString(5, Integer.toString(std_test.getGrade()));
+			add_student_test.setBoolean(6, std_test.isCheat());
+			add_student_test.setBoolean(7, std_test.isCheck());
+			add_student_test.setString(8, std_test.getReason());
 			add_student_test.executeUpdate();
 		} catch (SQLException e) {e.printStackTrace();}
 		
@@ -560,6 +552,9 @@ public class MySqlConnection
 	 				answers.add(g[i]+"");
 	 			std_test.setAnswers(answers);
 	 			std_test.setGrade(Integer.parseInt(rs.getString(5)));
+	 			std_test.setCheat(rs.getBoolean(6));
+	 			std_test.setCheck(rs.getBoolean(7));
+	 			std_test.setReason(rs.getString(8));
 	 		}
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}
@@ -628,7 +623,33 @@ public class MySqlConnection
 			st[i] = st_arr.get(i);
 		return st;
 	}
+	public static boolean deleteTest(String code)
+	{
+		if(code == null)
+			return false;
+		try
+		{
+			String state = "delete from " + TEST_DATABASE_NAME + " where code = \'" + code +"\';";
+			PreparedStatement del_test = conn.prepareStatement(state);		
+			del_test.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+		
+	}
 	
+	public static boolean deleteStudentTest(String code)
+	{
+		if(code == null)
+			return false;
+		try
+		{
+			String state = "delete from " + STUDENT_TEST_DATABASE_NAME + " where id_code = \'" + code +"\';";
+			PreparedStatement del_test = conn.prepareStatement(state);		
+			del_test.executeUpdate();
+		} catch (SQLException e) {e.printStackTrace();}
+		return true;
+		
+	}
 	public static void UpdateExecutedTests(ExecutedTest updatedTest)
 	{
 		for(int i=0; i<executedTests.size();i++)
@@ -636,6 +657,10 @@ public class MySqlConnection
 			if(executedTests.get(i).getTest().getCode().equals(updatedTest.getTest().getCode()))
 			{
 				executedTests.get(i).setSignUpList(updatedTest.getSignUpList());
+				executedTests.get(i).setFInishedNum(updatedTest.getFInishedNum());
+				executedTests.get(i).setFFInishedNum(updatedTest.getFFInishedNum());
+				executedTests.get(i).setSign(updatedTest.getSign());
+				executedTests.get(i).setrSign(updatedTest.getrSign());
 			}
 		}
 	}

@@ -42,6 +42,7 @@ public class ActionsType implements Serializable
 		STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID,
 		STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID,
 		STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID,
+		STUDENT_TEST_UPDATE,
 		
 		EXECUTED_TEST_ADD,
 		EXECUTED_TEST_GET_ALL,
@@ -74,7 +75,8 @@ public class ActionsType implements Serializable
 		case STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID: return 121;
 		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return 122;
 		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return 123;
-
+		case STUDENT_TEST_UPDATE: return 124;
+		
 		case EXECUTED_TEST_ADD: return 1000;
 		case EXECUTED_TEST_GET_ALL: return 1001;
 		case EXECUTED_TEST_UPDATE: return 1002;
@@ -108,6 +110,7 @@ public class ActionsType implements Serializable
 		case 121: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID;
 		case 122: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID;
 		case 123: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID;
+		case 124: return ActionNumber.STUDENT_TEST_UPDATE;
 		
 		case 1000: return ActionNumber.EXECUTED_TEST_ADD;
 		case 1001: return ActionNumber.EXECUTED_TEST_GET_ALL;

@@ -57,6 +57,7 @@ public class StudentController {
 	public static final ArrayList<Stage> closestage=new  ArrayList<Stage>();
 	public static final ArrayList<Stage> Messagestage=new  ArrayList<Stage>();
 	public static ArrayList<Test> signUp_test_list=new ArrayList<Test>();
+	public ArrayList<studentTest> checked_list=new ArrayList<studentTest>();
 	private ArrayList<Test> test_list;
 	private String Question_select="0";
 	private Test save=new Test();
@@ -442,7 +443,6 @@ public class StudentController {
 								    	   {
 								    		        client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()+1);
 								    		        BorderPane window=new BorderPane();
-								    		       
 											        final studentTest sav1=new studentTest(Owner_name[c],client.GetAllExecutreTest().get(idx).getTest(),0,new ArrayList<String>(),client.GetAllExecutreTest().get(idx).getTest().getTime(),
 											        		client.GetAllExecutreTest().get(idx).getTest().getOwner());
   										    	    ScrollPane pane=new ScrollPane();
@@ -523,26 +523,16 @@ public class StudentController {
 																		    		   j=0;
 																		    	   }
 																		    	   signUp_test_list.remove(idx);
-																		    	  
 										
 																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
 																		    	   client.GetAllExecutreTest().get(idx).setrSign(-1);
-																		    	   client.GetAllExecutreTest().get(idx).setSign(1);
-																		    	   int k=0;
-																		    	   for(int i=0;i<Main.TController.length;i++)
-																		    	   {
-																		    		   
-																		    		   if(Main.TController[i].Owner_name[i].equals(client.GetAllExecutreTest().get(idx).getexecuter()))
-																		    	       {
-																		    			   k=i;
-																		    			  
-																		    	       }
-																		    	   }
-																		    	   SampleController.solved_Tests.get(k).add(sav1.getTest());
+																		    	   client.GetAllExecutreTest().get(idx).setSign(2);
+																		    	   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
+																		    	   
 													    						   closestage.get(c).close();
 													    					   }));
 													    			   time1[c].play();
-													    			  
+													    			
 													    			   
 													    		   }
 													    	   }
@@ -750,7 +740,12 @@ public class StudentController {
 																		    		   }
 																		    		   j=0;
 																		    	   }
+                                                                                   int sum=0;
 																		    	   
+																		    	   for (int y=0;y<sav1.getAnswers().size();y++)
+																		    	   {
+																		    		   sum+=Integer.parseInt(sav1.getAnswers().get(y));
+																		    	   }
 																		    	  
 																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
 																		    	   client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()-1);
@@ -758,31 +753,10 @@ public class StudentController {
 																		    	   {
 																		    		   client.GetAllExecutreTest().get(idx).setSign(1);
 																		    		   client.GetAllExecutreTest().get(idx).setrSign(-1);
-																		    		   for(int i=0;i<client.GetAllExecutreTest().get(idx).getSignUpList().size();i++)
-																		    		   {
-																		    			   for(int p=0;p<signUp_test_list.size();p++)
-																		    			   {
-																		    				   for(int u=0;u<signUp_test_list.size();u++)
-																		    				   {
-																		    					   if(signUp_test_list.get(u).getCode().
-																		    							   equals(client.GetAllExecutreTest().get(idx).getTest().getCode()))
-																		    					   {
-																		    						   signUp_test_list.remove(u);
-																		    						   break;
-																		    					   }
-																		    				   }
-																		    			   }
-																		    		   }
+																		    		   client.GetAllExecutreTest().get(idx).setFFInishedNum(client.GetAllExecutreTest().get(idx).getStudentNumber()-client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
+																		    		  
 																		    	   }
-																		    	   int k=0;
-																		    	   for(int i=0;i<Main.TController.length;i++)
-																		    	   {
-																		    		   if(Main.TController[i].Owner_name[i].equals(client.GetAllExecutreTest().get(idx).getexecuter()))
-																		    	       {
-																		    			   k=i;
-																		    			  
-																		    	       }
-																		    	   }
+																		    	   
 																		    	   int sign1=0;
 																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
@@ -798,9 +772,13 @@ public class StudentController {
 																		    			   }
 																		    		   }																		    		   
 																		    	   }
-																		    	   //if(sign1>0)sav1.setcop(1);
-																		    	   SampleController.solved_Tests.get(k).add(sav1.getTest());
-																		    	   System.out.println(SampleController.solved_Tests.get(k));
+																		    	   studentTest st1 = new studentTest(Owner_name[c], client.GetAllExecutreTest().get(idx).getTest(), sum, sav1.getAnswers(), sav1.getTime(), sav1.getTeacher());
+																		    	   if(sign1>1) st1.setCheat(true);
+																		    	   client.submitStudentTest(st1);
+
+																		    	   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
+																		    	   
+																		    	  
 																		    	  
 																			  }
 																	    });
@@ -875,58 +853,42 @@ public class StudentController {
 																		    		   }
 																		    		   j=0;
 																		    	   }
-																		    	  
-																		 
+																		    	   int sum=0;
+																		    	   
+																		    	   for (int y=0;y<sav1.getAnswers().size();y++)
+																		    	   {
+																		    		   sum+=Integer.parseInt(sav1.getAnswers().get(y));
+																		    	   }
 																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
 																		    	   client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()-1);
 																		    	   if(client.GetAllExecutreTest().get(idx).getrSign()==0)
 																		    	   {
 																		    		   client.GetAllExecutreTest().get(idx).setSign(1);
 																		    		   client.GetAllExecutreTest().get(idx).setrSign(-1);
-																		    		   for(int i=0;i<client.GetAllExecutreTest().get(idx).getSignUpList().size();i++)
-																		    		   {
-																		    			   for(int p=0;p<signUp_test_list.size();p++)
-																		    			   {
-																		    				   for(int u=0;u<signUp_test_list.size();u++)
-																		    				   {
-																		    					   if(signUp_test_list.get(u).getCode().
-																		    							   equals(client.GetAllExecutreTest().get(idx).getTest().getCode()))
-																		    					   {
-																		    						   signUp_test_list.remove(u);
-																		    						   break;
-																		    					   }
-																		    				   }
-																		    			   }
-																		    		   }
-																		    	   }
-																		    	   int k=0;
-																		    	   for(int i=0;i<Main.TController.length;i++)
-																		    	   {
-																		    		   if(Main.TController[i].Owner_name[i].equals(client.GetAllExecutreTest().get(idx).getexecuter()))
-																		    	       {
-																		    			   k=i;
-																		    			  
-																		    	       }
+																		    		   client.GetAllExecutreTest().get(idx).setFFInishedNum(client.GetAllExecutreTest().get(idx).getStudentNumber()-client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
+																		    		  
 																		    	   }
 																		    	   int sign1=0;
 																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
-																		    	   System.out.println(client.GetAllExecutreTest().get(idx).gradelog);
+																		    	   
 																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).gradelog.size();f++)
 																		    	   {
-					
+																		    		   
 																		    		   for(int s=0;s<client.GetAllExecutreTest().get(idx).getTest().getQuestions().size();s++)
 																		    		   {
 																		    			   if(sav1.getAnswers().get(s)==client.GetAllExecutreTest().get(idx).gradelog.get(f).get(s))
 																		    			   {
 																		    				   sign1++;
 																		    			   }
-																		    		   
-																		    		   }
+																		    		   }																		    		   
 																		    	   }
-																		    	   //if(sign1>0)sav1.setcop(1);
-																		    	   SampleController.solved_Tests.get(k).add(sav1.getTest());
-																		    	   System.out.println(SampleController.solved_Tests.get(k));
+																		    	   studentTest st1 = new studentTest(Owner_name[c], client.GetAllExecutreTest().get(idx).getTest(), sum, sav1.getAnswers(), sav1.getTime(), sav1.getTeacher());
+																		    	   if(sign1>1) st1.setCheat(true);
+																		    	   client.submitStudentTest(st1);
+																		    	   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
+																		    	  
+																		    	  
 																		    	   
 																		    	   
 																			  }
@@ -1022,16 +984,25 @@ public class StudentController {
 	        // Horizontal scroll bar is only displayed when needed
 			return sp;
 		}
-	public void resultWindow(String str4,int c) {
+	public void resultWindow(String str4,int c,Client client) {
 		
 		Stage Second=new Stage();
+		checked_list=new ArrayList<studentTest>();
+		studentTest list[]=client.getAllTestsByStudentId(str4).getTests();
+		for(int i=0;i<list.length;i++)
+		{
+			if(list[i].isCheck())
+			{
+				checked_list.add(list[i]);
+			}
+		}
 		BorderPane BP=new BorderPane();
 		ScrollPane pane=new ScrollPane();
 		ObservableList<String> data = FXCollections.observableArrayList();
 
 	    ListView<String> listView = new ListView<String>(data);
 	    listView.setPrefSize(300, 250);
-	    for(int i=0;i<checkedTests.get(c).size();i++)data.add(checkedTests.get(c).get(i).getCode());
+	    for(int i=0;i<checked_list.size();i++)data.add(checked_list.get(i).getTest().getCode());
 
 	    listView.setItems(data);
 	    listView.getSelectionModel().selectedItemProperty().addListener(
@@ -1050,11 +1021,11 @@ public class StudentController {
 				     Stage second=new Stage();
 				     GridPane pane=new GridPane();
 				     int idx=0;
-				     for(int i=0;i<checkedTests.get(c).size();i++)
+				     for(int i=0;i<checked_list.size();i++)
 				     {
-				    	 if(checkedTests.get(c).get(i).getCode().equals(Question_select))idx=i;
+				    	 if(checked_list.get(i).getTest().getCode().equals(Question_select))idx=i;
 				     }
-				     Label L1=new Label("Grade :"+checkedTests.get(c).get(idx).getQuestionGrade().get(0));//change after madafaker
+				     Label L1=new Label("Grade :"+checked_list.get(idx).getGrade());//change after madafaker
 				     pane.add(L1, 1, 0);
 				     Scene scene = new Scene(pane,300,200);
 				     scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -1071,16 +1042,21 @@ public class StudentController {
 				  {
 				 if(Question_select!="0") {
 				     int idx=0,idx2=0;
-			         for(int i=0;i<checkedTests.get(c).size();i++)
+				     Date d=new Date();
+			         for(int i=0;i<checked_list.size();i++)
 			         {
-			    	 if(checkedTests.get(c).get(i).getCode().equals(Question_select))idx=i;
+			    	 if(checked_list.get(i).getTest().getCode().equals(Question_select))idx=i;
 			         }
-			         for(int i=0;i<Main.ExecuteList.size();i++)
+			         for(int i=0;i<client.GetAllExecutreTest().size();i++)
 			         {
-			        	 if(Main.ExecuteList.get(i).getTest().getCode().equals(Question_select))idx2=i;
+			        	 if(client.GetAllExecutreTest().get(i).getTest().getCode()
+			        			 .equals(checked_list.get(idx).getTest().getCode()))
+			        	 {
+			        		 d=client.GetAllExecutreTest().get(i).getDate();
+			        	 }
 			         }
 			         studentTest Chosen=new studentTest();
-			         Chosen.setTest(checkedTests.get(c).get(idx));
+			         Chosen.setTest(checked_list.get(idx).getTest());
 				    ScrollPane pane=new ScrollPane();
 			     	GridPane Text_edit=new GridPane();
 			     	Text_edit.setHgap(10);
@@ -1090,13 +1066,14 @@ public class StudentController {
 			     	Text_edit.add(L1, 0, 0);
 			     	L1=new Label("Taken by: "+Owner_name[c]);
 			     	Text_edit.add(L1, 0, 1);
-			     	L1=new Label("On date: "+Main.ExecuteList.get(idx2).getDate());
+			     	L1=new Label("On date: "+d);
 			     	Text_edit.add(L1, 0, 2);
 			     	L1=new Label("Test duration: "+Chosen.getTime()+" minuts");
 			     	Text_edit.add(L1, 0, 3);
 			     	L1=new Label("Test grade: "+Chosen.getTest().getQuestionGrade());
 			     	Text_edit.add(L1, 0, 4);
-			     	if(!Chosen.getReason().isEmpty())
+			   
+			     	if(Chosen.getReason()!=null && !Chosen.getReason().isEmpty())
 			     	{
 			     		L1=new Label("Grade change reason: "+Chosen.getReason());
 				     	Text_edit.add(L1, 0, 5);
@@ -1105,7 +1082,7 @@ public class StudentController {
 			     	for(int i=0;i<Chosen.getTest().getQuestions().size();i++)
 			     	{
 			     		final int val=i;
-			     		if(Chosen.getAnswers().get(i)!="0") {
+			     		if(Chosen.getAnswers() != null && Chosen.getAnswers().get(i)!="0") {
 			     		L1=new Label("Question"+(i+1)+":");
 			     		L1.setFont(Font.font( "", FontWeight.BOLD, 17));
 			         	Text_edit.add(L1, 0, j);
@@ -1199,7 +1176,7 @@ public class StudentController {
 				         	Text_edit.add(L1, 0, j);
 				         	j++;
 			     		}
-			     		if(!Chosen.getRemark().get(i).isEmpty())
+			     		if(Chosen.getRemark() != null && i<Chosen.getRemark().size() && !Chosen.getRemark().get(i).isEmpty())
 			     		{
 			     			L1=new Label("Teacher remarks:"+Chosen.getRemark().get(i));
 			     			Text_edit.add(L1, 0, j);

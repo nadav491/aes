@@ -150,7 +150,7 @@ public class Main extends Application {
 				    							 @Override
 				    							  public void handle(ActionEvent e)
 				    								  {
-				    								     Controller[0].resultWindow(Controller[0].Owner_name[0],0);
+				    								     Controller[0].resultWindow(Controller[0].Owner_name[0],0,client);
 			    								        
 				    								      
 				    								  }
@@ -233,7 +233,7 @@ public class Main extends Application {
 				    							 @Override
 				    							  public void handle(ActionEvent e)
 				    								  {
-				    								   TController[0].CheckTests(0);
+				    								   TController[0].CheckTests(0,client);
 				    							    	
 				    								 
 				    							      }
