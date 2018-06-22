@@ -48,7 +48,8 @@ public class ActionsType implements Serializable
 		EXECUTED_TEST_GET_ALL,
 		EXECUTED_TEST_UPDATE,
 		
-		UPLOAD_FILE;
+		UPLOAD_FILE,
+		DOWNLOAD_FILE;
 	}
 	
 	public static int getValue(ActionNumber action)
@@ -84,6 +85,7 @@ public class ActionsType implements Serializable
 		case EXECUTED_TEST_UPDATE: return 1002;
 		
 		case UPLOAD_FILE: return 2000;
+		case DOWNLOAD_FILE: return 2001;
 		}
 		return 0;
 	}
@@ -121,6 +123,7 @@ public class ActionsType implements Serializable
 		case 1002: return ActionNumber.EXECUTED_TEST_UPDATE;
 		
 		case 2000: return ActionNumber.UPLOAD_FILE;
+		case 2001: return ActionNumber.DOWNLOAD_FILE;
 		}
 		return null;
 	}

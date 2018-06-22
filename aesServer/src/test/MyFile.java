@@ -1,9 +1,9 @@
-package database;
+package test;
 
 import java.io.Serializable;
 
 public class MyFile implements Serializable {
-	
+	private static final long serialVersionUID = 2993776648537120491L;
 	private String Description=null;
 	private String fileName=null;	
 	private int size=0;

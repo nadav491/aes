@@ -1,18 +1,22 @@
 package database;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import Student.Student;
-
 import java.sql.PreparedStatement;
-
 import database.ActionsType.ActionNumber;
+import message.MessageType;
 import question.ExecutedTest;
 import question.Question;
+import test.MyFile;
 import test.Test;
 import test.studentTest;
 
@@ -91,6 +95,7 @@ public class MySqlConnection
 		case EXECUTED_TEST_UPDATE: UpdateExecutedTests((ExecutedTest)obj); return(executedTests);
 		
 		case UPLOAD_FILE: uploadFile((MyFile)obj); return " ";
+		case DOWNLOAD_FILE: return downloadFile((String)obj);
 		}
 		return null;
 	}
@@ -667,10 +672,46 @@ public class MySqlConnection
 		}
 	}
 	
+	/**
+	 * This function uploads and create a file from the client.
+	 * @param file - the file to upload.
+	 */
 	public static void uploadFile(MyFile file) {
-		int fileSize = file.getSize();
-		System.out.println("Message received: " + file + " from ");
-		System.out.println("length " + fileSize);
+		try {
+
+			File newFile = new File(file.getFileName());
+			FileOutputStream fos = new FileOutputStream(newFile);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			bos.write(file.getMybytearray());
+			bos.close();
+		} catch (Exception e) {
+			System.out.println("Error send (Files)msg) to Server");
+		}
+	}
+	
+	/**
+	 * This function downloads a file from the server.
+	 * @param file - The files path.
+	 */
+	public static MyFile downloadFile(String LocalfilePath) {
+		MyFile file = new MyFile(LocalfilePath);
+		try {
+
+			File newFile = new File(LocalfilePath);
+
+			byte[] mybytearray = new byte[(int) newFile.length()];
+			FileInputStream fis = new FileInputStream(newFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+
+			file.initArray(mybytearray.length);
+			file.setSize(mybytearray.length);
+
+			bis.read(file.getMybytearray(), 0, mybytearray.length);
+			bis.close();
+		} catch (Exception e) {
+			System.out.println("Error send (Files)msg) to Server");
+		}
+		return file;
 	}
 }
 
