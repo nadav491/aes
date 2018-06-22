@@ -259,6 +259,14 @@ public class Client implements ChatIF
 	public void setChatClient(ChatClient chatClient) {
 		this.chatClient = chatClient;
 	}
+	
+	public void sendFile()
+	{
+		String path = "c:\test.txt";
+		MyFile file = new MyFile(path);
+		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.UPLOAD_FILE), file);
+		this.chatClient.handleMessageFromClientUI(msg);
+	}
 
 }
 //End of ConsoleChat class

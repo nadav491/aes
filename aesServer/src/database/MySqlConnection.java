@@ -89,6 +89,8 @@ public class MySqlConnection
 		case EXECUTED_TEST_ADD: executedTests.add((ExecutedTest)obj); return " ";
 		case EXECUTED_TEST_GET_ALL: return(executedTests);
 		case EXECUTED_TEST_UPDATE: UpdateExecutedTests((ExecutedTest)obj); return(executedTests);
+		
+		case UPLOAD_FILE: uploadFile((MyFile)obj); return " ";
 		}
 		return null;
 	}
@@ -663,6 +665,12 @@ public class MySqlConnection
 				executedTests.get(i).setrSign(updatedTest.getrSign());
 			}
 		}
+	}
+	
+	public static void uploadFile(MyFile file) {
+		int fileSize = file.getSize();
+		System.out.println("Message received: " + file + " from ");
+		System.out.println("length " + fileSize);
 	}
 }
 
