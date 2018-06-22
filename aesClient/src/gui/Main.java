@@ -430,6 +430,8 @@ public class Main extends Application {
 		//launch(args);
     	Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
     	client.downloadFile("saveTestFiles/test2.txt");
+    	client.uploadFile("saveTestFiles/test3.txt");
+
 	}
 	public ArrayList<ExecutedTest> getList()
 	{
