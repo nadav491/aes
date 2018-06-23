@@ -426,7 +426,11 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		launch(args);
+		//launch(args);
+    	Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
+    	System.out.print(client.getAllTeachersNames());
+    	System.out.print(client.getAllStudnetNames());
+
 	}
 	public ArrayList<ExecutedTest> getList()
 	{

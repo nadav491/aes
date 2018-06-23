@@ -328,6 +328,30 @@ public class Client implements ChatIF {
 		waitForAnswer();
 		return (int) this.answer;	
 	}
+	
+	/**
+	 * This function return all the students names.
+	 * @return Array list of all the names.
+	 */
+	public ArrayList<String> getAllStudnetNames ()
+	{
+		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.STUDENT_GET_ALL_NAME), "Student");
+		this.chatClient.handleMessageFromClientUI(msg);
+		waitForAnswer();
+		return (ArrayList<String>)this.answer;	
+	}
+	
+	/**
+	 * This function return all the teachers names.
+	 * @return Array list of all the names.
+	 */
+	public ArrayList<String> getAllTeachersNames ()
+	{
+		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.TEACHER_GET_ALL_NAME), "Teacher");
+		this.chatClient.handleMessageFromClientUI(msg);
+		waitForAnswer();
+		return (ArrayList<String>)this.answer;	
+	}
 
 }
 // End of ConsoleChat class

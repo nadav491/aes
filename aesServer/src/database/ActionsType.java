@@ -43,6 +43,7 @@ public class ActionsType implements Serializable
 		STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID,
 		STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID,
 		STUDENT_TEST_UPDATE,
+		STUDENT_GET_ALL_NAME,
 		
 		EXECUTED_TEST_ADD,
 		EXECUTED_TEST_GET_ALL,
@@ -51,7 +52,8 @@ public class ActionsType implements Serializable
 		
 		UPLOAD_FILE,
 		DOWNLOAD_FILE,
-		COURSE_GET_ID_LIST;
+		COURSE_GET_ID_LIST,
+		TEACHER_GET_ALL_NAME;
 	}
 	
 	public static int getValue(ActionNumber action)
@@ -81,6 +83,7 @@ public class ActionsType implements Serializable
 		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return 122;
 		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return 123;
 		case STUDENT_TEST_UPDATE: return 124;
+		case STUDENT_GET_ALL_NAME: return 125;
 		
 		case EXECUTED_TEST_ADD: return 1000;
 		case EXECUTED_TEST_GET_ALL: return 1001;
@@ -90,6 +93,7 @@ public class ActionsType implements Serializable
 		case UPLOAD_FILE: return 2000;
 		case DOWNLOAD_FILE: return 2001;
 		case COURSE_GET_ID_LIST: return 2002;
+		case TEACHER_GET_ALL_NAME: return 2003;
 		}
 		return 0;
 	}
@@ -121,6 +125,7 @@ public class ActionsType implements Serializable
 		case 122: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID;
 		case 123: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID;
 		case 124: return ActionNumber.STUDENT_TEST_UPDATE;
+		case 125: return ActionNumber.STUDENT_GET_ALL_NAME;
 		
 		case 1000: return ActionNumber.EXECUTED_TEST_ADD;
 		case 1001: return ActionNumber.EXECUTED_TEST_GET_ALL;
@@ -130,6 +135,7 @@ public class ActionsType implements Serializable
 		case 2000: return ActionNumber.UPLOAD_FILE;
 		case 2001: return ActionNumber.DOWNLOAD_FILE;
 		case 2002: return ActionNumber.COURSE_GET_ID_LIST;
+		case 2003: return ActionNumber.TEACHER_GET_ALL_NAME;
 		}
 		return null;
 	}

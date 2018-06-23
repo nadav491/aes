@@ -98,6 +98,7 @@ public class MySqlConnection
 		case UPLOAD_FILE: uploadFile((MyFile)obj); return " ";
 		case DOWNLOAD_FILE: return downloadFile((String)obj);
 		case COURSE_GET_ID_LIST: return getCoursesId();
+		case STUDENT_GET_ALL_NAME: return getAllUsersNamesByType((String) obj);
 		
 		default: return null;
 		}
@@ -773,5 +774,28 @@ public class MySqlConnection
 		} catch (SQLException e) {e.printStackTrace();}
 		return coursesID;
 	}
+	
+	/**
+	 * This function return all the names of a user by type
+	 * @param type - the type
+	 * @return Array list of all the names.
+	 */
+	public static ArrayList<String> getAllUsersNamesByType (String userType)
+	{
+		ArrayList<String> studnetName = new ArrayList<String>();
+		Statement stmt;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+ COURSES_DATABASE_NAME+" where type = "+ userType+";");
+	 		while(rs.next())
+	 		{
+	 			studnetName.add(rs.getString(1));
+			} 
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		return studnetName;
+	}
+
 }
 

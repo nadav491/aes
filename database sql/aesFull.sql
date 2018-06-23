@@ -11,6 +11,7 @@ insert into test value("041401", "0400104002", "044056", "2", "2", "roie", "11")
 CREATE TABLE user(id varchar(10),password varchar(20), type varchar(10),login boolean, Uname varchar(256), PRIMARY KEY (id));
 insert into user value("123","123","Student",false,"yossia");
 insert into user value("1","1","Teacher",false,"roie");
+insert into user value("12","12","Teacher",false,"moshe");
 insert into user value("2","2","Manager",false,"shaked");
 insert into user value("3","3","Student",false,"yossid");
 
