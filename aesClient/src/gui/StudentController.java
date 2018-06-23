@@ -42,6 +42,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import test.ExecutedTest;
+import test.MyFile;
 import test.Test;
 import test.studentTest;
 
@@ -63,6 +64,7 @@ public class StudentController {
 	private static int val=0;
 	static int timeC=0;
 	int dur;
+	private MyFile file;
 	public static  Map <Integer,ArrayList<Test>> checkedTests=new HashMap();
 	public static final Timeline time1[]=new Timeline[2];
 
@@ -226,7 +228,6 @@ public class StudentController {
 					    				   client.GetAllExecutreTest().get(j).getF().add("0");					    				  
 					    				   signUp_test_list.add(client.GetAllExecutreTest().get(j).getTest());
 					    				   client.UpdateExecutreTest(client.GetAllExecutreTest().get(j));
-					    				   System.out.println(client.GetAllExecutreTest().get(j).getSignUpList());
 					    				   break;
 					    			   }
 					    			   }
@@ -360,51 +361,32 @@ public class StudentController {
 									  {
 								    	   if(F1.getText().equals(exeCodes.get(idx)))
 								    	   {
-								    		  File file = new File("C:\\Users\\tomer_000\\Desktop\\test.txt");
-								    		   BufferedWriter writer;
-											try {
-												writer = new BufferedWriter(new FileWriter(file, true));
-												writer.append("Test: "+signUp_test_list.get(idx).getCode());
-												writer.newLine();
-												writer.append("Written by: "+signUp_test_list.get(idx).getOwner());
-												writer.newLine();
-												writer.append("test duration: "+signUp_test_list.get(idx).getTime());
-												writer.newLine();
-												writer.newLine();
-												for(int i=0;i<signUp_test_list.get(idx).getQuestions().size();i++)
-												{
-													writer.append("Question "+(i+1)+":");
-													writer.newLine();
-													writer.append("Question points: "+signUp_test_list.get(idx).getQuestionGrade().get(i));
-													writer.newLine();
-													writer.newLine();
-													writer.append("question:");
-													writer.newLine();
-													writer.append(signUp_test_list.get(idx).getQuestions().get(i).getBody());
-													writer.newLine();
-													writer.newLine();
-													writer.append("instructions: "+signUp_test_list.get(idx).getQuestions().get(i).getSInstruction());
-													writer.newLine();
-													writer.newLine();
-													writer.append("Answers:");
-													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(idx).getQuestions().get(i).getAnswer1());
-													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(idx).getQuestions().get(i).getAnswer2());
-													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(idx).getQuestions().get(i).getAnswer3());
-													writer.newLine();
-													writer.append("_ "+signUp_test_list.get(idx).getQuestions().get(i).getAnswer4());
-													writer.newLine();
-													writer.newLine();
-													writer.newLine();
-												}
-												writer.append("Good Luck!");
-								    		    writer.close();
-											} catch (IOException e2) {
-												// TODO Auto-generated catch block
-												e2.printStackTrace();
-											}
+								    		 GridPane p=new GridPane();
+								    		 Stage j=new Stage();
+								    		 Button B1=new Button("DownLoad");
+									    	   B1.setOnAction(new EventHandler<ActionEvent>()
+											    {
+												       @Override
+												       public void handle(ActionEvent e)
+													  {
+												    	   client.downloadFile(client.GetAllExecutreTest().get(idx));
+													  }
+											    });
+									    	   Button B2=new Button("UpLoad");
+									    	   B2.setOnAction(new EventHandler<ActionEvent>()
+											    {
+												       @Override
+												       public void handle(ActionEvent e)
+													  {
+												    	   client.uploadFile("saveTestFiles\\"+client.GetAllExecutreTest().get(idx).getTest().getCode()+".txt");
+													  }
+											    });
+									    	   p.add(B1, 0, 0);
+									    	   p.add(B2, 1, 0);
+									    	   Scene scene = new Scene(p,400,200);
+												scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+												j.setScene(scene);
+												j.show();
 								    		 primaryStage.close();   
 											
 								    		  
@@ -446,11 +428,18 @@ public class StudentController {
 									  {
 								    	   if(F1.getText().equals(exeCodes.get(idx)))
 								    	   {
+								    		        for(int q=0;q<client.GetAllExecutreTest().size();q++)
+								    		        {
+								    		        	if(client.GetAllExecutreTest().get(q).getTest().equals(signUp_test_list.get(idx)))
+								    		        	{
+								    		        		idx=q;
+								    		        		break;
+								    		        	}
+								    		        }
 								    		        client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()+1);
 								    		        BorderPane window=new BorderPane();
 											        final studentTest sav1=new studentTest(Owner_name[c],client.GetAllExecutreTest().get(idx).getTest(),0,new ArrayList<String>(),client.GetAllExecutreTest().get(idx).getTest().getTime(),
 											        		client.GetAllExecutreTest().get(idx).getTest().getOwner());
-											        System.out.println(client.GetAllExecutreTest().get(idx).getSignUpList());
   										    	    ScrollPane pane=new ScrollPane();
 											      	GridPane Text_edit=new GridPane();
 											      	Text_edit.setHgap(10);
@@ -804,6 +793,13 @@ public class StudentController {
 																		    	   int sign1=0;
 																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
+																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).getGradeList().size();f++)
+																		    	   {
+																		    		   		if(client.GetAllExecutreTest().get(idx).getGradeList().get(f).equals(sum+""))	
+																		    		   		{
+																		    		   			sign1++;
+																		    		   		}
+																		    	   }
 																		    	   client.GetAllExecutreTest().get(idx).getGradeList().add(sum+"");
 																		    	   for(int i=0;i< client.GetAllExecutreTest().get(idx).getSignUpList().size();i++)
 																		    	   {
@@ -814,17 +810,6 @@ public class StudentController {
 																		    	   }
 																		    	   
 																		    	  
-																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).gradelog.size();f++)
-																		    	   {
-																		    		   
-																		    		   for(int s=0;s<client.GetAllExecutreTest().get(idx).getTest().getQuestions().size();s++)
-																		    		   {
-																		    			   if(sav1.getAnswers().get(s)==client.GetAllExecutreTest().get(idx).gradelog.get(f).get(s))
-																		    			   {
-																		    				   sign1++;
-																		    			   }
-																		    		   }																		    		   
-																		    	   }
 																		    	   studentTest st1 = new studentTest(Owner_name[c], client.GetAllExecutreTest().get(idx).getTest(), sum, sav1.getAnswers(), sav1.getTime(), sav1.getTeacher());
 																		    	   if(sign1>1) st1.setCheat(true);
 																		    	   client.submitStudentTest(st1);
@@ -933,19 +918,15 @@ public class StudentController {
 																		    		   }
 																		    	   }
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
+																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).getGradeList().size();f++)
+																		    	   {
+																		    		   		if(client.GetAllExecutreTest().get(idx).getGradeList().get(f).equals(sum+""))	
+																		    		   		{
+																		    		   			sign1++;
+																		    		   		}
+																		    	   }
 																		    	   client.GetAllExecutreTest().get(idx).getGradeList().add(sum+"");
 																		    	  
-																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).gradelog.size();f++)
-																		    	   {
-																		    		   
-																		    		   for(int s=0;s<client.GetAllExecutreTest().get(idx).getTest().getQuestions().size();s++)
-																		    		   {
-																		    			   if(sav1.getAnswers().get(s)==client.GetAllExecutreTest().get(idx).gradelog.get(f).get(s))
-																		    			   {
-																		    				   sign1++;
-																		    			   }
-																		    		   }																		    		   
-																		    	   }
 																		    	   studentTest st1 = new studentTest(Owner_name[c], client.GetAllExecutreTest().get(idx).getTest(), sum, sav1.getAnswers(), sav1.getTime(), sav1.getTeacher());
 																		    	   if(sign1>1) st1.setCheat(true);
 																		    	   client.submitStudentTest(st1);

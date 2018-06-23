@@ -82,9 +82,9 @@ public class MySqlConnection
 		case QUESTION_UPDATE: return(updateQuestion((Question)obj));
 		case QUESTION_ADD: return(addQuestion((Question)obj));
 		case QUESTION_GET_BY_OWNER: return(getQuestionByOwner((String)obj));
+		
 		case USER_LOGIN: return(userChecklogin((ArrayList<String>)obj));
 		case USER_LOGOUT: return(userLogout((String)obj));
-
 
 		case TEST_CREATE: return createTest((Test)obj);
 		case TEST_SET_QUESTIONS: return setQuestionsForTest((Test)obj);
@@ -974,7 +974,9 @@ public class MySqlConnection
 			{
 				test.getQuestions().get(i).writeQuestionToFile(newFile);
 			}
-			newFile.close();
+			newFile.newLine();
+			newFile.write("Please fill the answers here: "+test.getTime());
+			newFile.newLine();
 		} catch (Exception e) {e.printStackTrace();	}
 
 	}

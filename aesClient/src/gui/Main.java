@@ -166,7 +166,7 @@ public class Main extends Application {
 		    								         
 				    								     
 				    								  }
-				    						});
+				    						}); 
 				    						 Button back=new Button("back");
 					    					    back.setOnAction(new EventHandler<ActionEvent>()
 					    						{
@@ -174,6 +174,7 @@ public class Main extends Application {
 					    							  public void handle(ActionEvent e)
 					    								  {
 					    							    	primaryStage.close();
+					    							    	User.logout(client, txt1.getText());
 					    							    	start(new Stage());
 					    							      }
 					    							       
@@ -259,6 +260,7 @@ public class Main extends Application {
 				    							  public void handle(ActionEvent e)
 				    								  {
 				    							    	primaryStage.close();
+				    							    	User.logout(client, txt1.getText());
 				    							    	start(new Stage());
 				    							      }
 				    							       
@@ -377,6 +379,7 @@ public class Main extends Application {
 				    							  public void handle(ActionEvent e)
 				    								  {
 				    							    	primaryStage.close();
+				    							    	User.logout(client, txt1.getText());
 				    							    	start(new Stage());
 				    							      }
 				    							       

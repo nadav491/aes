@@ -1279,22 +1279,19 @@ public class SampleController {
        Test Update=new Test();
        
  	   Q_list=client.getAllQuestion();
- 	  
- 	  
- 	  ArrayList<Question> rem1=new ArrayList<Question>();
+ 	   	  ArrayList<Question> rem1=new ArrayList<Question>();
+ 	  int sign=0;
  	  for(int h=0;h<Q_list.size();h++) {
  	   for(int i=Chosen.getQuestions().size()-1;i>=0;i--)
  	   {
  		   if(Q_list.get(h).getCode().equals(Chosen.getQuestions().get(i).getCode()))
- 			   {
- 			   }
- 		   else
  		   {
- 			   rem1.add(Q_list.get(h));
+ 			  sign++;
  		   }
  	   }
+ 	   if(sign==0)rem1.add(Q_list.get(h));
+ 	  sign=0;
  	  }
- 	  
  	   ArrayList<Question> rem2=new ArrayList<Question>();
  	   for(int i=0;i<rem1.size();i++)
  	   {
@@ -1841,7 +1838,6 @@ public class SampleController {
 							           }
 							           client.GetAllExecutreTest().get(f).setSign(2);
 							           client.UpdateExecutreTest(client.GetAllExecutreTest().get(f));
-							           for(int i=0;i<client.GetAllExecutreTest().size();i++)System.out.println(client.GetAllExecutreTest().get(i).getSign());
 							    	   Run_test(Owner,c,client);
 								  }
 						    });
@@ -1957,9 +1953,7 @@ public class SampleController {
 									    		   client.GetAllExecutreTest().get(idx_C).setR(F1.getText());
 									    		   client.GetAllExecutreTest().get(idx_C).setT(F2.getText());
 									    		   client.GetAllExecutreTest().get(idx_C).setSign(3);
-									    		   System.out.println(client.GetAllExecutreTest().get(idx_C).returnR()+" "+client.GetAllExecutreTest().get(idx_C).returnT());
 									    		   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx_C));
-									    		   System.out.println(client.GetAllExecutreTest().get(idx_C).returnR()+" "+client.GetAllExecutreTest().get(idx_C).returnT());
 
 									    		   second.close();
 									    	   }
@@ -2447,19 +2441,14 @@ public class SampleController {
 						    	  p.add(new Label("Taken in: "+arr.get(idx).getDate()), 0, 1);
 						    	  p.add(new Label("Started at: "+arr.get(idx).getStartTime()), 0, 2);
 						    	  p.add(new Label("Test duration: "+arr.get(idx).getCurrentTime()), 0, 3);
-						    	  p.add(new Label("Student number: "+arr.get(idx).getSignUpList().size()), 0, 4);
-						    	  p.add(new Label("Finished student number: "+arr.get(idx).getFInishedNum()), 0, 5);
-						    	  p.add(new Label("Force Finished student number: "+(arr.get(idx).getSignUpList().size()-arr.get(idx).getFInishedNum())), 0, 6);
-						    	  p.add(new Label("Signup list: "+arr.get(idx).getSignUpList()), 0, 7);
-						    	  p.add(new Label("Executed by: "+arr.get(idx).getexecuter()), 0, 8);
+						    	  p.add(new Label("Executed by: "+arr.get(idx).getexecuter()), 0, 4);
 						    	  int avarage=0;
 				    				 for(int b=0;b<arr.get(idx).getGradeList().size();b++)
 				    				 {
 				    					 avarage+=Integer.parseInt(arr.get(idx).getGradeList().get(b));
 				    				 }
-				    				 System.out.println(arr.get(idx).getGradeList());
 				    				 avarage=avarage/arr.get(idx).getFInishedNum();
-				    				 p.add(new Label("avarage grade: "+avarage), 0, 9);
+				    				 p.add(new Label("avarage grade: "+avarage), 0, 5);
 				    				 int median=0;
 				    				 int middle = arr.get(idx).getFInishedNum();
 				    				 if(arr.get(idx).getGradeList().size()!=0) {
@@ -2469,7 +2458,7 @@ public class SampleController {
 				    			           median=Integer.parseInt(arr.get(idx).getGradeList().get((middle-1)/2));
 				    			        }
 				    				 }
-				    			     p.add(new Label("median: "+median),0, 10);
+				    			     p.add(new Label("median: "+median),0, 6);
 				    			     int gradeSpace[]=new int[10];
 				    			     for(int k=0;k<10;k++)gradeSpace[k]=0;
 				    			     for(int b=0;b<arr.get(idx).getGradeList().size();b++)
@@ -2556,7 +2545,7 @@ public class SampleController {
 				    			        
 				    			        bc.getData().addAll(series1, series2, series3,series4,series5,series6,series7,series8,series9,series10);
 				    			        bc.setPrefHeight(700);
-				    			        p.add(bc, 0, 11);
+				    			        p.add(bc, 0, 7);
 						    	  pane.setContent(p);
 						    	  Scene scene = new Scene(pane,700,449);
 							  	  scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
