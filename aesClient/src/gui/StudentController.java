@@ -217,20 +217,20 @@ public class StudentController {
 					       }
 					       else
 					       {
-					    	   int index;
+					    	   ArrayList<ExecutedTest> et = client.GetAllExecutreTest();
 					    	   for(int i=0;i<selected.size();i++)
 					    	   {
-					    		   for(int j=0;j<client.GetAllExecutreTest().size();j++)
+					    		   for(int j=0;j<et.size();j++)
 					    		   {
-					    			   if(!client.GetAllExecutreTest().get(j).getSignUpList().contains(Owner_name[c])){
-					    			   if(selected.get(i).equals(client.GetAllExecutreTest().get(j).getTest().getCode())) {
-					    				   client.GetAllExecutreTest().get(j).getSignUpList().add(Owner_name[c]);
-					    				   client.GetAllExecutreTest().get(j).setStudentNumber(1);
-					    				   client.GetAllExecutreTest().get(j).getTest().setCode(client.GetAllExecutreTest().get(j).getTest().getCode());
-					    				   client.GetAllExecutreTest().get(j).setExe_code(client.GetAllExecutreTest().get(j).getExe_code());
-					    				   client.GetAllExecutreTest().get(j).getF().add("0");					    				  
-					    				   signUp_test_list.add(client.GetAllExecutreTest().get(j).getTest());
-					    				   client.UpdateExecutreTest(client.GetAllExecutreTest().get(j));
+					    			   if(!et.get(j).getSignUpList().contains(Owner_name[c])){
+					    			   if(selected.get(i).equals(et.get(j).getTest().getCode())) {
+					    				   et.get(j).getSignUpList().add(Owner_name[c]);
+					    				   et.get(j).setStudentNumber(1);
+					    				   et.get(j).getTest().setCode(et.get(j).getTest().getCode());
+					    				   et.get(j).setExe_code(et.get(j).getExe_code());
+					    				   et.get(j).getF().add("0");					    				  
+					    				   signUp_test_list.add(et.get(j).getTest());
+					    				   client.UpdateExecutreTest(et.get(j));
 					    				   break;
 					    			   }
 					    			   }

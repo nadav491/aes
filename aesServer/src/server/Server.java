@@ -4,6 +4,9 @@ import java.io.IOException;
 import database.*;
 import message.MessageType;
 
+/**
+ * This class represent the server which work with the database.
+ */
 public class Server extends AbstractServer 
 {
   final public static int DEFAULT_PORT = 5555;
