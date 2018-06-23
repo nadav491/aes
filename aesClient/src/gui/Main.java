@@ -31,7 +31,7 @@ import javafx.geometry.Insets;
 
 
 public class Main extends Application {
-	public static String HOST_IP = "192.168.1.12";
+	public static String HOST_IP = "";
 	public static final int HOST_PORT = 5555;
 	public static final ArrayList<ExecutedTest> ExecuteList=new ArrayList<ExecutedTest>();
     public static final StudentController Controller[]=new StudentController[2];//change to size of students
