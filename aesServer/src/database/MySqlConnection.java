@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import Student.Student;
 import java.sql.PreparedStatement;
 import database.ActionsType.ActionNumber;
-import message.MessageType;
-import question.ExecutedTest;
 import question.Question;
+import test.ExecutedTest;
 import test.MyFile;
 import test.Test;
 import test.studentTest;
@@ -92,16 +91,24 @@ public class MySqlConnection
 		case STUDENT_TEST_UPDATE: deleteStudentTest(((studentTest) obj).getStudent() + ((studentTest) obj).getTest().getCode() ); return createStudentTest((studentTest) obj);
 		
 		case EXECUTED_TEST_ADD: executedTests.add((ExecutedTest)obj); return " ";
-		case EXECUTED_TEST_GET_ALL: return(executedTests);
-		case EXECUTED_TEST_UPDATE: UpdateExecutedTests((ExecutedTest)obj); return(executedTests);
+		case EXECUTED_TEST_GET_ALL: return(getExecutedTests());
+		case EXECUTED_TEST_UPDATE: return(UpdateExecutedTests((ExecutedTest)obj));
 		
 		case UPLOAD_FILE: uploadFile((MyFile)obj); return " ";
 		case DOWNLOAD_FILE: return downloadFile((String)obj);
 		case COURSE_GET_ID_LIST: return getCoursesId();
+		
+		default: return null;
 		}
-		return null;
 	}
 	
+	/**
+	 * Return a copy of the executedTests.
+	 * @return a copy of the executedTests.
+	 */
+	public static ArrayList<ExecutedTest> getExecutedTests() {
+		return new ArrayList<>(executedTests);
+	}
 	/**
 	 * This function get all the question from the database. 
 	 * @return ArrayList<Question> of the questions.
@@ -659,7 +666,13 @@ public class MySqlConnection
 		return true;
 		
 	}
-	public static void UpdateExecutedTests(ExecutedTest updatedTest)
+	
+	/**
+	 * Update a given ExecutedTest in the array list.
+	 * @param updatedTest the ExecutedTest to update.
+	 * @return the new ExecutedTest.
+	 */
+	public static ArrayList<ExecutedTest> UpdateExecutedTests(ExecutedTest updatedTest)
 	{
 		for(int i=0; i<executedTests.size();i++)
 		{
@@ -672,6 +685,7 @@ public class MySqlConnection
 				executedTests.get(i).setrSign(updatedTest.getrSign());
 			}
 		}
+		return(new ArrayList<>(executedTests));
 	}
 	
 	/**

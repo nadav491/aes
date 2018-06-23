@@ -12,8 +12,8 @@ import java.util.Map;
 
 import client.Client;
 import question.Course;
-import question.ExecutedTest;
 import question.Question;
+import test.ExecutedTest;
 import test.Test;
 import test.studentTest;
 import javafx.beans.value.ObservableValue;
@@ -944,6 +944,7 @@ public class SampleController {
                 		    		   {
                 		    			   for(int j=0;j<Q_list.size();j++)
                 		    			   {
+                		    				  
                 		    				   if(Q_list.get(j).getCode().equals(selected.get(i)))test_add.getQuestions().add(Q_list.get(j));
                 		    			   }
                 		    			   
@@ -1832,35 +1833,20 @@ public class SampleController {
 							    	   second1.close();
 							    	   second.close();
 							    	   primaryStage.close();
-							    	   for(int i=0;i<running.get(idx_C).getSignUpList().size();i++)
-							    	   {
-							    		  
-							    		  if(running.get(idx_C).getSignUpList().get(i).equals(Main.Controller[0].Owner_name[0]))
-							    		  {
-							    			  
-							    			 
-							    			  for(int j=0;j<StudentController.signUp_test_list.size();j++)
-							    			 {
-							    				 if(running.get(idx_C).getTest().getCode().equals(StudentController.signUp_test_list.get(j).getCode()))
-							    				 {
-							    					 StudentController.signUp_test_list.remove(j);
-							    				 }
-							    			 }
-							    		 }
-							    		  System.out.println(Main.ExecuteList.get(idx_C).getSignUpList().get(i)+" "+Main.Controller[1].Owner_name[1]);
-							    		  if(Main.ExecuteList.get(idx_C).getSignUpList().get(i).equals(Main.Controller[1].Owner_name[1]))
-							    		  {
-							    			  Main.Controller[1].closestage.get(1).close();
-							    			  for(int j=0;j<StudentController.signUp_test_list.size();j++)
-								    			 {
-								    				 if(Main.ExecuteList.get(idx_C).getTest().getCode().equals(StudentController.signUp_test_list.get(j).getCode()))
-								    				 {
-								    					 StudentController.signUp_test_list.remove(j);
-								    				 }
-								    			 }
-							    		  }
-							    	   }
-							    	   Main.ExecuteList.remove(idx_C);
+							    	   int g=listView.getSelectionModel().getSelectedIndex();
+							    	   int f=0;
+							    	   ArrayList<ExecutedTest> get=new ArrayList<ExecutedTest>();
+							           for(int j=0;j<client.GetAllExecutreTest().size();j++)
+							           {
+							        	   if((client.GetAllExecutreTest().get(j).getTest().getCode().equals(running.get(g).getTest().getCode())
+							        			   && (client.GetAllExecutreTest().get(j).getexecuter().equals(running.get(g).getexecuter()))))
+							        	   {
+							        		   f=j;
+							        		   break;
+							        	   }
+							           }
+							           client.GetAllExecutreTest().get(f).setSign(2);
+							           client.UpdateExecutreTest(client.GetAllExecutreTest().get(f));
 							    	   Run_test(Owner,c,client);
 								  }
 						    });

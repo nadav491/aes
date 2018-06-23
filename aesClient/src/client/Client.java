@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import Student.Student;
 import client.ActionsType.ActionNumber;
 import message.MessageType;
-import question.ExecutedTest;
 import question.Question;
 import question.QuestionManager;
+import test.ExecutedTest;
 import test.MyFile;
 import test.Test;
 import test.studentTest;
@@ -228,9 +228,12 @@ public class Client implements ChatIF {
 	}
 
 	public ArrayList<ExecutedTest> GetAllExecutreTest() {
-		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_GET_ALL), "");
+		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_GET_ALL), " ");
 		this.chatClient.handleMessageFromClientUI(msg);
 		waitForAnswer();
+		System.out.println(this.answer);
+		if(this.answer.getClass() != ArrayList.class)
+			return(new ArrayList<ExecutedTest>());
 		return (ArrayList<ExecutedTest>) this.answer;
 	}
 

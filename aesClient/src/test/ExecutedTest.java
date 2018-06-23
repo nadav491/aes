@@ -1,4 +1,4 @@
-package question;
+package test;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import test.Test;
 
 public class ExecutedTest implements Serializable {
 	private static final long serialVersionUID = 3834052242070085516L;

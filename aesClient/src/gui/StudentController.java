@@ -46,7 +46,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import question.ExecutedTest;
+import test.ExecutedTest;
 import test.Test;
 import test.studentTest;
 
