@@ -1,9 +1,11 @@
 package database;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -32,6 +34,7 @@ public class MySqlConnection
 	private final static String STUDENT_DATABASE_NAME = "student";
 	private final static String STUDENT_TEST_DATABASE_NAME = "studentTest";
 	private final static String COURSES_DATABASE_NAME = "course";
+	private final static String TEST_FILE_LOCATION = "saveTestFiles\\";
 	private static ArrayList<ExecutedTest> executedTests;
 	
 	public MySqlConnection()
@@ -104,7 +107,7 @@ public class MySqlConnection
 		case EXECUTED_TEST_CHECK_LOCK_TEST: return(executedTestsCheckLock((ExecutedTest)obj));
 
 		case UPLOAD_FILE: uploadFile((MyFile)obj); return " ";
-		case DOWNLOAD_FILE: return downloadFile((String)obj);
+		case DOWNLOAD_FILE: return downloadFile((ExecutedTest)obj);
 		case COURSE_GET_ID_LIST: return getCoursesId();
 		case STUDENT_GET_ALL_NAME: return getAllUsersNamesByType((String)obj);
 		case TEACHER_GET_ALL_NAME: return getAllUsersNamesByType((String)obj);
@@ -537,7 +540,18 @@ public class MySqlConnection
 			return false;
 		try
 		{
-			deleteStudentTest(std_test.getStudent() + (std_test.getTest().getCode()), std_test.getStudent());
+			studentTest [] testToSave = getAllTestsByStudentId(std_test.getStudent()).getTests();
+			String saveTestCode = "";
+			String saveGrades = "";
+			for(int i=0; i<testToSave.length ; i++)
+			{
+				if(testToSave[i].getTest().getCode() != std_test.getTest().getCode())
+				{
+					saveTestCode = saveTestCode.concat(testToSave[i].getTest().getCode());
+					saveGrades = saveTestCode.concat(String.format("%3d", testToSave[i].getGrade()).replace(' ', '0'));
+				}
+			}
+			deleteStudentTest(std_test.getStudent() + (std_test.getTest().getCode()), std_test.getStudent(),saveTestCode,saveGrades);
 			String state = "insert into " + STUDENT_TEST_DATABASE_NAME + " values (?,?,?,?,?,?,?,?);";
 			String answers = "";
 			PreparedStatement add_student_test = conn.prepareStatement(state);
@@ -809,7 +823,7 @@ public class MySqlConnection
 	 * @param id - the student id.
 	 * @return return - true is successfully.
 	 */
-	public static boolean deleteStudentTest(String code, String id)
+	private static boolean deleteStudentTest(String code, String id, String testCodes,String TestGrades)
 	{
 		if (code == null)
 			return false;
@@ -892,14 +906,17 @@ public class MySqlConnection
 	}
 
 	/**
-	* This function downloads a file from the server.
-	* @param file - The files path.
-	*/
-	public static MyFile downloadFile(String LocalfilePath) {
-		MyFile file = new MyFile(LocalfilePath);
+	 * Create and send a manual test using the given executed test.
+	 * @param test - the executed test.
+	 * @return - the test file.
+	 */
+	public static MyFile downloadFile(ExecutedTest test) 
+	{
+		createMainualTest(test);
+		MyFile file = new MyFile(TEST_FILE_LOCATION + test.getTest().getCode() + ".txt");
 		try {
 
-			File newFile = new File(LocalfilePath);
+			File newFile = new File(TEST_FILE_LOCATION + test.getTest().getCode() + ".txt");
 
 			byte[] mybytearray = new byte[(int)newFile.length()];
 			FileInputStream fis = new FileInputStream(newFile);
@@ -916,7 +933,32 @@ public class MySqlConnection
 		}
 		return file;
 	}
+	
+	/**
+	 * Create a test file for manual testing user ExecutedTest.
+	 * @param EcxTest - the executed test.
+	 */
+	private static void createMainualTest(ExecutedTest EcxTest)
+	{
+		Test test = EcxTest.getTest();
+		try {
+			BufferedWriter newFile = new BufferedWriter(new FileWriter(TEST_FILE_LOCATION + test.getCode() + ".txt"));
+			if(test.getCommentsForStudent() != null) 
+			{
+				newFile.write("Teacher comments: "+test.getCommentsForStudent());
+				newFile.newLine();
+			}
+			newFile.write("The test time is: "+test.getTime());
+			newFile.newLine();
+			for(int i=0; i<test.getQuestions().size(); i++)
+			{
+				test.getQuestions().get(i).writeQuestionToFile(newFile);
+			}
+			newFile.close();
+		} catch (Exception e) {e.printStackTrace();	}
 
+	}
+	
 	/**
 	* This function get all the courses id from the server.
 	* @return ArrayList<String> of the courses id.

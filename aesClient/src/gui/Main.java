@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -426,6 +427,7 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
+    
 	}
 	public ArrayList<ExecutedTest> getList()
 	{

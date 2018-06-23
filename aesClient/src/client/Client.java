@@ -360,8 +360,8 @@ public class Client implements ChatIF {
 	* This function downloads a file from the server.
 	* @param file - The files path.
 	*/
-	public MyFile downloadFile(String LocalfilePath) {
-		MessageType fileMsg = new MessageType(ActionsType.getValue(ActionNumber.DOWNLOAD_FILE), LocalfilePath);
+	public MyFile downloadFile(ExecutedTest test) {
+		MessageType fileMsg = new MessageType(ActionsType.getValue(ActionNumber.DOWNLOAD_FILE), test);
 		this.chatClient.handleMessageFromClientUI(fileMsg);
 		waitForAnswer();
 		MyFile file = (MyFile)this.answer;

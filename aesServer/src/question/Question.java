@@ -1,5 +1,8 @@
 package question;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -112,7 +115,27 @@ public class Question implements Serializable {
 	public String showQuestion() {
 		return body + "\n" + answer1 + "\n" + answer2 + "\n" + answer3 + "\n" + answer4 + "\n";
 	}
-
+	
+	/**
+	 * Write a question to the given file.
+	 * @param bw - the file to  write into.
+	 */
+	public void writeQuestionToFile(BufferedWriter bw)
+	{
+		try {
+			bw.write(body);
+			bw.newLine();
+			bw.write(answer1);
+			bw.newLine();
+			bw.write(answer2);
+			bw.newLine();
+			bw.write(answer3);
+			bw.newLine();
+			bw.write(answer4);
+			bw.newLine();
+		} catch (IOException e) {e.printStackTrace();}
+	}
+	
 	public String getSInstruction() {
 		if (Sinstruction == null)
 			Sinstruction = " ";
