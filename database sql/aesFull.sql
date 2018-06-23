@@ -15,10 +15,12 @@ CREATE TABLE user(id varchar(10),password varchar(20), type varchar(10),login bo
 insert into user value("111111111","123","Student",false,"gal");
 insert into user value("111111112","1234","Student",false,"ronny");
 insert into user value("111111113","1233","Student",false,"gal");
-insert into user value("111111114","1235","Student",false,"yossi");
-insert into user value("123","123","Student",false,"yossi");
+insert into user value("111111114","1235","Student",false,"yossib");
+insert into user value("123","123","Student",false,"yossia");
 insert into user value("1","1","Teacher",false,"roie");
-insert into user value("333333333","1235","Manager",false,"shaked");
+insert into user value("2","2","Manager",false,"shaked");
+insert into user value("3","3","Student",false,"yossid");
+
 select * from user;
 
 
@@ -29,6 +31,12 @@ select * from student;
 create table studentTest(id_code varchar(20), id varchar(10), test_code varchar(6), test_answers varchar(1024), test_grade varchar(3), cheat boolean,  checked boolean, CommentsForStudent varchar(256), key(id_code));
 select * from studentTest;
 
+create table course(code varchar(20),name varchar(256), PRIMARY key(code));
+insert into course value("02", "Physics");
+insert into course value("03", "Algebra1");
+insert into course value("04", "History");
+insert into course value("05", "English");
+select * from course;
 
 drop table question;
 drop table test;

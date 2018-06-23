@@ -302,5 +302,16 @@ public class Client implements ChatIF {
 		return file;
 	}
 
+	/**
+	 * This function get all the courses id from the server.
+	 * @return ArrayList<String> of the courses id.
+	 */
+	public ArrayList<String> getCoursesId()
+	{
+		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.COURSE_GET_ID_LIST), " ");
+		this.chatClient.handleMessageFromClientUI(msg);
+		waitForAnswer();
+		return (ArrayList<String>) this.answer;	
+	}
 }
 // End of ConsoleChat class

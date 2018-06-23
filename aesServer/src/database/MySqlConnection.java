@@ -28,6 +28,7 @@ public class MySqlConnection
 	private final static String TEST_DATABASE_NAME = "test";
 	private final static String STUDENT_DATABASE_NAME = "student";
 	private final static String STUDENT_TEST_DATABASE_NAME = "studentTest";
+	private final static String COURSES_DATABASE_NAME = "course";	
 	private static ArrayList<ExecutedTest> executedTests;
 	public MySqlConnection() 
 	{
@@ -96,6 +97,7 @@ public class MySqlConnection
 		
 		case UPLOAD_FILE: uploadFile((MyFile)obj); return " ";
 		case DOWNLOAD_FILE: return downloadFile((String)obj);
+		case COURSE_GET_ID_LIST: return getCoursesId();
 		}
 		return null;
 	}
@@ -712,6 +714,27 @@ public class MySqlConnection
 			System.out.println("Error send (Files)msg) to Server");
 		}
 		return file;
+	}
+	
+	/**
+	 * This function get all the courses id from the server.
+	 * @return ArrayList<String> of the courses id.
+	 */
+	public static ArrayList<String> getCoursesId()
+	{
+		ArrayList<String> coursesID = new ArrayList<String>();
+		Statement stmt;
+		try 
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+ COURSES_DATABASE_NAME+";");
+	 		while(rs.next())
+	 		{
+	 			coursesID.add(rs.getString(1));
+			} 
+			rs.close();
+		} catch (SQLException e) {e.printStackTrace();}
+		return coursesID;
 	}
 }
 
