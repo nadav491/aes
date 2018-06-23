@@ -4,11 +4,9 @@ package message;
 import java.io.Serializable;
 /**
  * This class is used to determine how to transfer messages to server and client.
+ * The class contains the action and object to send to the server.
  */
 public class MessageType implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4977398872945543277L;
 	private int action;
 	private Object obj;

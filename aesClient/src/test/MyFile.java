@@ -1,7 +1,9 @@
 package test;
 
 import java.io.Serializable;
-
+/**
+ * This class is used to send a file to and from the server.
+ */
 public class MyFile implements Serializable {
 	private static final long serialVersionUID = 2993776648537120491L;
 	private String Description=null;

@@ -1,20 +1,20 @@
 package Student;
 import java.io.Serializable;
 import test.studentTest;
+/**
+ * This class represent the students with all its test and grades.
+ */
 public class Student  implements Serializable{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4499287752138916867L;
-	
 	private String id;
 	private studentTest tests[];
 	private int grades[];
+	
 	public Student()
 	{
 		super();
 	}
+	
 	public Student(Student std)
 	{
 		super();
@@ -22,6 +22,7 @@ public class Student  implements Serializable{
 		this.tests = std.tests;
 		this.grades = std.grades;
 	}
+	
 	public Student(String id, studentTest tests[], int grades[])
 	{
 		super();
@@ -29,24 +30,36 @@ public class Student  implements Serializable{
 		this.tests = tests;
 		this.grades = grades;
 	}
+	
 	public String getId() {
 		return id;
 	}
+	
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public studentTest[] getTests() {
 		return tests;
 	}
+	
 	public void setTests(studentTest[] tests) {
 		this.tests = tests;
 	}
+	
 	public int[] getGrades() {
 		return grades;
 	}
+	
 	public void setGrades(int[] grades) {
 		this.grades = grades;
 	}
+	
+	/**
+	 * This function get all the grades and creates a string to save into the database.
+	 * @param grades - the grades array.
+	 * @return the new string.
+	 */
 	public String fromIntArrayToString(int grades[])
 	{
 		String str = "";
@@ -69,6 +82,12 @@ public class Student  implements Serializable{
 			}
 		return str;
 	}
+	
+	/**
+	 * This function get all the tests and creates a string to save into the database.
+	 * @param tests - the tests array.
+	 * @return the new string.
+	 */
 	public String fromStudentTestsArrayToString(studentTest tests[])
 	{
 		String str ="";

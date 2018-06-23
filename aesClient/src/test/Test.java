@@ -2,12 +2,16 @@ package test;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import question.*;
+
+/**
+ * This class represent the test created by the teacher.
+ * This class is not a test done by students.
+ * The test that is done by student is studentTest.
+ *
+ */
 public class Test implements Serializable {
 	private static final long serialVersionUID = -8046372034304566997L;
-	
-	private static final int CODE_LENGTH = 6;
 	private ArrayList<Question> questions;
 	private ArrayList<String> questionGrade;
 	private String commentsForTeacher;
@@ -83,6 +87,13 @@ public class Test implements Serializable {
 				"\nQuestions = [" + FromQuestionArrayToString(questions, questionGrade) +
 				 "]\n";
 	}
+	
+	/**
+	 * Build a string of question and grades to save into the database.
+	 * @param questions2 the questions.
+	 * @param questionGrade2 the grades.
+	 * @return the string.
+	 */
 	public static String FromQuestionArrayToString(ArrayList<Question> questions2, ArrayList<String> questionGrade2)
 	{
 		String str="\n  ";

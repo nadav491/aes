@@ -245,29 +245,52 @@ public class Client implements ChatIF {
 		return (boolean) this.answer;
 	}
 
+	/**
+	 * Get all the tests by student id.
+	 * @param stud_id - the student id.
+	 * @return Student with all the tests.
+	 */
 	public Student getAllTestsByStudentId(String stud_id) {
 		studentTestController.getAllTestsByStudentId(stud_id, this.chatClient);
 		waitForAnswer();
 		return (Student) this.answer;
 	}
 
+	/**
+	 * Get all the tests by teacher id.
+	 * @param teacher_id - the teacher id.
+	 * @return studentTest array.
+	 */
 	public studentTest[] getAllTestsByTeacherId(String teacher_id) {
 		studentTestController.getAllTestsByTeacherId(teacher_id, this.chatClient);
 		waitForAnswer();
 		return (studentTest[]) this.answer;
 	}
 
+	/**
+	 * Get all the tests by course id.
+	 * @param course_id - the course id.
+	 * @return studentTest array.
+	 */
 	public studentTest[] getAllTestsByCourseId(String course_id) {
 		studentTestController.getAllTestsByCourseId(course_id, this.chatClient);
 		waitForAnswer();
 		return (studentTest[]) this.answer;
 	}
 
+	/**
+	 * Add new executed test.
+	 * @param test - the test to add.
+	 */
 	public void AddToExecutreTest(ExecutedTest test) {
 		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_ADD), test);
 		this.chatClient.handleMessageFromClientUI(msg);
 	}
 
+	/**
+	 * Get all the executed tests.
+	 * @return - Array list of all the executed tests.
+	 */
 	public ArrayList<ExecutedTest> GetAllExecutreTest() {
 		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_GET_ALL), " ");
 		this.chatClient.handleMessageFromClientUI(msg);
@@ -277,6 +300,11 @@ public class Client implements ChatIF {
 		return (ArrayList<ExecutedTest>) this.answer;
 	}
 
+	/**
+	 * Update an executre test.
+	 * @param test - the test to update.
+	 * @return the new Array list of all the executed tests.
+	 */
 	public ArrayList<ExecutedTest> UpdateExecutreTest(ExecutedTest test) {
 		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_UPDATE), test);
 		this.chatClient.handleMessageFromClientUI(msg);
@@ -284,6 +312,10 @@ public class Client implements ChatIF {
 		return (ArrayList<ExecutedTest>) this.answer;
 	}
 
+	/**
+	 * Update a student test.
+	 * @param test - the test to update.
+	 */
 	public void UpdateStudentTest(studentTest test) {
 		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.STUDENT_TEST_UPDATE), test);
 		this.chatClient.handleMessageFromClientUI(msg);
