@@ -1010,11 +1010,14 @@ public class StudentController {
 		Stage Second=new Stage();
 		checked_list=new ArrayList<studentTest>();
 		studentTest list[]=client.getAllTestsByStudentId(str4).getTests();
-		for(int i=0;i<list.length;i++)
-		{
-			if(list[i].isCheck())
+		System.out.println(client.getAllTestsByStudentId(str4)+" "+client.getAllTestsByStudentId(str4).getTests());
+		if(list != null) {
+			for(int i=0;i<list.length;i++)
 			{
-				checked_list.add(list[i]);
+				if(list[i].isCheck())
+				{
+					checked_list.add(list[i]);
+				}
 			}
 		}
 		BorderPane BP=new BorderPane();

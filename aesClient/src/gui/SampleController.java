@@ -945,7 +945,8 @@ public class SampleController {
                 		    			   for(int j=0;j<Q_list.size();j++)
                 		    			   {
                 		    				  
-                		    				   if(Q_list.get(j).getCode().equals(selected.get(i)))test_add.getQuestions().add(Q_list.get(j));
+                		    				   if(Q_list.get(j).getCode().equals(selected.get(i)))
+                		    					   test_add.getQuestions().add(Q_list.get(j));
                 		    			   }
                 		    			   
                 		    		   }

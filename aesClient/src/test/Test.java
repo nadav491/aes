@@ -92,12 +92,16 @@ public class Test implements Serializable {
 	}
 
 	public ArrayList<Question> getQuestions() {
+		if(questions == null)
+			this.questions = new ArrayList<Question>();
 		return questions;
 	}
 	public void setQuestions(ArrayList<Question> questions) {
 		this.questions = questions;
 	}
 	public ArrayList<String> getQuestionGrade() {
+		if(questionGrade == null)
+			this.questionGrade = new ArrayList<String>();
 		return questionGrade;
 	}
 	public void setQuestionGrade(ArrayList<String> questionGrade) {
