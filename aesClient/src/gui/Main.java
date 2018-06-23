@@ -118,7 +118,6 @@ public class Main extends Application {
 				    			txt1.setBlendMode(BlendMode.SRC_OVER);
 				    			txt2.setBlendMode(BlendMode.SRC_OVER);
 				    					
-						    	System.out.println(txt1.getText() + txt2.getText()+" "+typeName+" "+typeName.get(0));
 				    					//change here to input size for jumps
 				    					if(typeName.get(0).equals("Student"))
 				    					{

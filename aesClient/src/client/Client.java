@@ -231,7 +231,6 @@ public class Client implements ChatIF {
 		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_GET_ALL), " ");
 		this.chatClient.handleMessageFromClientUI(msg);
 		waitForAnswer();
-		System.out.println(this.answer);
 		if(this.answer.getClass() != ArrayList.class)
 			return(new ArrayList<ExecutedTest>());
 		return (ArrayList<ExecutedTest>) this.answer;

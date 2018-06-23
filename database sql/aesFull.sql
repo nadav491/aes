@@ -17,7 +17,7 @@ insert into user value("3","3","Student",false,"yossid");
 create table student(id varchar(10), tests_id varchar(1024), tests_grades varchar(1024), PRIMARY KEY (id));
 insert into student value("yossia","","");
 
-create table studentTest(id_code varchar(20), id varchar(10), test_code varchar(6), test_answers varchar(1024), test_grade varchar(3), cheat boolean,  checked boolean, CommentsForStudent varchar(256), key(id_code));
+create table studentTest(id_code varchar(20), id varchar(10), test_code varchar(6), test_answers varchar(1024), test_grade varchar(3), cheat boolean,  checked boolean, CommentsForStudent varchar(256),PRIMARY key(id_code));
 
 create table course(code varchar(20),name varchar(256), PRIMARY key(code));
 insert into course value("02", "Physics");

@@ -88,7 +88,7 @@ public class MySqlConnection
 		case STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID: return getAllTestsByStudentId((String) obj);
 		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return getAllTestsByTeacherId((String) obj);
 		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return getAllTestsByCourseId((String) obj);
-		case STUDENT_TEST_UPDATE: deleteStudentTest(((studentTest) obj).getStudent() + ((studentTest) obj).getTest().getCode() ); return createStudentTest((studentTest) obj);
+		case STUDENT_TEST_UPDATE: return createStudentTest((studentTest) obj);
 		
 		case EXECUTED_TEST_ADD: executedTests.add((ExecutedTest)obj); return " ";
 		case EXECUTED_TEST_GET_ALL: return(getExecutedTests());
@@ -456,6 +456,7 @@ public class MySqlConnection
 			return false;
 		try
 		{
+			deleteStudentTest(std_test.getStudent() + (std_test.getTest().getCode()),std_test.getStudent());
 			String state = "insert into " + STUDENT_TEST_DATABASE_NAME + " values (?,?,?,?,?,?,?,?);";
 			String answers = "";
 			PreparedStatement add_student_test = conn.prepareStatement(state);
@@ -472,7 +473,6 @@ public class MySqlConnection
 			add_student_test.setString(8, std_test.getReason());
 			add_student_test.executeUpdate();
 		} catch (SQLException e) {e.printStackTrace();}
-		
 		return updateStudentTable(std_test.getStudent(), std_test.getTest().getCode(), std_test.fromIntToString(std_test.getGrade()));
 	}
 	public static boolean updateStudentTable(String id, String code, String grade)
@@ -648,7 +648,7 @@ public class MySqlConnection
 		
 	}
 	
-	public static boolean deleteStudentTest(String code)
+	public static boolean deleteStudentTest(String code,String id)
 	{
 		if(code == null)
 			return false;
@@ -657,9 +657,17 @@ public class MySqlConnection
 			String state = "delete from " + STUDENT_TEST_DATABASE_NAME + " where id_code = \'" + code +"\';";
 			PreparedStatement del_test = conn.prepareStatement(state);		
 			del_test.executeUpdate();
+			String stateS = "delete from " + STUDENT_DATABASE_NAME + " where id = \'" + id +"\';";
+			PreparedStatement del_testS = conn.prepareStatement(stateS);		
+			del_testS.executeUpdate();
+			String stateA = "insert into " + STUDENT_DATABASE_NAME + " value(?,?,?)";
+			PreparedStatement insert = conn.prepareStatement(stateA);	
+			insert.setString(1, id);
+			insert.setString(2, "");
+			insert.setString(3, "");
+			insert.executeUpdate();
 		} catch (SQLException e) {e.printStackTrace();}
 		return true;
-		
 	}
 	
 	/**

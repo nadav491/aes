@@ -398,7 +398,6 @@ public class SampleController {
 	        			    	   Question_add.setTInstruction(F0.getText());
 	        			    	   if(j==7) {
 	        			    	   Question_add.setOwner(Owner_name[c]);
-	        			    	   System.out.println("123");
 	        			    	   client.addQuestion(Question_add);
 	        			    	   primaryStage.close();
 	        			    	   Q_print(Owner,c,client);
@@ -572,7 +571,6 @@ public class SampleController {
 		    		   {
 		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
-		    		   System.out.println(idx_C);
 		    		   view_test(test_list.get(idx_C));
 		           }
 			  }
@@ -1079,7 +1077,6 @@ public class SampleController {
                                 		    		   }
                                 		    	
                                 		    	   }
-                                		    	   System.out.println(sum);
                                 			  }
                                 	        });
                      		        	    gridpane.add(B1, 0, j);
@@ -1432,7 +1429,6 @@ public class SampleController {
  		    			   }
  		    			   
  		    		   }
- 		    		   System.out.println(Update.getQuestions());
  		    		   Update.setTime(Chosen.getTime());
         		    	    TextArea matrix[][]=new TextArea[Update.getQuestions().size()][9];
         		    	    ScrollPane pane=new ScrollPane();
@@ -1741,9 +1737,7 @@ public class SampleController {
 		    				    		   final ExecutedTest add=new ExecutedTest(test_list.get(idx_C),date, test_list.get(idx_C).getTime());
 		    				    		   add.setExe_code(F1.getText());
 		    				    		   add.getTest().setQuestionGrade(test_list.get(idx_C).getQuestionGrade());
-		    				    		   System.out.println(add.getTest().getQuestionGrade());
 		    				    		   add.setexecuter(Owner_name[c]);
-		    				    		   System.out.println(add.getexecuter());
 		    				    		   add.setrSign(0);
 		    				    		   int check=0;
 		    				    		   for(int h=0;h< client.GetAllExecutreTest().size();h++)

@@ -1010,7 +1010,6 @@ public class StudentController {
 		Stage Second=new Stage();
 		checked_list=new ArrayList<studentTest>();
 		studentTest list[]=client.getAllTestsByStudentId(str4).getTests();
-		System.out.println(client.getAllTestsByStudentId(str4)+" "+client.getAllTestsByStudentId(str4).getTests());
 		if(list != null) {
 			for(int i=0;i<list.length;i++)
 			{

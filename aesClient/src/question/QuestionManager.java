@@ -29,7 +29,6 @@ public class QuestionManager {
 	 */
 	public static void addQuestion(Client client, Question questionToAdd)
 	{
-		System.out.println(questionToAdd);
 		if(questionToAdd.checkQuestion())
 		{
 			MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.QUESTION_ADD), questionToAdd);
@@ -49,15 +48,10 @@ public class QuestionManager {
 	{
 		if(updatedQuestion.checkQuestion())
 		{
-			System.out.println("Y");
-
 			MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.QUESTION_UPDATE),updatedQuestion);
-			
-			System.out.println("2Y");
 			client.getChatClient().handleMessageFromClientUI(msg);
 			client.waitForAnswer();
 		}
-		System.out.println("N");
 	}
 	
 	/**
