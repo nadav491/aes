@@ -1947,7 +1947,6 @@ public class SampleController {
 									    	   }
 									    	   if(j==2)
 									    	   {
-									    		   Main.Manager.handleTimeChangeRequest(selected, F1.getText(),F2.getText());
 									    		   second.close();
 									    	   }
 									    	   
@@ -2077,7 +2076,15 @@ public class SampleController {
 					    	 int a=listView.getSelectionModel().getSelectedIndex();
 					    	 for(int i=0;i<solved_Tests.get(a).getAnswers().size();i++)
 					    	 {
-					    		 sum+=Integer.parseInt(solved_Tests.get(a).getAnswers().get(i));
+					    		 if(solved_Tests.get(a).getAnswers().get(i).endsWith(""))
+					    		 {
+					    			 sum+=Integer.parseInt(solved_Tests.get(a).getAnswers().get(i))*10;
+					    		 }
+					    		 else
+					    		 {
+					    			 sum+=Integer.parseInt(solved_Tests.get(a).getAnswers().get(i));
+					    		 }
+					    		 
 					    	 }
 					    	 Chosen=new Test();
 					    	 Chosen=solved_Tests.get(a).getTest();
@@ -2384,19 +2391,23 @@ public class SampleController {
 			primaryStage.show();
 			
     }
-    public void Check_test_statistics(int c)
+    public void Check_test_statistics(int c,Client client)
     {
-    	/*
+    	
     	Stage second=new Stage();
  	   BorderPane p1=new BorderPane();
 	    	 ScrollPane sp=new ScrollPane();
 	  		 ObservableList<String> data = FXCollections.observableArrayList();
-
+                ArrayList<ExecutedTest> arr=new ArrayList<ExecutedTest>();
 	  		    ListView<String> listView = new ListView<String>(data);
 	  		    listView.setPrefSize(300, 250);
-	  		    for(int i=0;i<Main.ExecuteList.size();i++) {
-	  		    	if(Main.ExecuteList.get(i).getTest().getOwner().equals(Main.TController[c].Owner_name[c])&& Main.ExecuteList.get(i).getSign()==1)
-	  		    			data.add(Main.ExecuteList.get(i).getTest().getcode());
+	  		    for(int i=0;i<client.GetAllExecutreTest().size();i++) {
+	  		    	if(client.GetAllExecutreTest().get(i).getTest().getOwner().equals(Owner_name[c])&& client.GetAllExecutreTest().get(i).getSign()==1)
+	  		    			{
+	  		    		      data.add(client.GetAllExecutreTest().get(i).getTest().getCode());
+	  		    		      arr.add(client.GetAllExecutreTest().get(i));
+	  		    		      
+	  		    			}
 	  		    }
 
 	  		    listView.setItems(data);
@@ -2418,65 +2429,66 @@ public class SampleController {
 						    	  int idx=0;
 						    	  idx=listView.getSelectionModel().getSelectedIndex();
 						    	  GridPane p=new GridPane();
-						    	  p.add(new Label("Test :"+Main.ExecuteList.get(idx).getTest().getcode()), 0, 0);
-						    	  p.add(new Label("Taken in: "+Main.ExecuteList.get(idx).getDate()), 0, 1);
-						    	  p.add(new Label("Started at: "+Main.ExecuteList.get(idx).getStartTime()), 0, 2);
-						    	  p.add(new Label("Test duration: "+Main.ExecuteList.get(idx).getCurrentTime()), 0, 3);
-						    	  p.add(new Label("Student number: "+Main.ExecuteList.get(idx).getStudentNumber()), 0, 4);
-						    	  p.add(new Label("Finished student number: "+Main.ExecuteList.get(idx).getFInishedNum()), 0, 5);
-						    	  p.add(new Label("Force Finished student number: "+Main.ExecuteList.get(idx).getFFInishedNum()), 0, 6);
-						    	  p.add(new Label("Signup list: "+Main.ExecuteList.get(idx).getSignUpList()), 0, 7);
-						    	  p.add(new Label("Executed by: "+Main.ExecuteList.get(idx).getexecuter()), 0, 8);
+						    	  p.add(new Label("Test :"+arr.get(idx).getTest().getCode()), 0, 0);
+						    	  p.add(new Label("Taken in: "+arr.get(idx).getDate()), 0, 1);
+						    	  p.add(new Label("Started at: "+arr.get(idx).getStartTime()), 0, 2);
+						    	  p.add(new Label("Test duration: "+arr.get(idx).getCurrentTime()), 0, 3);
+						    	  p.add(new Label("Student number: "+arr.get(idx).getSignUpList().size()), 0, 4);
+						    	  p.add(new Label("Finished student number: "+arr.get(idx).getFInishedNum()), 0, 5);
+						    	  p.add(new Label("Force Finished student number: "+(arr.get(idx).getSignUpList().size()-arr.get(idx).getFInishedNum())), 0, 6);
+						    	  p.add(new Label("Signup list: "+arr.get(idx).getSignUpList()), 0, 7);
+						    	  p.add(new Label("Executed by: "+arr.get(idx).getexecuter()), 0, 8);
 						    	  int avarage=0;
-				    				 for(int b=0;b<Main.ExecuteList.get(idx).getGradeList().size();b++)
+				    				 for(int b=0;b<arr.get(idx).getFInishedNum();b++)
 				    				 {
-				    					 avarage+=Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b));
+				    					 avarage+=Integer.parseInt(arr.get(idx).getGradeList().get(b));
 				    				 }
-				    				 if(Main.ExecuteList.get(idx).getGradeList().size()!=0)  avarage=avarage/Main.ExecuteList.get(idx).getGradeList().size();
+				    				 System.out.println(arr.get(idx).getGradeList());
+				    				 avarage=avarage/arr.get(idx).getFInishedNum();
 				    				 p.add(new Label("avarage grade: "+avarage), 0, 9);
 				    				 int median=0;
-				    				 int middle = Main.ExecuteList.get(idx).getGradeList().size();
-				    				 if(Main.ExecuteList.get(idx).getGradeList().size()!=0) {
-				    			        if (Main.ExecuteList.get(idx).getGradeList().size() % 2 == 1) {
-				    			             median=Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get((middle)/2));
+				    				 int middle = arr.get(idx).getFInishedNum();
+				    				 if(arr.get(idx).getGradeList().size()!=0) {
+				    			        if (arr.get(idx).getGradeList().size() % 2 == 1) {
+				    			             median=Integer.parseInt(arr.get(idx).getGradeList().get((middle)/2));
 				    			        } else {
-				    			           median=Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get((middle-1)/2));
+				    			           median=Integer.parseInt(arr.get(idx).getGradeList().get((middle-1)/2));
 				    			        }
 				    				 }
 				    			     p.add(new Label("median: "+median),0, 10);
 				    			     int gradeSpace[]=new int[10];
 				    			     for(int k=0;k<10;k++)gradeSpace[k]=0;
-				    			     for(int b=0;b<Main.ExecuteList.get(idx).getGradeList().size();b++)
+				    			     for(int b=0;b<arr.get(idx).getFInishedNum();b++)
 				    			     {
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=10 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>=0)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=10 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>=0)
 				    			    		 gradeSpace[0]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=20 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>10)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=20 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>10)
 				    			    		 gradeSpace[1]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=30 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>20)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=30 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>20)
 				    			    		 gradeSpace[2]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=40 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>30)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=40 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>30)
 				    			    		 gradeSpace[3]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=50 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>40)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=50 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>40)
 				    			    		 gradeSpace[4]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=60 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>50)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=60 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>50)
 				    			    		 gradeSpace[5]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=70 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>60)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=70 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>60)
 				    			    		 gradeSpace[6]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=80 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>70)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=80 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>70)
 				    			    		 gradeSpace[7]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=90 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>80)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=90 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>80)
 				    			    		 gradeSpace[8]++;
-				    			    	 if(Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))<=100 && 
-				    			    			 Integer.parseInt(Main.ExecuteList.get(idx).getGradeList().get(b))>90)
+				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=100 && 
+				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>90)
 				    			    		 gradeSpace[9]++;
 				    			    	 
 				    			    	 
@@ -2546,6 +2558,6 @@ public class SampleController {
 		  		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		  		second.setScene(scene);
 		  		second.show();
-		  		*/
+		  		
     }
 }

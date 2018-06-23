@@ -99,7 +99,7 @@ public class MySqlConnection
 		case DOWNLOAD_FILE: return downloadFile((String)obj);
 		case COURSE_GET_ID_LIST: return getCoursesId();
 		case STUDENT_GET_ALL_NAME: return getAllUsersNamesByType((String) obj);
-		
+		case TEACHER_GET_ALL_NAME: return getAllUsersNamesByType((String) obj);
 		default: return null;
 		}
 	}
@@ -787,10 +787,11 @@ public class MySqlConnection
 		try 
 		{
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM "+ COURSES_DATABASE_NAME+" where type = "+ userType+";");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM "+USER_DATABASE_NAME+";");
 	 		while(rs.next())
 	 		{
-	 			studnetName.add(rs.getString(1));
+	 			if(rs.getString(3).equals(userType))
+	 				studnetName.add(rs.getString(1));
 			} 
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}

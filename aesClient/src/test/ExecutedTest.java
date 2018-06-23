@@ -15,6 +15,7 @@ public class ExecutedTest implements Serializable {
 	private LocalDateTime StartTime;
 	private String CurrentLength;
 	private ArrayList<String> SignUplist;
+	private ArrayList<String> FUplist;
 	private int StudentNumStart;
 	private int StudentNumFinished;
 	private int StudentNumForceFinished;
@@ -40,7 +41,14 @@ public class ExecutedTest implements Serializable {
 		sign=0;
 		run_sign=-1;
 		gradelog=new HashMap();
+		FUplist=new ArrayList<String>();
 	}
+	
+	public ArrayList<String> getF()
+	{
+		return FUplist;
+	}
+	
 	public int getSign() {return sign;};
 	public void setSign(int state) {sign=state;};
 	public int getrSign() {return run_sign;};

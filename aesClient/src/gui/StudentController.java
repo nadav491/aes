@@ -228,6 +228,7 @@ public class StudentController {
 					    				   client.GetAllExecutreTest().get(j).setStudentNumber(1);
 					    				   client.GetAllExecutreTest().get(j).getTest().setCode(client.GetAllExecutreTest().get(j).getTest().getCode());
 					    				   client.GetAllExecutreTest().get(j).setExe_code(client.GetAllExecutreTest().get(j).getExe_code());
+					    				   client.GetAllExecutreTest().get(j).getF().add("0");					    				  
 					    				   signUp_test_list.add(client.GetAllExecutreTest().get(j).getTest());
 					    				   client.UpdateExecutreTest(client.GetAllExecutreTest().get(j));
 					    				   break;
@@ -295,9 +296,15 @@ public class StudentController {
 			{
 				if(client.GetAllExecutreTest().get(i).getSignUpList().contains(Owner_name[c]))
 				{
-					signUp_test_list.add(client.GetAllExecutreTest().get(i).getTest());
-					exeCodes.add(client.GetAllExecutreTest().get(i).getExe_code());
 					
+					for(int p=0;p<client.GetAllExecutreTest().get(i).getSignUpList().size();p++) {
+				    if(client.GetAllExecutreTest().get(i).getSignUpList().get(p).equals(Owner_name[c])) {
+				    	if(client.GetAllExecutreTest().get(i).getF().get(p).equals("0")) {
+					      signUp_test_list.add(client.GetAllExecutreTest().get(i).getTest());
+					      exeCodes.add(client.GetAllExecutreTest().get(i).getExe_code());
+				    	}
+				    }
+					}
 				}
 			}
 		}
@@ -537,12 +544,12 @@ public class StudentController {
 																		    		   j=0;
 																		    	   }
 																		    	   signUp_test_list.remove(idx);
-										
-																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
+																		    	   client.GetAllExecutreTest().get(idx).setStudentNumber(client.GetAllExecutreTest().get(idx).getSignUpList().size());
+																		    	   client.GetAllExecutreTest().get(idx).setFFInishedNum(client.GetAllExecutreTest().get(idx).getFFInishedNum()+1);
 																		    	   client.GetAllExecutreTest().get(idx).setrSign(-1);
 																		    	   client.GetAllExecutreTest().get(idx).setSign(2);
+																		    	   client.GetAllExecutreTest().get(idx).getF().add("1");
 																		    	   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
-																		    	   
 													    						   closestage.get(c).close();
 													   							   time1[c].stop();
 													   							}
@@ -767,9 +774,11 @@ public class StudentController {
 																		    	   {
 																		    		   sum+=Integer.parseInt(sav1.getAnswers().get(y));
 																		    	   }
-																		    	  
+																		    	   
 																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
 																		    	   client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()-1);
+																		    	   client.GetAllExecutreTest().get(idx).setStudentNumber(client.GetAllExecutreTest().get(idx).getSignUpList().size());
+																		    	   
 																		    	   if(client.GetAllExecutreTest().get(idx).getrSign()==0)
 																		    	   {
 																		    		   client.GetAllExecutreTest().get(idx).setSign(1);
@@ -781,7 +790,9 @@ public class StudentController {
 																		    	   int sign1=0;
 																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
-																		    	   
+																		    	   client.GetAllExecutreTest().get(idx).getGradeList().add(sum+"");
+																		    	   client.GetAllExecutreTest().get(idx).getF().add("1");
+																		    	  
 																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).gradelog.size();f++)
 																		    	   {
 																		    		   
@@ -882,6 +893,8 @@ public class StudentController {
 																		    	   }
 																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
 																		    	   client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()-1);
+																		    	   client.GetAllExecutreTest().get(idx).setStudentNumber(client.GetAllExecutreTest().get(idx).getSignUpList().size());
+																		    	   
 																		    	   if(client.GetAllExecutreTest().get(idx).getrSign()==0)
 																		    	   {
 																		    		   client.GetAllExecutreTest().get(idx).setSign(1);
@@ -891,8 +904,10 @@ public class StudentController {
 																		    	   }
 																		    	   int sign1=0;
 																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
+																		    	   client.GetAllExecutreTest().get(idx).getF().add("1");
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
-																		    	   
+																		    	   client.GetAllExecutreTest().get(idx).getGradeList().add(sum+"");
+																		    	  
 																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).gradelog.size();f++)
 																		    	   {
 																		    		   
@@ -1093,10 +1108,9 @@ public class StudentController {
 			     	Text_edit.add(L1, 0, 2);
 			     	L1=new Label("Test duration: "+Chosen.getTime()+" minuts");
 			     	Text_edit.add(L1, 0, 3);
-			     	L1=new Label("Test grade: "+Chosen.getTest().getQuestionGrade());
+			     	L1=new Label("Test grade: "+Chosen.getGrade());
 			     	Text_edit.add(L1, 0, 4);
-			   
-			     	if(Chosen.getReason()!=null && !Chosen.getReason().isEmpty())
+			       	if(Chosen.getReason()!=null && !Chosen.getReason().isEmpty())
 			     	{
 			     		L1=new Label("Grade change reason: "+Chosen.getReason());
 				     	Text_edit.add(L1, 0, 5);

@@ -117,8 +117,7 @@ public class Main extends Application {
 				    		{
 				    			txt1.setBlendMode(BlendMode.SRC_OVER);
 				    			txt2.setBlendMode(BlendMode.SRC_OVER);
-				    					
-				    					//change here to input size for jumps
+				    			//change here to input size for jumps
 				    					if(typeName.get(0).equals("Student"))
 				    					{
 				    						BorderPane Main_window=new BorderPane();
@@ -244,7 +243,7 @@ public class Main extends Application {
 				    							 @Override
 				    							  public void handle(ActionEvent e)
 				    								  {
-				    								TController[0].Check_test_statistics(0);
+				    								TController[0].Check_test_statistics(0,client);
 				    							    	
 				    								     
 				    							      }
@@ -281,7 +280,7 @@ public class Main extends Application {
 				    							  public void handle(ActionEvent e)
 				    								  {
 				    							    	
-				    							    	Manager.SystemReport();
+				    							    	Manager.SystemReport(client);
 				    							      }
 				    							       
 				    						 });
@@ -291,7 +290,7 @@ public class Main extends Application {
 				    							 @Override
 				    							  public void handle(ActionEvent e)
 				    								  {
-				    								    Manager.Report();
+				    								    Manager.Report(client);
 				    							      }
 				    							       
 				    						 });
@@ -301,7 +300,7 @@ public class Main extends Application {
 				    							 @Override
 				    							  public void handle(ActionEvent e)
 				    								  {
-				    								    Manager.Custom_report();
+				    								    Manager.Custom_report(client);
 				    							      }
 				    							       
 				    						 });
@@ -426,11 +425,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		//launch(args);
-    	Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
-    	System.out.print(client.getAllTeachersNames());
-    	System.out.print(client.getAllStudnetNames());
-
+		launch(args);
 	}
 	public ArrayList<ExecutedTest> getList()
 	{

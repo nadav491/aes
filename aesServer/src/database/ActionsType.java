@@ -2,12 +2,11 @@ package database;
 
 import java.io.Serializable;
 
-/* An enum class to use database actions*/
+/**
+ *  An enum class to use database actions
+ */
 public class ActionsType implements Serializable
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3007036497465788417L;
 
 	public enum ActionNumber
