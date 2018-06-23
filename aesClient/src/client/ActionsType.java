@@ -47,6 +47,7 @@ public class ActionsType implements Serializable
 		EXECUTED_TEST_ADD,
 		EXECUTED_TEST_GET_ALL,
 		EXECUTED_TEST_UPDATE,
+		EXECUTED_TEST_CHECK_LOCK_TEST,
 		
 		UPLOAD_FILE,
 		DOWNLOAD_FILE,
@@ -84,6 +85,7 @@ public class ActionsType implements Serializable
 		case EXECUTED_TEST_ADD: return 1000;
 		case EXECUTED_TEST_GET_ALL: return 1001;
 		case EXECUTED_TEST_UPDATE: return 1002;
+		case EXECUTED_TEST_CHECK_LOCK_TEST: return 1003;
 		
 		case UPLOAD_FILE: return 2000;
 		case DOWNLOAD_FILE: return 2001;
@@ -123,6 +125,7 @@ public class ActionsType implements Serializable
 		case 1000: return ActionNumber.EXECUTED_TEST_ADD;
 		case 1001: return ActionNumber.EXECUTED_TEST_GET_ALL;
 		case 1002: return ActionNumber.EXECUTED_TEST_UPDATE;
+		case 1003: return ActionNumber.EXECUTED_TEST_CHECK_LOCK_TEST;
 		
 		case 2000: return ActionNumber.UPLOAD_FILE;
 		case 2001: return ActionNumber.DOWNLOAD_FILE;

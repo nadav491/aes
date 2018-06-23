@@ -93,6 +93,7 @@ public class MySqlConnection
 		case EXECUTED_TEST_ADD: executedTests.add((ExecutedTest)obj); return " ";
 		case EXECUTED_TEST_GET_ALL: return(getExecutedTests());
 		case EXECUTED_TEST_UPDATE: return(UpdateExecutedTests((ExecutedTest)obj));
+		case EXECUTED_TEST_CHECK_LOCK_TEST: return(executedTestsCheckLock((ExecutedTest)obj));
 		
 		case UPLOAD_FILE: uploadFile((MyFile)obj); return " ";
 		case DOWNLOAD_FILE: return downloadFile((String)obj);
@@ -102,13 +103,7 @@ public class MySqlConnection
 		}
 	}
 	
-	/**
-	 * Return a copy of the executedTests.
-	 * @return a copy of the executedTests.
-	 */
-	public static ArrayList<ExecutedTest> getExecutedTests() {
-		return new ArrayList<>(executedTests);
-	}
+	
 	/**
 	 * This function get all the question from the database. 
 	 * @return ArrayList<Question> of the questions.
@@ -686,6 +681,26 @@ public class MySqlConnection
 			}
 		}
 		return(new ArrayList<>(executedTests));
+	}
+	
+	/**
+	 * Return a copy of the executedTests.
+	 * @return a copy of the executedTests.
+	 */
+	public static ArrayList<ExecutedTest> getExecutedTests() {
+		return new ArrayList<>(executedTests);
+	}
+	
+	/**
+	 * Check if a test was locked.
+	 * @param test - the test to check.
+	 * @return the sign of the test (2 for locked).
+	 */
+	public static int executedTestsCheckLock(ExecutedTest test) {
+		for(int i=0;i<executedTests.size();i++)
+			if(executedTests.get(i).getTest().getCode().equals(test.getTest().getCode()))
+				return executedTests.get(i).getSign();
+		return -1;
 	}
 	
 	/**

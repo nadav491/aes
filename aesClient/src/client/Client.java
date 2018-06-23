@@ -316,5 +316,19 @@ public class Client implements ChatIF {
 		waitForAnswer();
 		return (ArrayList<String>) this.answer;	
 	}
+	
+	/**
+	 * Check if a test was locked.
+	 * @param test - the test to check.
+	 * @return the sign of the test (2 for locked).
+	 */
+	public int executedTestsCheckLock(ExecutedTest test) 
+	{
+		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.EXECUTED_TEST_CHECK_LOCK_TEST), test);
+		this.chatClient.handleMessageFromClientUI(msg);
+		waitForAnswer();
+		return (int) this.answer;	
+	}
+
 }
 // End of ConsoleChat class

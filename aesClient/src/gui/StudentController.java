@@ -21,6 +21,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -66,6 +67,7 @@ public class StudentController {
 	private String ID1;
 	private String pass1;
 	private static int val=0;
+	static int timeC=0;
 	public static  Map <Integer,ArrayList<Test>> checkedTests=new HashMap();
 	public static final Timeline time1[]=new Timeline[2];
 
@@ -481,10 +483,22 @@ public class StudentController {
 													    		   {
 													    			   pane.setVisible(true);
 													    			   b.setVisible(false);
-													    			     time1[c]=new Timeline(new KeyFrame(
-													    					   Duration.minutes(Integer.parseInt(sav1.getTime())),
-													    					   ae->{
-													    						   int j=0;
+													    			   final int dur=Integer.parseInt(sav1.getTime());
+													    			   time1[c].setCycleCount(Timeline.INDEFINITE);
+													    			   time1[c].getKeyFrames().add(
+													   		                new KeyFrame(Duration.seconds(1),
+													   		                  new EventHandler() {
+													   							@Override
+													   							public void handle(Event event) {
+													   								if(client.executedTestsCheckLock(client.GetAllExecutreTest().get(idx))==2)
+													   								{
+													   									time1[c].stop();
+													   								    closestage.get(c).close();
+													   								}
+													   								timeC++;
+													   								
+													   								if(timeC==dur*60) {
+													   							   int j=0;
 																		    	   for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 																		    	   {
 																		    		   if(select[i][0].selectedProperty().get()==true)
@@ -530,9 +544,16 @@ public class StudentController {
 																		    	   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
 																		    	   
 													    						   closestage.get(c).close();
-													    					   }));
+													   							   time1[c].stop();
+													   							}
+													   								else
+													   								{
+													   									
+													   									time1[c].play();
+													   								}
+													   							}
+													   		                }));
 													    			   time1[c].play();
-													    			
 													    			   
 													    		   }
 													    	   }
@@ -777,7 +798,7 @@ public class StudentController {
 																		    	   client.submitStudentTest(st1);
 
 																		    	   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
-																		    	   
+																		    	   time1[c].stop();
 																		    	  
 																		    	  
 																			  }
@@ -887,7 +908,7 @@ public class StudentController {
 																		    	   if(sign1>1) st1.setCheat(true);
 																		    	   client.submitStudentTest(st1);
 																		    	   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
-																		    	  
+																		    	   time1[c].stop();
 																		    	  
 																		    	   
 																		    	   
