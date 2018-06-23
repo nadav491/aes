@@ -274,7 +274,7 @@ public class MySqlConnection
 				{
 					typeName.add(rs.getString(3));
 					typeName.add(rs.getString(5));
-					userUpdateLogin(info.get(0),true);
+					//userUpdateLogin(info.get(0),true);
 				}
 			rs.close();
 		} catch (SQLException e) {e.printStackTrace();}
