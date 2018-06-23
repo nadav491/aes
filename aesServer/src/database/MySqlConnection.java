@@ -853,15 +853,35 @@ public class MySqlConnection
 	*/
 	public static ArrayList<ExecutedTest> UpdateExecutedTests(ExecutedTest updatedTest)
 	{
-		for (int i = 0; i<executedTests.size(); i++)
+		for(int i=0; i<executedTests.size();i++)
 		{
-			if (executedTests.get(i).getTest().getCode().equals(updatedTest.getTest().getCode()))
+			if(executedTests.get(i).getTest().getCode().equals(updatedTest.getTest().getCode()))
 			{
 				executedTests.get(i).setSignUpList(updatedTest.getSignUpList());
 				executedTests.get(i).setFInishedNum(updatedTest.getFInishedNum());
 				executedTests.get(i).setFFInishedNum(updatedTest.getFFInishedNum());
 				executedTests.get(i).setSign(updatedTest.getSign());
 				executedTests.get(i).setrSign(updatedTest.getrSign());
+				executedTests.get(i).setStudentNumber(updatedTest.getSignUpList().size());
+				executedTests.get(i).setR(updatedTest.returnR());
+				executedTests.get(i).setT(updatedTest.returnT());
+				for(int h=0;h<executedTests.get(i).getSignUpList().size();h++)
+				{
+					executedTests.get(i).getSignUpList().remove(h);
+				}
+				for(int h=0;h<updatedTest.getSignUpList().size();h++)
+				{
+					executedTests.get(i).getSignUpList().add(updatedTest.getSignUpList().get(h));
+				}
+				for(int h=0;h<executedTests.get(i).getGradeList().size();h++)
+				{
+					executedTests.get(i).getGradeList().remove(h);
+				}
+				for(int h=0;h<updatedTest.getGradeList().size();h++)
+				{
+					executedTests.get(i).getGradeList().add(updatedTest.getGradeList().get(h));
+				}
+
 			}
 		}
 		return(new ArrayList<>(executedTests));
