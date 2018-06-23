@@ -2,6 +2,9 @@ package question;
 
 import java.io.Serializable;
 
+/**
+ * This class represent the courses in the database.
+ */
 public class Course implements Serializable{
 	private static final long serialVersionUID = 7509762707691988447L;
 

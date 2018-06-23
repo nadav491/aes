@@ -3,8 +3,8 @@ package database;
 import java.io.Serializable;
 
 /**
- *  An enum class to use database actions
- */
+*An enum class to use database actions
+*/
 public class ActionsType implements Serializable
 {
 	private static final long serialVersionUID = 3007036497465788417L;
@@ -19,23 +19,17 @@ public class ActionsType implements Serializable
 		QUESTION_REMOVE,
 		USER_LOGIN,
 		USER_LOGOUT,
+
+		TEST_CREATE,
+		TEST_SET_QUESTIONS,
+		TEST_UPDATE,
+		TEST_UPDATE_COMMENTS_TEACHER,
+		TEST_UPDATE_COMMENTS_STUDENT,
+		TEST_DELETE,
+		TEST_GET_ALL,
+		TEST_GET_BY_ID,
+		TEST_GET_ALL_TESTS_BY_STUDENT,
 		
-		/* TEST ACTION NUMBERS */
-		TEST_CREATE,//done
-		TEST_SET_QUESTIONS, //done
-		TEST_UPDATE, // done
-		TEST_UPDATE_COMMENTS_TEACHER,//done
-		TEST_UPDATE_COMMENTS_STUDENT,//done
-		TEST_DELETE,//done
-		TEST_GET_ALL,//done
-		TEST_GET_BY_ID,//done
-		
-		/* TEST DATA ACTION NUMBERS */
-		
-		TEST_GET_ALL_TESTS_BY_STUDENT, //done
-		
-		
-		/* STUDENT TEST ACTION NUMBERS */
 		START_TEST,
 		STUDENT_TEST_CREATE,
 		STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID,
@@ -54,10 +48,10 @@ public class ActionsType implements Serializable
 		COURSE_GET_ID_LIST,
 		TEACHER_GET_ALL_NAME;
 	}
-	
+
 	public static int getValue(ActionNumber action)
 	{
-		switch(action)
+		switch (action)
 		{
 		case QUESIOTN_GET_ALL: return 1;
 		case QUESTION_GET_BY_CODE: return 2;
@@ -67,39 +61,39 @@ public class ActionsType implements Serializable
 		case QUESTION_REMOVE: return 6;
 		case USER_LOGIN: return 7;
 		case USER_LOGOUT: return 8;
-		
-		case TEST_CREATE : return 100;
+
+		case TEST_CREATE: return 100;
 		case TEST_SET_QUESTIONS: return 103;
 		case TEST_UPDATE: return 105;
 		case TEST_UPDATE_COMMENTS_TEACHER: return 106;
 		case TEST_UPDATE_COMMENTS_STUDENT: return 108;
 		case TEST_DELETE: return 110;
 		case TEST_GET_ALL: return 112;
-		case TEST_GET_BY_ID: return 113;	
-		
+		case TEST_GET_BY_ID: return 113;
+
 		case STUDENT_TEST_CREATE: return 120;
 		case STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID: return 121;
 		case STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID: return 122;
 		case STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID: return 123;
 		case STUDENT_TEST_UPDATE: return 124;
 		case STUDENT_GET_ALL_NAME: return 125;
-		
+
 		case EXECUTED_TEST_ADD: return 1000;
 		case EXECUTED_TEST_GET_ALL: return 1001;
 		case EXECUTED_TEST_UPDATE: return 1002;
 		case EXECUTED_TEST_CHECK_LOCK_TEST: return 1003;
-		
+
 		case UPLOAD_FILE: return 2000;
 		case DOWNLOAD_FILE: return 2001;
 		case COURSE_GET_ID_LIST: return 2002;
 		case TEACHER_GET_ALL_NAME: return 2003;
+		default: return 0;
 		}
-		return 0;
 	}
-	
+
 	public static ActionNumber getAction(int number)
 	{
-		switch(number)
+		switch (number)
 		{
 		case 1: return ActionNumber.QUESIOTN_GET_ALL;
 		case 2: return ActionNumber.QUESTION_GET_BY_CODE;
@@ -109,7 +103,7 @@ public class ActionsType implements Serializable
 		case 6: return ActionNumber.QUESTION_REMOVE;
 		case 7: return ActionNumber.USER_LOGIN;
 		case 8: return ActionNumber.USER_LOGOUT;
-		
+
 		case 100: return ActionNumber.TEST_CREATE;
 		case 103: return ActionNumber.TEST_SET_QUESTIONS;
 		case 105: return ActionNumber.TEST_UPDATE;
@@ -118,19 +112,19 @@ public class ActionsType implements Serializable
 		case 110: return ActionNumber.TEST_DELETE;
 		case 112: return ActionNumber.TEST_GET_ALL;
 		case 113: return ActionNumber.TEST_GET_BY_ID;
-		
+
 		case 120: return ActionNumber.STUDENT_TEST_CREATE;
 		case 121: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID;
 		case 122: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID;
 		case 123: return ActionNumber.STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID;
 		case 124: return ActionNumber.STUDENT_TEST_UPDATE;
 		case 125: return ActionNumber.STUDENT_GET_ALL_NAME;
-		
+
 		case 1000: return ActionNumber.EXECUTED_TEST_ADD;
 		case 1001: return ActionNumber.EXECUTED_TEST_GET_ALL;
 		case 1002: return ActionNumber.EXECUTED_TEST_UPDATE;
 		case 1003: return ActionNumber.EXECUTED_TEST_CHECK_LOCK_TEST;
-		
+
 		case 2000: return ActionNumber.UPLOAD_FILE;
 		case 2001: return ActionNumber.DOWNLOAD_FILE;
 		case 2002: return ActionNumber.COURSE_GET_ID_LIST;

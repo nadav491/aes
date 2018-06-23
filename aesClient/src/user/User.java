@@ -1,12 +1,9 @@
 package user;
-
 import java.util.ArrayList;
-
 import client.ActionsType;
 import client.Client;
 import client.ActionsType.ActionNumber;
 import message.MessageType;
-import question.Question;
 
 /**
  * This class implement the user type. 

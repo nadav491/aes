@@ -3,8 +3,8 @@ package client;
 import java.io.Serializable;
 
 /**
-*  An enum class to use database actions
-*  */
+*An enum class to use database actions
+*/
 public class ActionsType implements Serializable
 {
 	private static final long serialVersionUID = 3007036497465788417L;
@@ -20,39 +20,33 @@ public class ActionsType implements Serializable
 		USER_LOGIN,
 		USER_LOGOUT,
 
-		/* TEST ACTION NUMBERS */
-		TEST_CREATE,//done
-		TEST_SET_QUESTIONS, //done
-		TEST_UPDATE, // done
-		TEST_UPDATE_COMMENTS_TEACHER,//done
-		TEST_UPDATE_COMMENTS_STUDENT,//done
-		TEST_DELETE,//done
-		TEST_GET_ALL,//done
-		TEST_GET_BY_ID,//done
-
-					   /* TEST DATA ACTION NUMBERS */
-
-					   TEST_GET_ALL_TESTS_BY_STUDENT, //done
-
-
-													  /* STUDENT TEST ACTION NUMBERS */
-													  START_TEST,
-													  STUDENT_TEST_CREATE,
-													  STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID,
-													  STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID,
-													  STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID,
-													  STUDENT_TEST_UPDATE,
-													  STUDENT_GET_ALL_NAME,
-
-													  EXECUTED_TEST_ADD,
-													  EXECUTED_TEST_GET_ALL,
-													  EXECUTED_TEST_UPDATE,
-													  EXECUTED_TEST_CHECK_LOCK_TEST,
-
-													  UPLOAD_FILE,
-													  DOWNLOAD_FILE,
-													  COURSE_GET_ID_LIST,
-													  TEACHER_GET_ALL_NAME;
+		TEST_CREATE,
+		TEST_SET_QUESTIONS,
+		TEST_UPDATE,
+		TEST_UPDATE_COMMENTS_TEACHER,
+		TEST_UPDATE_COMMENTS_STUDENT,
+		TEST_DELETE,
+		TEST_GET_ALL,
+		TEST_GET_BY_ID,
+		TEST_GET_ALL_TESTS_BY_STUDENT,
+		
+		START_TEST,
+		STUDENT_TEST_CREATE,
+		STUDENT_TEST_GET_ALL_TESTS_BY_STUDENT_ID,
+		STUDENT_TEST_GET_ALL_TESTS_BY_TEACHER_ID,
+		STUDENT_TEST_GET_ALL_TESTS_BY_COURSE_ID,
+		STUDENT_TEST_UPDATE,
+		STUDENT_GET_ALL_NAME,
+		
+		EXECUTED_TEST_ADD,
+		EXECUTED_TEST_GET_ALL,
+		EXECUTED_TEST_UPDATE,
+		EXECUTED_TEST_CHECK_LOCK_TEST,
+		
+		UPLOAD_FILE,
+		DOWNLOAD_FILE,
+		COURSE_GET_ID_LIST,
+		TEACHER_GET_ALL_NAME;
 	}
 
 	public static int getValue(ActionNumber action)
@@ -93,8 +87,8 @@ public class ActionsType implements Serializable
 		case DOWNLOAD_FILE: return 2001;
 		case COURSE_GET_ID_LIST: return 2002;
 		case TEACHER_GET_ALL_NAME: return 2003;
+		default: return 0;
 		}
-		return 0;
 	}
 
 	public static ActionNumber getAction(int number)
