@@ -1,19 +1,12 @@
 package gui;
-
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import client.Client;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -40,6 +33,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -68,6 +62,7 @@ public class StudentController {
 	private String pass1;
 	private static int val=0;
 	static int timeC=0;
+	int dur;
 	public static  Map <Integer,ArrayList<Test>> checkedTests=new HashMap();
 	public static final Timeline time1[]=new Timeline[2];
 
@@ -217,20 +212,21 @@ public class StudentController {
 					       }
 					       else
 					       {
-					    	   ArrayList<ExecutedTest> et = client.GetAllExecutreTest();
+					    	   int index;
 					    	   for(int i=0;i<selected.size();i++)
 					    	   {
-					    		   for(int j=0;j<et.size();j++)
+					    		   for(int j=0;j<client.GetAllExecutreTest().size();j++)
 					    		   {
-					    			   if(!et.get(j).getSignUpList().contains(Owner_name[c])){
-					    			   if(selected.get(i).equals(et.get(j).getTest().getCode())) {
-					    				   et.get(j).getSignUpList().add(Owner_name[c]);
-					    				   et.get(j).setStudentNumber(1);
-					    				   et.get(j).getTest().setCode(et.get(j).getTest().getCode());
-					    				   et.get(j).setExe_code(et.get(j).getExe_code());
-					    				   et.get(j).getF().add("0");					    				  
-					    				   signUp_test_list.add(et.get(j).getTest());
-					    				   client.UpdateExecutreTest(et.get(j));
+					    			   if(!client.GetAllExecutreTest().get(j).getSignUpList().contains(Owner_name[c])){
+					    			   if(selected.get(i).equals(client.GetAllExecutreTest().get(j).getTest().getCode())) {
+					    				   client.GetAllExecutreTest().get(j).getSignUpList().add(Owner_name[c]);
+					    				   client.GetAllExecutreTest().get(j).setStudentNumber(1);
+					    				   client.GetAllExecutreTest().get(j).getTest().setCode(client.GetAllExecutreTest().get(j).getTest().getCode());
+					    				   client.GetAllExecutreTest().get(j).setExe_code(client.GetAllExecutreTest().get(j).getExe_code());
+					    				   client.GetAllExecutreTest().get(j).getF().add("0");					    				  
+					    				   signUp_test_list.add(client.GetAllExecutreTest().get(j).getTest());
+					    				   client.UpdateExecutreTest(client.GetAllExecutreTest().get(j));
+					    				   System.out.println(client.GetAllExecutreTest().get(j).getSignUpList());
 					    				   break;
 					    			   }
 					    			   }
@@ -454,6 +450,7 @@ public class StudentController {
 								    		        BorderPane window=new BorderPane();
 											        final studentTest sav1=new studentTest(Owner_name[c],client.GetAllExecutreTest().get(idx).getTest(),0,new ArrayList<String>(),client.GetAllExecutreTest().get(idx).getTest().getTime(),
 											        		client.GetAllExecutreTest().get(idx).getTest().getOwner());
+											        System.out.println(client.GetAllExecutreTest().get(idx).getSignUpList());
   										    	    ScrollPane pane=new ScrollPane();
 											      	GridPane Text_edit=new GridPane();
 											      	Text_edit.setHgap(10);
@@ -490,7 +487,7 @@ public class StudentController {
 													    		   {
 													    			   pane.setVisible(true);
 													    			   b.setVisible(false);
-													    			   final int dur=Integer.parseInt(sav1.getTime());
+													    			     dur=Integer.parseInt(sav1.getTime());
 													    			   time1[c].setCycleCount(Timeline.INDEFINITE);
 													    			   time1[c].getKeyFrames().add(
 													   		                new KeyFrame(Duration.seconds(1),
@@ -501,6 +498,23 @@ public class StudentController {
 													   								{
 													   									time1[c].stop();
 													   								    closestage.get(c).close();
+													   								}
+													   								if(client.executedTestsCheckLock(client.GetAllExecutreTest().get(idx))==4)
+													   								{
+													   									dur=Integer.parseInt(client.GetAllExecutreTest().get(idx).getCurrentTime());
+													   									client.GetAllExecutreTest().get(idx).setSign(1);
+												    								    client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
+												    								    Pane p=new Pane()  ;
+												    								    Label L1=new Label("test period extanded by "+
+												    								    (Integer.parseInt(client.GetAllExecutreTest().get(idx).getCurrentTime())-
+												    								    		Integer.parseInt(client.GetAllExecutreTest().get(idx).getTest().getTime()))+" minuts");
+												    								    p.getChildren().add(L1);
+												    								    Stage h=new Stage();
+												    								    Scene scene = new Scene(p,400,200);
+																						scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+																						h.setScene(scene);
+																						h.show();
+												    								      
 													   								}
 													   								timeC++;
 													   								
@@ -791,7 +805,14 @@ public class StudentController {
 																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
 																		    	   client.GetAllExecutreTest().get(idx).getGradeList().add(sum+"");
-																		    	   client.GetAllExecutreTest().get(idx).getF().add("1");
+																		    	   for(int i=0;i< client.GetAllExecutreTest().get(idx).getSignUpList().size();i++)
+																		    	   {
+																		    		   if(client.GetAllExecutreTest().get(idx).getSignUpList().get(i).equals(Owner_name[c]))
+																		    		   {
+																		    			   client.GetAllExecutreTest().get(idx).getF().set(i, "1");
+																		    		   }
+																		    	   }
+																		    	   
 																		    	  
 																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).gradelog.size();f++)
 																		    	   {
@@ -904,7 +925,13 @@ public class StudentController {
 																		    	   }
 																		    	   int sign1=0;
 																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
-																		    	   client.GetAllExecutreTest().get(idx).getF().add("1");
+																		    	   for(int i=0;i< client.GetAllExecutreTest().get(idx).getSignUpList().size();i++)
+																		    	   {
+																		    		   if(client.GetAllExecutreTest().get(idx).getSignUpList().get(i).equals(Owner_name[c]))
+																		    		   {
+																		    			   client.GetAllExecutreTest().get(idx).getF().set(i, "1");
+																		    		   }
+																		    	   }
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
 																		    	   client.GetAllExecutreTest().get(idx).getGradeList().add(sum+"");
 																		    	  

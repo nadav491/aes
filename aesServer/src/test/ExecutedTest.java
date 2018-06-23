@@ -19,7 +19,7 @@ public class ExecutedTest implements Serializable {
 	private LocalDateTime StartTime;
 	private String CurrentLength;
 	private ArrayList<String> SignUplist;
-	private ArrayList<String> FUplist;
+	private final ArrayList<String> FUplist;
 	private int StudentNumStart;
 	private int StudentNumFinished;
 	private int StudentNumForceFinished;
@@ -27,40 +27,68 @@ public class ExecutedTest implements Serializable {
 	private ArrayList<String> gradeList;
 	private int sign;
 	private int run_sign;
-	public Map<Integer, ArrayList<String>> gradelog;
-	
-	public ExecutedTest(Test T1, Date currentDate, String Length)
+	public Map<Integer , ArrayList<String>> gradelog;
+	private static String reason;
+	private static String timeC;
+	public ExecutedTest(Test T1,Date currentDate,String Length)
 	{
-		Execute = new Test();
-		Execute = T1;
-		Exe_code = null;
-		date = currentDate;
-		StartTime = LocalDateTime.now();
-		CurrentLength = Length;
-		SignUplist = new ArrayList<String>();
-		StudentNumStart = 0;
-		StudentNumFinished = 0;
-		StudentNumForceFinished = 0;
-		executer = null;
-		gradeList = new ArrayList<String>();
-		sign = 0;
-		run_sign = -1;
-		gradelog = new HashMap();
-		FUplist = new ArrayList<String>();
+		Execute=new Test();
+		Execute=T1;
+		Exe_code=null;
+		date=currentDate;
+		StartTime=LocalDateTime.now();
+		CurrentLength=Length;
+		SignUplist=new ArrayList<String>();
+		StudentNumStart=0;
+		StudentNumFinished=0;
+		StudentNumForceFinished=0;
+		executer=null;
+		gradeList=new ArrayList<String>();
+		sign=0;
+		run_sign=-1;
+		gradelog=new HashMap();
+		FUplist=new ArrayList<String>();
+		reason=null;
+		timeC=null;
 	}
-
+	public ExecutedTest()
+	{
+		Execute=new Test();
+		SignUplist=new ArrayList<String>();
+		gradeList=new ArrayList<String>();
+		gradelog=new HashMap();
+		FUplist=new ArrayList<String>();
+		reason=null;
+		timeC=null;
+	}
+	public String returnR()
+	{
+		return reason;
+	}
+	public String returnT()
+	{
+		return timeC;
+	}
+	public void setR(String s1)
+	{
+		 reason=s1;
+	}
+	public void setT(String s1)
+	{
+		 timeC=s1;
+	}
 	public ArrayList<String> getF()
 	{
 		return FUplist;
 	}
-
-	public int getSign() { return sign; };
-	public void setSign(int state) { sign = state; };
-	public int getrSign() { return run_sign; };
-	public void setrSign(int state) { run_sign = state; };
-	public String getexecuter() { return executer; };
-	public void setexecuter(String str) { executer = str; };
-	public ArrayList<String> getGradeList() { return gradeList; };
+	
+	public int getSign() {return sign;};
+	public void setSign(int state) {sign=state;};
+	public int getrSign() {return run_sign;};
+	public void setrSign(int state) {run_sign=state;};
+	public String getexecuter() {return executer;};
+	public void setexecuter(String str) { executer=str;};
+	public ArrayList<String> getGradeList(){return gradeList;};
 	public Test getTest()
 	{
 		return Execute;
@@ -71,7 +99,7 @@ public class ExecutedTest implements Serializable {
 	}
 	public void setExe_code(String EXE)
 	{
-		Exe_code = EXE;
+		Exe_code=EXE;
 	}
 	public Date getDate()
 	{
@@ -81,50 +109,50 @@ public class ExecutedTest implements Serializable {
 	{
 		return StartTime;
 	}
-	public String getCurrentTime()
-	{
-		return CurrentLength;
-	}
-	public void setCurrentTime(String time)
-	{
-		CurrentLength = time;
-	}
-	public ArrayList<String> getSignUpList()
-	{
-		return SignUplist;
-	}
-	public int getStudentNumber()
-	{
-		return StudentNumStart;
-	}
-	public void setStudentNumber(int value)
-	{
-		if (value>0)
-		{
-			StudentNumStart++;
-		}
-		if (value<0)
-		{
-			if (StudentNumStart>0)StudentNumStart--;
-		}
-	}
-	public int getFInishedNum()
-	{
-		return StudentNumFinished;
-	}
-	public void setFInishedNum(int num)
-	{
-		StudentNumFinished = num;
-	}
-	public int getFFInishedNum()
-	{
-		return StudentNumForceFinished;
-	}
-	public void setFFInishedNum(int num)
-	{
-		StudentNumForceFinished = num;
-	}
+    public String getCurrentTime()
+    {
+    	return CurrentLength;
+    }
+    public void setCurrentTime(String time)
+    {
+    	CurrentLength=time;
+    }
+    public ArrayList<String> getSignUpList()
+    {
+    	return SignUplist;
+    }
+    public int getStudentNumber()
+    {
+    	return StudentNumStart;
+    }
+    public void setStudentNumber(int value)
+    {
+    	if(value>0)
+    	{
+    		StudentNumStart++;
+    	}
+    	if(value<0)
+    	{
+    		if(StudentNumStart>0)StudentNumStart--;
+    	}
+    }
+    public int getFInishedNum()
+    {
+    	return StudentNumFinished;
+    }
+    public void setFInishedNum(int num)
+    {
+    	StudentNumFinished=num;
+    }
+    public int getFFInishedNum()
+    {
+    	return StudentNumForceFinished;
+    }
+    public void setFFInishedNum(int num)
+    {
+    	 StudentNumForceFinished=num;
+    }
 	public void setSignUpList(ArrayList<String> signUpList2) {
-		this.SignUplist = signUpList2;
+		this.SignUplist = signUpList2;	
 	}
 }

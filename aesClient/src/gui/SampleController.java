@@ -1833,8 +1833,7 @@ public class SampleController {
 							    	   ArrayList<ExecutedTest> get=new ArrayList<ExecutedTest>();
 							           for(int j=0;j<client.GetAllExecutreTest().size();j++)
 							           {
-							        	   if((client.GetAllExecutreTest().get(j).getTest().getCode().equals(running.get(g).getTest().getCode())
-							        			   && (client.GetAllExecutreTest().get(j).getexecuter().equals(running.get(g).getexecuter()))))
+							        	   if(client.GetAllExecutreTest().get(j).equals(running.get(g)))
 							        	   {
 							        		   f=j;
 							        		   break;
@@ -1842,6 +1841,7 @@ public class SampleController {
 							           }
 							           client.GetAllExecutreTest().get(f).setSign(2);
 							           client.UpdateExecutreTest(client.GetAllExecutreTest().get(f));
+							           for(int i=0;i<client.GetAllExecutreTest().size();i++)System.out.println(client.GetAllExecutreTest().get(i).getSign());
 							    	   Run_test(Owner,c,client);
 								  }
 						    });
@@ -1883,9 +1883,9 @@ public class SampleController {
 
 			  		    ListView<String> listView = new ListView<String>(data);
 			  		    listView.setPrefSize(300, 250);
-			  		    for(int i=0;i<Main.ExecuteList.size();i++) {
-			  		    	if(Main.ExecuteList.get(i).getexecuter().equals(Main.TController[c].Owner_name[c]))
-			  		    			data.add(Main.ExecuteList.get(i).getTest().getCode());
+			  		    for(int i=0;i<client.GetAllExecutreTest().size();i++) {
+			  		    	if(client.GetAllExecutreTest().get(i).getexecuter().equals(Owner_name[c]))
+			  		    			data.add(client.GetAllExecutreTest().get(i).getTest().getCode());
 			  		    }
 
 			  		    listView.setItems(data);
@@ -1903,6 +1903,13 @@ public class SampleController {
 			  			  {
 			  		    	   if(Question_select!="0")
 			  		    	   {
+			  		    		   for(int i=0;i<client.GetAllExecutreTest().size();i++)
+			  		    		   {
+			  		    			   if(client.GetAllExecutreTest().get(i).getTest().getCode().equals(Question_select));
+			  		    			   {
+			  		    				   idx_C=i;
+			  		    			   }
+			  		    		   }
 			  		    		   GridPane p=new GridPane();
 			  		    		   Label L1=new Label("Explanation for request");
 			  		    		   p.add(L1, 0, 0);
@@ -1947,6 +1954,13 @@ public class SampleController {
 									    	   }
 									    	   if(j==2)
 									    	   {
+									    		   client.GetAllExecutreTest().get(idx_C).setR(F1.getText());
+									    		   client.GetAllExecutreTest().get(idx_C).setT(F2.getText());
+									    		   client.GetAllExecutreTest().get(idx_C).setSign(3);
+									    		   System.out.println(client.GetAllExecutreTest().get(idx_C).returnR()+" "+client.GetAllExecutreTest().get(idx_C).returnT());
+									    		   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx_C));
+									    		   System.out.println(client.GetAllExecutreTest().get(idx_C).returnR()+" "+client.GetAllExecutreTest().get(idx_C).returnT());
+
 									    		   second.close();
 									    	   }
 									    	   
@@ -2439,7 +2453,7 @@ public class SampleController {
 						    	  p.add(new Label("Signup list: "+arr.get(idx).getSignUpList()), 0, 7);
 						    	  p.add(new Label("Executed by: "+arr.get(idx).getexecuter()), 0, 8);
 						    	  int avarage=0;
-				    				 for(int b=0;b<arr.get(idx).getFInishedNum();b++)
+				    				 for(int b=0;b<arr.get(idx).getGradeList().size();b++)
 				    				 {
 				    					 avarage+=Integer.parseInt(arr.get(idx).getGradeList().get(b));
 				    				 }
@@ -2458,7 +2472,7 @@ public class SampleController {
 				    			     p.add(new Label("median: "+median),0, 10);
 				    			     int gradeSpace[]=new int[10];
 				    			     for(int k=0;k<10;k++)gradeSpace[k]=0;
-				    			     for(int b=0;b<arr.get(idx).getFInishedNum();b++)
+				    			     for(int b=0;b<arr.get(idx).getGradeList().size();b++)
 				    			     {
 				    			    	 if(Integer.parseInt(arr.get(idx).getGradeList().get(b))<=10 && 
 				    			    			 Integer.parseInt(arr.get(idx).getGradeList().get(b))>=0)

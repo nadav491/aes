@@ -3,16 +3,18 @@ package gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import client.Client;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import test.ExecutedTest;
 import user.User;
 import javafx.scene.Scene;
@@ -272,6 +274,69 @@ public class Main extends Application {
 				    					}
 				    					else if(typeName.get(0).equals("Manager"))
 				    					{
+				    						Timeline tm=new Timeline();
+				    						tm.setCycleCount(Timeline.INDEFINITE);
+							    			   tm.getKeyFrames().add(
+							   		                new KeyFrame(Duration.seconds(1),
+							   		                  new EventHandler() {
+							   							@Override
+							   							public void handle(Event event) {
+							   								for(int i=0;i<client.GetAllExecutreTest().size();i++) {
+							   									loop=i;
+							   								if(client.executedTestsCheckLock(client.GetAllExecutreTest().get(i))==3)
+							   								{
+							   									tm.stop();
+							   								    Stage ask=new Stage();
+							   								    GridPane p=new GridPane();
+							   								    p.add(new Label("reaseon for change: "+client.GetAllExecutreTest().get(i).returnR()), 0, 0);
+							   								    p.add(new Label("time added: "+client.GetAllExecutreTest().get(i).returnT()), 0, 1);
+							   								    Button B1=new Button("accept");
+							   								    B1.setOnAction(new EventHandler<ActionEvent>()
+									    						{
+									    							 @Override
+									    							  public void handle(ActionEvent e)
+									    								  {
+									    								      client.GetAllExecutreTest().get(loop).setSign(4);
+									    								      client.GetAllExecutreTest().get(loop).setCurrentTime((Integer.parseInt(
+									    								    		  client.GetAllExecutreTest().get(loop).getCurrentTime())
+									    								    		  +Integer.parseInt(client.GetAllExecutreTest().get(loop).returnT()))+"");
+									    								      client.UpdateExecutreTest(client.GetAllExecutreTest().get(loop));
+									    								      tm.play();
+									    								      ask.close();
+									    								      
+									    								  }
+									    						});
+							   								    Button B2=new Button("reject");
+							   								 B2.setOnAction(new EventHandler<ActionEvent>()
+									    						{
+									    							 @Override
+									    							  public void handle(ActionEvent e)
+									    								  {
+									    								      client.GetAllExecutreTest().get(loop).setSign(1);
+									    								      client.UpdateExecutreTest(client.GetAllExecutreTest().get(loop));
+									    								      tm.play();
+									    								      ask.close();
+									    								      
+									    								  }
+									    						});
+							   								    p.add(B2, 0, 2);
+							   								 
+							   								    p.add(B1, 1, 2);
+							   								    Scene scene = new Scene(p,400,400);
+																scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+																ask.setScene(scene);
+																ask.setTitle("time change window");
+																ask.show();
+							   								}
+							   								else
+							   								{
+							   									
+							   									tm.play();
+							   								}
+							   								}
+							   							}
+							   		                }));
+							    			   tm.play();
 				    						BorderPane root = new BorderPane();
 				    						VBox box1=new VBox();
 				    						Button B2=new Button("read System input reports");
@@ -427,7 +492,6 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-    
 	}
 	public ArrayList<ExecutedTest> getList()
 	{
