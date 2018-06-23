@@ -838,8 +838,8 @@ public class MySqlConnection
 			String stateA = "insert into " + STUDENT_DATABASE_NAME + " value(?,?,?)";
 			PreparedStatement insert = conn.prepareStatement(stateA);
 			insert.setString(1, id);
-			insert.setString(2, "");
-			insert.setString(3, "");
+			insert.setString(2, testCodes);
+			insert.setString(3, TestGrades);
 			insert.executeUpdate();
 		}
 		catch (SQLException e) { e.printStackTrace(); }
