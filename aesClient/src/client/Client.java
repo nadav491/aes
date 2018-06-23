@@ -178,36 +178,67 @@ public class Client implements ChatIF {
 		return (boolean) this.answer;
 	}
 
+	/**
+	 * Add comments for teacher in the given test.
+	 * @param test - the test to add.
+	 * @param comments - the comments to add.
+	 * @return true if successfully. 
+	 */
 	public boolean addCommentsForTeacher(Test test, String comments) {
 		testController.addCommentsForTeacher(test, comments, this.chatClient);
 		waitForAnswer();
 		return (boolean) this.answer;
 	}
 
+	/**
+	 * Add comments for student in the given test.
+	 * @param test - the test to add.
+	 * @param comments - the comments to add.
+	 * @return true if successfully. 
+	 */
 	public boolean addCommentsForStudent(Test test, String comments) {
 		testController.addCommentsForStudent(test, comments, this.chatClient);
 		waitForAnswer();
 		return (boolean) this.answer;
 	}
 
+	/**
+	 * Get all the tests in the database.
+	 * @return Array list of all the tests.
+	 */
 	public ArrayList<Test> getAllTests() {
 		testController.getAllTests(this.chatClient);
 		waitForAnswer();
 		return (ArrayList<Test>) this.answer;
 	}
 
+	/**
+	 * Get all the tests in the database by id.
+	 * @param id - the test id.
+	 * @return Array list of all the tests.
+	 */
 	public Test getTestById(String id) {
 		testController.getTestById(id, this.chatClient);
 		waitForAnswer();
 		return (Test) this.answer;
 	}
 
-	public boolean deleteTest(String code) {
-		testController.deleteTest(code, this.chatClient);
+	/**
+	 * Delete a test in the database by its id
+	 * @param id - the test id.
+	 * @return true if successfully. 
+	 */
+	public boolean deleteTest(String id) {
+		testController.deleteTest(id, this.chatClient);
 		waitForAnswer();
 		return (boolean) this.answer;
 	}
 
+	/**
+	 * Submit a student test to the database.
+	 * @param st - the student test.
+	 * @return true if successfully. 
+	 */
 	public boolean submitStudentTest(studentTest st) {
 		studentTestController.submitStudentTest(st, this.chatClient);
 		waitForAnswer();
