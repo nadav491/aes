@@ -27,6 +27,12 @@ insert into course value("03", "Algebra1");
 insert into course value("04", "History");
 insert into course value("05", "English");
 
+create table subject(code varchar(20),name varchar(256), PRIMARY key(code));
+insert into subject value("02", "Physics");
+insert into subject value("03", "Algebra1");
+insert into subject value("04", "History");
+insert into subject value("05", "English");
+
 
 
 

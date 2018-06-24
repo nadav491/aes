@@ -34,7 +34,9 @@ public class MySqlConnection
 	private final static String STUDENT_DATABASE_NAME = "student";
 	private final static String STUDENT_TEST_DATABASE_NAME = "studentTest";
 	private final static String COURSES_DATABASE_NAME = "course";
+	private final static String Subjects_DATABASE_NAME = "subject";
 	private final static String TEST_FILE_LOCATION = "saveTestFiles\\";
+	private final static String DATABASE_PASSWORD = "root";
 	private static ArrayList<ExecutedTest> executedTests;
 	
 	public MySqlConnection()
@@ -56,7 +58,7 @@ public class MySqlConnection
 
 		try
 		{
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/aes", "root", "root");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/aes", "root", DATABASE_PASSWORD);
 			System.out.println("SQL connection succeed");
 		}
 		catch (SQLException ex)
@@ -82,9 +84,9 @@ public class MySqlConnection
 		case QUESTION_UPDATE: return(updateQuestion((Question)obj));
 		case QUESTION_ADD: return(addQuestion((Question)obj));
 		case QUESTION_GET_BY_OWNER: return(getQuestionByOwner((String)obj));
-		
 		case USER_LOGIN: return(userChecklogin((ArrayList<String>)obj));
 		case USER_LOGOUT: return(userLogout((String)obj));
+
 
 		case TEST_CREATE: return createTest((Test)obj);
 		case TEST_SET_QUESTIONS: return setQuestionsForTest((Test)obj);
@@ -109,6 +111,7 @@ public class MySqlConnection
 		case UPLOAD_FILE: uploadFile((MyFile)obj); return " ";
 		case DOWNLOAD_FILE: return downloadFile((ExecutedTest)obj);
 		case COURSE_GET_ID_LIST: return getCoursesId();
+		case Subject_GET_ID_LIST: return getSubjectsId();
 		case STUDENT_GET_ALL_NAME: return getAllUsersNamesByType((String)obj);
 		case TEACHER_GET_ALL_NAME: return getAllUsersNamesByType((String)obj);
 		default: return null;
@@ -296,7 +299,7 @@ public class MySqlConnection
 				{
 					typeName.add(rs.getString(3));
 					typeName.add(rs.getString(5));
-					//userUpdateLogin(info.get(0),true);
+					userUpdateLogin(info.get(0),true);
 				}
 			rs.close();
 		}
@@ -865,22 +868,8 @@ public class MySqlConnection
 				executedTests.get(i).setStudentNumber(updatedTest.getSignUpList().size());
 				executedTests.get(i).setR(updatedTest.returnR());
 				executedTests.get(i).setT(updatedTest.returnT());
-				for(int h=0;h<executedTests.get(i).getSignUpList().size();h++)
-				{
-					executedTests.get(i).getSignUpList().remove(h);
-				}
-				for(int h=0;h<updatedTest.getSignUpList().size();h++)
-				{
-					executedTests.get(i).getSignUpList().add(updatedTest.getSignUpList().get(h));
-				}
-				for(int h=0;h<executedTests.get(i).getGradeList().size();h++)
-				{
-					executedTests.get(i).getGradeList().remove(h);
-				}
-				for(int h=0;h<updatedTest.getGradeList().size();h++)
-				{
-					executedTests.get(i).getGradeList().add(updatedTest.getGradeList().get(h));
-				}
+				executedTests.get(i).setGList(updatedTest.getGradeList());
+				executedTests.get(i).setCurrentTime(updatedTest.getCurrentTime());
 
 			}
 		}
@@ -974,9 +963,7 @@ public class MySqlConnection
 			{
 				test.getQuestions().get(i).writeQuestionToFile(newFile);
 			}
-			newFile.newLine();
-			newFile.write("Please fill the answers here: "+test.getTime());
-			newFile.newLine();
+			newFile.close();
 		} catch (Exception e) {e.printStackTrace();	}
 
 	}
@@ -993,6 +980,27 @@ public class MySqlConnection
 		{
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM " + COURSES_DATABASE_NAME + ";");
+			while (rs.next())
+			{
+				coursesID.add(rs.getString(1));
+			}
+			rs.close();
+		}
+		catch (SQLException e) { e.printStackTrace(); }
+		return coursesID;
+	}
+	/**
+	* This function get all the courses id from the server.
+	* @return ArrayList<String> of the courses id.
+	*/
+	public static ArrayList<String> getSubjectsId()
+	{
+		ArrayList<String> coursesID = new ArrayList<String>();
+		Statement stmt;
+		try
+		{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM " + Subjects_DATABASE_NAME + ";");
 			while (rs.next())
 			{
 				coursesID.add(rs.getString(1));
@@ -1019,7 +1027,7 @@ public class MySqlConnection
 			while (rs.next())
 			{
 				if (rs.getString(3).equals(userType))
-					studnetName.add(rs.getString(1));
+					studnetName.add(rs.getString(5));
 			}
 			rs.close();
 		}

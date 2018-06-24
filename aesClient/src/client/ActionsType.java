@@ -17,6 +17,7 @@ public class ActionsType implements Serializable
 		QUESTION_GET_BY_OWNER,
 		QUESTION_ADD,
 		QUESTION_REMOVE,
+		
 		USER_LOGIN,
 		USER_LOGOUT,
 
@@ -46,6 +47,7 @@ public class ActionsType implements Serializable
 		UPLOAD_FILE,
 		DOWNLOAD_FILE,
 		COURSE_GET_ID_LIST,
+		Subject_GET_ID_LIST,
 		TEACHER_GET_ALL_NAME;
 	}
 
@@ -87,6 +89,7 @@ public class ActionsType implements Serializable
 		case DOWNLOAD_FILE: return 2001;
 		case COURSE_GET_ID_LIST: return 2002;
 		case TEACHER_GET_ALL_NAME: return 2003;
+		case Subject_GET_ID_LIST: return 2004;
 		default: return 0;
 		}
 	}
@@ -129,6 +132,7 @@ public class ActionsType implements Serializable
 		case 2001: return ActionNumber.DOWNLOAD_FILE;
 		case 2002: return ActionNumber.COURSE_GET_ID_LIST;
 		case 2003: return ActionNumber.TEACHER_GET_ALL_NAME;
+		case 2004: return ActionNumber.Subject_GET_ID_LIST;
 		}
 		return null;
 	}

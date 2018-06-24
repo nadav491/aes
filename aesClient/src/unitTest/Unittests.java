@@ -93,8 +93,9 @@ class Unittests {
 	@Test
 	void testLogout() {
 	   	User.login(client,"1","1").toString();
-	   	Boolean actual = User.logout(client,"1");
-	   	Boolean expected = true;
+	   	User.logout(client,"1");
+    	String actual = User.login(client,"1","1").toString();
+    	String expected = "[Teacher, roie]";
     	Assert.assertEquals(expected,actual);
 	}
 }

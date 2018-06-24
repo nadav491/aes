@@ -63,11 +63,9 @@ public abstract class User {
 	 * @param id - the user id.
 	 * @return true if the user was logout.
 	 */
-	public static boolean logout(Client client, String id)
+	public static void logout(Client client, String id)
 	{
 		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.USER_LOGOUT),id);
 		client.getChatClient().handleMessageFromClientUI(msg);
-		client.waitForAnswer();
-		return (boolean)client.getAnswer();
 	}
 }

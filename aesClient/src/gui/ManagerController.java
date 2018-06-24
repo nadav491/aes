@@ -43,23 +43,26 @@ import user.User;
 
 public class ManagerController {
 
-	public final static Stage Manager_change_window=new Stage();
-	private Stage Main_stage;
-	private String Question_select;
-	private ArrayList<String> Course_list;
-	private ArrayList<Question> Q_list;
-	private ArrayList<Test> test_list;
-	public ManagerController()
+	
+	private Stage Main_stage;//main stage
+	private String Question_select;//selection vessale
+	private ArrayList<String> Course_list;//list of cources
+	private ArrayList<Question> Q_list;//question list
+	private ArrayList<Test> test_list;//test list
+	public ManagerController()// initialization
 	{
 		Q_list=new ArrayList<Question>();
 		test_list=new ArrayList<Test>();
 		Main_stage=new Stage();
 		Question_select="0";
 	}
-	public void SystemReport(Client client)
+	public void SystemReport(Client client)//view system input reports
 	{
-		Q_list=client.getAllQuestion();
-		test_list=client.getAllTests();
+		Q_list=client.getAllQuestion();//get all question from database
+		test_list=client.getAllTests();//get all tests from database
+		//
+		//
+		//initializing view window
 		GridPane grid=new GridPane();
    	    int j=0;
    	    Question Q_view=new Question();
@@ -69,32 +72,33 @@ public class ManagerController {
 		Flowtxt.setTextAlignment(TextAlignment.JUSTIFY);
 		Flowtxt.setPrefSize(600,300);
 		Flowtxt.setLineSpacing(5.0);
-		ObservableList list=Flowtxt.getChildren();
-		for(int i=0;i<Q_list.size();i++) {
+		ObservableList list=Flowtxt.getChildren(); 
+		for(int i=0;i<Q_list.size();i++) {//adding test view
 		Q_view=Q_list.get(i);
-		 txt1=new Text("Question "+(i+1)+":\n");
+		 txt1=new Text("Question "+(i+1)+":\n"); //question num
 		txt1.setFont(new Font(15));
-		 txt2=new Text("Written by: "+Q_view.getOwner()+"\n");
+		 txt2=new Text("Written by: "+Q_view.getOwner()+"\n");//question creator
 		txt2.setFont(new Font(15));
-		 txt3=new Text("Student Instructions: "+Q_view.getSInstruction()+"\n");
+		 txt3=new Text("Student Instructions: "+Q_view.getSInstruction()+"\n");//instructions for student
 		txt3.setFont(new Font(15));
-		 txt10=new Text("Teacher Instructions: "+Q_view.getTInstruction()+"\n");
+		 txt10=new Text("Teacher Instructions: "+Q_view.getTInstruction()+"\n");//instructions for teacher
 		txt10.setFont(new Font(15));
-		 txt4=new Text("Question: "+Q_view.getBody()+"\n");
+		 txt4=new Text("Question: "+Q_view.getBody()+"\n");//question body
 		txt4.setFont(new Font(15));
 		 txt5=new Text("answers:\n");
 		txt5.setFont(new Font(15));
-		 txt6=new Text("1:"+Q_view.getAnswer1()+"\n");
+		 txt6=new Text("1:"+Q_view.getAnswer1()+"\n");//answer 1
 		txt6.setFont(new Font(15));
-		 txt7=new Text("2:"+Q_view.getAnswer2()+"\n");
+		 txt7=new Text("2:"+Q_view.getAnswer2()+"\n");//answer 2
 		txt7.setFont(new Font(15));
-		 txt8=new Text("3:"+Q_view.getAnswer3()+"\n");
+		 txt8=new Text("3:"+Q_view.getAnswer3()+"\n");//answer 3
 		txt8.setFont(new Font(15));
-		 txt9=new Text("4:"+Q_view.getAnswer4()+"\n");
+		 txt9=new Text("4:"+Q_view.getAnswer4()+"\n");//answer 4
 		txt9.setFont(new Font(15));
-		list.addAll(txt1,txt2,txt3,txt10,txt4,txt5,txt6,txt7,txt8,txt9);
-		list.add(new Text("\n"));
+		list.addAll(txt1,txt2,txt3,txt10,txt4,txt5,txt6,txt7,txt8,txt9); //adding input
+		list.add(new Text("\n")); 
 		}
+		//setting window
    	    TitledPane tp = new TitledPane();
 	    tp.setText("Question Database");
 	    tp.setExpanded(false);
@@ -108,19 +112,19 @@ public class ManagerController {
     	Text_edit.setVgap(10);
     	Text_edit.setPadding(new Insets(25, 25, 25, 25));
     	
-    	for(int k=0;k<test_list.size();k++) {
+    	for(int k=0;k<test_list.size();k++) {//creating test view window
     	Test Chosen=new Test();
     	Chosen=test_list.get(k);
-    	Label L1=new Label("Test: "+Chosen.getCode());
+    	Label L1=new Label("Test: "+Chosen.getCode());//test code
     	Text_edit.add(L1, 0, j);
     	j++;
-    	L1=new Label("Written by: "+Chosen.getOwner());
+    	L1=new Label("Written by: "+Chosen.getOwner());//test creator
     	Text_edit.add(L1, 0, j);
     	j++;
-    	L1=new Label("Test duration: "+Chosen.getTime()+" minuts");
+    	L1=new Label("Test duration: "+Chosen.getTime()+" minuts");//test length
     	Text_edit.add(L1, 0, j);
     	j++;
-    	for(int i=0;i<Chosen.getQuestions().size();i++)
+    	for(int i=0;i<Chosen.getQuestions().size();i++) // getting question data
     	{
     		L1=new Label("Question"+(i+1)+":");
     		L1.setFont(Font.font( "", FontWeight.BOLD, 17));
@@ -164,6 +168,7 @@ public class ManagerController {
         	j++;
     	}
     	}
+    	//adding to view window
     	pane.setContent(Text_edit);
 	    TitledPane tp1 = new TitledPane();
 	    tp1.setExpanded(false);
@@ -178,17 +183,17 @@ public class ManagerController {
 		  Main_stage.setTitle("System report view window");
 		  Main_stage.show();
 	}
- 	public void Report(Client client)
+ 	public void Report(Client client)//function to view test data by teacher/course/student id
 	{
 		BorderPane root=new BorderPane();
-		Button B1=new Button("get report by teacher");
+		Button B1=new Button("get report by teacher");//by teacher id
 		 B1.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override
 			  public void handle(ActionEvent e)
-				  {     
+				  {  //initializing choice window
 				     ArrayList<String> Teachers=new ArrayList<String>();
-				     Teachers.add("roie");
+				     Teachers=client.getAllTeachersNames();
 				     BorderPane pane=new BorderPane();
 				     ScrollPane sp=new ScrollPane();
 				     ObservableList<String> data = FXCollections.observableArrayList();
@@ -206,7 +211,7 @@ public class ManagerController {
 				          });
 				      sp.setContent(listView);
 				      pane.setLeft(sp);
-				      Button B1=new Button("get report");
+				      Button B1=new Button("get report");//getting the report
 				      B1.setOnAction(new EventHandler<ActionEvent>()
 						{
 							 @Override
@@ -215,7 +220,7 @@ public class ManagerController {
 								     if(Question_select!="0")
 								     {
 								    	 ArrayList<ExecutedTest> dick=new ArrayList<ExecutedTest>();
-								    	 for(int i=0;i<client.GetAllExecutreTest().size();i++)
+								    	 for(int i=0;i<client.GetAllExecutreTest().size();i++)//finding finished checked tests
 								    	 {
 								    		 if(Question_select.equals(client.GetAllExecutreTest().get(i).getTest().getOwner()))
 								    		 {
@@ -224,6 +229,7 @@ public class ManagerController {
 								    			 }
 								    		 }
 								    	 }
+								    	 //initializing window
 								    	 GridPane grid=new GridPane();
 								    	 int j=0;
 								    	 for(int i=0;i<dick.size();i++)
@@ -236,6 +242,7 @@ public class ManagerController {
 								    				 tp.setText(dick.get(i).getTest().getCode());
 								    				 GridPane p=new GridPane();
 								    				 int avarage=0;
+								    				 //calculating avarage score
 								    				 for(int b=0;b<dick.get(i).getGradeList().size();b++)
 								    				 {
 								    					 avarage+=Integer.parseInt(dick.get(i).getGradeList().get(b));
@@ -243,6 +250,7 @@ public class ManagerController {
 								    				 if(dick.get(i).getGradeList().size()!=0)  avarage=avarage/dick.get(i).getGradeList().size();
 								    				 p.add(new Label("avarage score: "+avarage),0, 0);
 								    				 int median=0;
+								    				 //calculating median
 								    				 int middle = dick.get(i).getGradeList().size();
 								    				 if(dick.get(i).getGradeList().size()!=0) {
 								    			        if (dick.get(i).getGradeList().size() % 2 == 1) {
@@ -252,6 +260,7 @@ public class ManagerController {
 								    			        }
 								    				 }
 								    			     p.add(new Label("median: "+median),0, 1);
+								    			     //calculating grade spread to tens
 								    			     int gradeSpace[]=new int[10];
 								    			     for(int k=0;k<10;k++)gradeSpace[k]=0;
 								    			     for(int b=0;b<dick.get(i).getFInishedNum();b++)
@@ -289,7 +298,7 @@ public class ManagerController {
 								    			    	 
 								    			    	 
 								    			     }
-								    			     
+								    			     //creating hystogram view
 								    			        final NumberAxis xAxis = new NumberAxis();
 								    			        final CategoryAxis yAxis = new CategoryAxis();
 								    			        final BarChart<Number, String> bc = new BarChart<Number, String>(xAxis, yAxis);
@@ -364,16 +373,16 @@ public class ManagerController {
 					  Main_stage.show();
 				  }
 		});
-		Button B2=new Button("get report by course");
+		Button B2=new Button("get report by course");//getting test reports by course id
 		B2.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override
 			  public void handle(ActionEvent e)
-				  {     
+				  { //initializing choice window
 				 BorderPane pane=new BorderPane();
 			     ScrollPane sp=new ScrollPane();
 			     ObservableList<String> data = FXCollections.observableArrayList();
-
+                 Course_list=client.getCoursesId();
 			     ListView<String> listView = new ListView<String>(data);
 			     listView.setPrefSize(300, 250);
 			     for(int i=0;i<Course_list.size();i++)data.add(Course_list.get(i));
@@ -386,7 +395,7 @@ public class ManagerController {
 			                
 			          });
 			      sp.setContent(listView);
-			      Button B1=new Button("get report");
+			      Button B1=new Button("get report");//getting report
 			      B1.setOnAction(new EventHandler<ActionEvent>()
 					{
 						 @Override
@@ -395,7 +404,7 @@ public class ManagerController {
 							 if(Question_select!="0")
 						     {
 								 ArrayList<ExecutedTest> dick=new ArrayList<ExecutedTest>();
-								 for(int i=0;i<client.GetAllExecutreTest().size();i++)
+								 for(int i=0;i<client.GetAllExecutreTest().size();i++)//finding tests by course id
 								 {
 									 if(client.GetAllExecutreTest().get(i).getSign()==1)
 									 {
@@ -414,6 +423,7 @@ public class ManagerController {
 						    				 tp.setText(dick.get(i).getTest().getCode());
 						    				 GridPane p=new GridPane();
 						    				 int avarage=0;
+						    				 //calculating avarage
 						    				 for(int b=0;b<dick.get(i).getGradeList().size();b++)
 						    				 {
 						    					 avarage+=Integer.parseInt(dick.get(i).getGradeList().get(b));
@@ -421,6 +431,7 @@ public class ManagerController {
 						    				 if(dick.get(i).getGradeList().size()!=0)  avarage=avarage/dick.get(i).getGradeList().size();
 						    				 p.add(new Label("avarage score: "+avarage),0, 0);
 						    				 int median=0;
+						    				 //calculating median
 						    				 int middle = dick.get(i).getGradeList().size();
 						    				 if(dick.get(i).getGradeList().size()!=0) {
 						    			        if (dick.get(i).getGradeList().size() % 2 == 1) {
@@ -430,6 +441,7 @@ public class ManagerController {
 						    			        }
 						    				 }
 						    			     p.add(new Label("median: "+median),0, 1);
+						    			     //calculating grade by tens
 						    			     int gradeSpace[]=new int[10];
 						    			     for(int k=0;k<10;k++)gradeSpace[k]=0;
 						    			     for(int b=0;b<dick.get(i).getFInishedNum();b++)
@@ -467,7 +479,7 @@ public class ManagerController {
 						    			    	 
 						    			    	 
 						    			     }
-						    			     
+						    			        //creting hystogram view
 						    			        final NumberAxis xAxis = new NumberAxis();
 						    			        final CategoryAxis yAxis = new CategoryAxis();
 						    			        final BarChart<Number, String> bc = new BarChart<Number, String>(xAxis, yAxis);
@@ -543,17 +555,17 @@ public class ManagerController {
 				  Main_stage.show();
 				  }
 		});
-		Button B3=new Button("get report by student");
+		Button B3=new Button("get report by student");//getting reports by student id
 		B3.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override
 			  public void handle(ActionEvent e)
-				  {     
+				  {//initializing chice window  
 				 BorderPane pane=new BorderPane();
 			     ScrollPane sp=new ScrollPane();
 			     ObservableList<String> data = FXCollections.observableArrayList();
                  ArrayList<String> students=new ArrayList<String> ();
-                 students.add("yossi");
+                 students=client.getAllStudnetNames();
 			     ListView<String> listView = new ListView<String>(data);
 			     listView.setPrefSize(300, 250);
 			     for(int i=0;i<students.size();i++)data.add(students.get(i));
@@ -566,7 +578,7 @@ public class ManagerController {
 			                
 			          });
 			      sp.setContent(listView);
-			      Button B1=new Button("get report");
+			      Button B1=new Button("get report");//getting report
 			      B1.setOnAction(new EventHandler<ActionEvent>()
 					{
 						 @Override
@@ -578,17 +590,18 @@ public class ManagerController {
 								 dick=client.GetAllExecutreTest();
 						    	 GridPane grid=new GridPane();
 						    	 int j=0;
-						    	 for(int i=0;i<dick.size();i++)
+						    	 for(int i=0;i<dick.size();i++)//getting correct tests by student id
 						    	 {
 						    		 for(int k=0;k<dick.get(i).getSignUpList().size();k++){
 						    		 if(dick.get(i).getSignUpList().get(k).equals(Question_select))
 						    		 {
 						    			 if(dick.get(i).getSign()==1)
-						    			 {
+						    			 {   
 						    				 TitledPane tp = new TitledPane();
 						    				 tp.setText(dick.get(i).getTest().getCode());
 						    				 GridPane p=new GridPane();
 						    				 int avarage=0;
+						    				 //calculating avarage
 						    				 for(int b=0;b<dick.get(i).getGradeList().size();b++)
 						    				 {
 						    					 avarage+=Integer.parseInt(dick.get(i).getGradeList().get(b));
@@ -596,6 +609,7 @@ public class ManagerController {
 						    				 if(dick.get(i).getGradeList().size()!=0)  avarage=avarage/dick.get(i).getGradeList().size();
 						    				 p.add(new Label("avarage score: "+avarage),0, 0);
 						    				 int median=0;
+						    				 //calculating median
 						    				 int middle = dick.get(i).getGradeList().size();
 						    				 if(dick.get(i).getGradeList().size()!=0) {
 						    			        if (dick.get(i).getGradeList().size() % 2 == 1) {
@@ -605,6 +619,7 @@ public class ManagerController {
 						    			        }
 						    				 }
 						    			     p.add(new Label("median: "+median),0, 1);
+						    			     //calculating grade by tens
 						    			     int gradeSpace[]=new int[10];
 						    			     for(int d=0;d<10;d++)gradeSpace[d]=0;
 						    			     for(int b=0;b<dick.get(i).getFInishedNum();b++)
@@ -642,7 +657,7 @@ public class ManagerController {
 						    			    	 
 						    			    	 
 						    			     }
-						    			     
+						    			        //creating hystogram view
 						    			        final NumberAxis xAxis = new NumberAxis();
 						    			        final CategoryAxis yAxis = new CategoryAxis();
 						    			        final BarChart<Number, String> bc = new BarChart<Number, String>(xAxis, yAxis);
@@ -720,7 +735,7 @@ public class ManagerController {
 				  Main_stage.show();
 				  }
 		});
-		  Button back=new Button("back");
+		  Button back=new Button("back");//back to main window
 		    back.setOnAction(new EventHandler<ActionEvent>()
 			{
 				 @Override
@@ -743,15 +758,18 @@ public class ManagerController {
 			
 	}
   
-    public void Custom_report(Client client)
+    public void Custom_report(Client client)//creating a report by choice
     {
     	ArrayList<String> Teachers=new ArrayList<String>();
     	ArrayList<String> Cources=new ArrayList<String>();
     	ArrayList<String> Students=new ArrayList<String>();
+		Students=client.getAllStudnetNames();
+		Cources=client.getCoursesId();
+		Teachers=client.getAllTeachersNames();
     	BorderPane pM=new BorderPane();
     	GridPane grid=new GridPane();
     	TitledPane tp = new TitledPane();
-	    tp.setText("Select Teacher partion");
+	    tp.setText("Select Teacher partion");//creating teacher choice window
 	    tp.setExpanded(false);
 	    tp.setPrefWidth(600);
 	    ScrollPane p=new ScrollPane();
@@ -818,7 +836,7 @@ public class ManagerController {
 	    tp.setContent(p);
 	    grid.add(tp, 0, 0);
 	    TitledPane tp1 = new TitledPane();
-	    tp1.setText("Select Course partion");
+	    tp1.setText("Select Course partion");//creating course choice window
 	    tp1.setExpanded(false);
 	    tp1.setPrefWidth(600);
 	    ScrollPane p1=new ScrollPane();
@@ -885,7 +903,7 @@ public class ManagerController {
 	    tp1.setContent(p1);
 	    grid.add(tp1, 0, 1);
 	    TitledPane tp2 = new TitledPane();
-	    tp2.setText("Select student partion");
+	    tp2.setText("Select student partion");//creating student choice window
 	    tp2.setExpanded(false);
 	    tp2.setPrefWidth(600);
 	    ScrollPane p2=new ScrollPane();
@@ -952,7 +970,7 @@ public class ManagerController {
 	    tp2.setContent(p2);
 	    grid.add(tp2, 0, 2);
 	    pM.setCenter(grid);
-	    Button B1=new Button("get report");
+	    Button B1=new Button("get report");//getting reports
 	    B1.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override
@@ -961,7 +979,7 @@ public class ManagerController {
 				 
 				 GridPane grid=new GridPane();
 		    	 int j=0;
-		    	 if(selected.size()>0)grid.add(new Label("Teacher reports"), 0, 0);
+		    	 if(selected.size()>0)grid.add(new Label("Teacher reports"), 0, 0);//creating teacher reports
 		    	 j++;
 		    	 ArrayList<ExecutedTest> dick=new ArrayList<ExecutedTest>();
 		    	 for(int i=0;i<client.GetAllExecutreTest().size();i++)
@@ -1097,7 +1115,7 @@ public class ManagerController {
 		    		 }
 		    	 }
 		    	 }
-		    	 if(selected1.size()>0) grid.add(new Label("Course reports"), 0, j);
+		    	 if(selected1.size()>0) grid.add(new Label("Course reports"), 0, j);//creating course reports
 		    	 j++;
 			    	 for(int g=0;g<selected1.size();g++)
 			    	 {
@@ -1224,7 +1242,7 @@ public class ManagerController {
 			    		 }
 			    	 }
 			    	 }
-			    	 if(selected2.size()>0) grid.add(new Label("Student reports"), 0, j);
+			    	 if(selected2.size()>0) grid.add(new Label("Student reports"), 0, j);//creating student reports
 			    	 j++;
 				    	 for(int g=0;g<selected2.size();g++)
 				    	 {
@@ -1360,7 +1378,7 @@ public class ManagerController {
 		     
 				  }
 		});
-	    Button B2=new Button("Back");
+	    Button B2=new Button("Back");//back to main
 	    B2.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override

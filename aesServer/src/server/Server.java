@@ -28,7 +28,7 @@ public class Server extends AbstractServer
   public void handleMessageFromClient(Object msg, ConnectionToClient client)
   {
 	  	MessageType msgType = (MessageType)msg;
-	  	//System.out.println("Message recived from: "+client.getId()+ "  "+msgType.getAction());
+	  	System.out.println("Message recived from: "+client.getId()+ "  "+msgType.getAction());
 	  	Object answer = MySqlConnection.action(ActionsType.getAction(msgType.getAction()), msgType.getObj());
 	  	try {
 	  		client.sendToClient(answer);

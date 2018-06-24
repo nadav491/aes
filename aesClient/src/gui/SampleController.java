@@ -55,14 +55,14 @@ import javafx.stage.Stage;
 
 public class SampleController {
 	Course L = null;
-	private Stage primaryStage;
-	private ArrayList<Question> Q_list;
-	private ArrayList<Test> test_list;
-	private ObservableList<String> Subject_list=FXCollections.observableArrayList("02","04","06");//get subject list from database
-	private ObservableList<String> Course_list=FXCollections.observableArrayList("20","12","14");//get course list from database
-	public ArrayList<studentTest> solved_Tests=new ArrayList<studentTest> ();
+	private Stage primaryStage;//main stage
+	private ArrayList<Question> Q_list;//question list
+	private ArrayList<Test> test_list;//test list
+	private ObservableList<String> Subject_list=FXCollections.observableArrayList();//get subject list from database//subject list
+	private ObservableList<String> Course_list=FXCollections.observableArrayList();//get course list from database//course list
+	public ArrayList<studentTest> solved_Tests=new ArrayList<studentTest> ();//list of solved tests
 	private ScrollPane Scroll;
-	public final String Owner_name[]=new String[2];//change to size of teachers
+	public final String Owner_name[]=new String[2];//owner name
 	public String Question_select="0";
 	int start=0;
 	Question Q_Update;
@@ -74,15 +74,19 @@ public class SampleController {
 	
 	public SampleController()
 	{
-		test_list=new ArrayList<Test>();//get tests from database
+		test_list=new ArrayList<Test>();//initializing
 		
 	}
-	public void Q_print(String Owner,int c,Client client)
+	public void Q_print(String Owner,int c,Client client)//question database managment window
 	{
 		
-			Owner_name[c]=Owner;
-			Q_list = client.getAllQuestion();
-			for(int i=Q_list.size()-1;i>=0;i--) {
+		Subject_list=FXCollections.observableArrayList();
+		    Course_list=FXCollections.observableArrayList();
+		    Course_list.addAll(client.getCoursesId());//get subject list from database
+		    Subject_list.addAll(client.getSubjectsId());//get course list from database
+			Owner_name[c]=Owner;//setting name
+			Q_list = client.getAllQuestion();//getting questions
+			for(int i=Q_list.size()-1;i>=0;i--) {//getting teacher questions
 				if(!Q_list.get(i).getOwner().equals(Owner_name[c]))Q_list.remove(i);
 			}
 		primaryStage=new Stage();
@@ -97,21 +101,21 @@ public class SampleController {
 			       @Override
 			       public void handle(ActionEvent e)
 				  {
-			    	   if(Question_select!="0") Question_mode();
+			    	   if(Question_select!="0") Question_mode();//view question
 			      }
 			       
 		    });
 		
 
 			B2=new Button("modify Question");
-			B2.setOnAction(new EventHandler<ActionEvent>()
+			B2.setOnAction(new EventHandler<ActionEvent>()//modify question
 		    {
 			       @Override
 			       public void handle(ActionEvent e)
 				  {
 			    	Q_Update=new Question();
 			    	Text t1=null,t2=null,t3=null,t4=null,t5=null,t6=null,t7=null;
-			    	for(int i=0;i<Q_list.size();i++)
+			    	for(int i=0;i<Q_list.size();i++)//finding correct question
 			   	    {
 			   	    	if(Question_select==Q_list.get(i).getCode())
 			   	    		{
@@ -119,7 +123,7 @@ public class SampleController {
 			   	    		idx_C=i;
 			   	    		}
 			   	    }
-			    	if(Question_select!="0") {
+			    	if(Question_select!="0") {//creating input window
 			    	GridPane Text_edit=new GridPane();
 			    	Text_edit.setHgap(10);
 			    	Text_edit.setVgap(10);
@@ -182,7 +186,7 @@ public class SampleController {
                     F7.setText(Q_list.get(idx_C).getCorrect()+"");
                     Text_edit.add(F7, 1,7);
                     Button B3,B4;
-                    B3=new Button("Cancel");
+                    B3=new Button("Cancel");//cancel question creation
         			B3.setOnAction(new EventHandler<ActionEvent>()
         		    {
         			       @Override
@@ -193,12 +197,13 @@ public class SampleController {
         			      }
         			       
         		    });
-        			B4=new Button("Submit");
+        			B4=new Button("Submit");//submitting question to update
         			B4.setOnAction(new EventHandler<ActionEvent>()
         		    {
         			       @Override
         			       public void handle(ActionEvent e)
         				  {
+        			    	   //getting data from input
         			    	   Q_list.get(idx_C).setSInstruction(F1.getText());
         			    	   Q_list.get(idx_C).setTInstruction(F0.getText());
         			    	   if(F2.getText().length()>0) Q_list.get(idx_C).setBody(F2.getText());
@@ -213,6 +218,7 @@ public class SampleController {
         			    		   if(F7.getText().equals("4"))Q_list.get(idx_C).setCorrect(4);
         			    		   else System.out.println("invalid correct index");
         			    	   }
+        			    	   //updating database
         			    	   client.modifyQuestion(Q_list.get(idx_C));
         			    	   primaryStage.close();
         			    	   Q_print(Owner,c,client);
@@ -230,12 +236,13 @@ public class SampleController {
 			      }
 			       
 		    });
-			Button B4=new Button("add Question");
+			Button B4=new Button("add Question");//adding a new question
 			B4.setOnAction(new EventHandler<ActionEvent>()
 		    {
 			       @Override
 			       public void handle(ActionEvent e)
 				  {
+			    	   //initializing question creation window
 			    	    Q_Update=new Question();
 				    	Text t1=null,t2=null,t3=null,t4=null,t5=null,t6=null,t7=null;
 				    	GridPane Text_edit=new GridPane();
@@ -304,7 +311,7 @@ public class SampleController {
 	                    F7.setPromptText("enter correct answer index here");
 	                    Text_edit.add(F7, 1,8);
 	                    Button B3,B4;
-	                    B3=new Button("Cancel");
+	                    B3=new Button("Cancel");//canceling creation
 	        			B3.setOnAction(new EventHandler<ActionEvent>()
 	        		    {
 	        			       @Override
@@ -315,13 +322,14 @@ public class SampleController {
 	        			      }
 	        			       
 	        		    });
-	        			B4=new Button("Submit");
+	        			B4=new Button("Submit");//submitting question
 	        		
 	        			B4.setOnAction(new EventHandler<ActionEvent>()
 	        		    {
 	        			       @Override
 	        			       public void handle(ActionEvent e)
 	        				  {
+	        			    	   //checking for invalid input
 	        			    	   int j=0;
 	        			    	   Question Question_add=new Question();
 	        			    	   if(box1.getValue()==null)box1.setBlendMode(BlendMode.RED);
@@ -397,6 +405,7 @@ public class SampleController {
 	        			    	   Question_add.setSInstruction(F1.getText());
 	        			    	   Question_add.setTInstruction(F0.getText());
 	        			    	   if(j==7) {
+	        			    	   //updating database
 	        			    	   Question_add.setOwner(Owner_name[c]);
 	        			    	   client.addQuestion(Question_add);
 	        			    	   primaryStage.close();
@@ -415,61 +424,10 @@ public class SampleController {
 						
 				  }
 		    });
-			B3=new Button("remove Question");
-			B3.setOnAction(new EventHandler<ActionEvent>()
-		    {
-			       @Override
-			       public void handle(ActionEvent e)
-				  {
-			    	   if(Question_select!="0") {
-			    	   for(int i=0;i<Q_list.size();i++)
-				   	    {
-				   	    	if(Question_select==Q_list.get(i).getCode())
-				   	    		{
-				   	    		idx_C=i;
-				   	    		}
-				   	    }
-			    	   GridPane grid = new GridPane();
-				       grid.setHgap(10);
-				       grid.setVgap(10);
-				       grid.setPadding(new Insets(25, 25, 25, 25));
-				       Label Message=new Label("Are you sure you want to delete this question?");
-				       grid.add(Message,1, 0);
-				       Button B1=new Button("Yes");
-				       B1.setOnAction(new EventHandler<ActionEvent>()
-					    {
-						       @Override
-						       public void handle(ActionEvent e)
-							  {
-						    	   client.removeQuestion(Q_list.get(idx_C).getCode());
-						    	   primaryStage.close();
-						    	   Q_list.remove(idx_C);
-						    	   Q_print(Owner,c,client);
-							  }
-					    });
-				       Button B2=new Button("No");
-				       B2.setOnAction(new EventHandler<ActionEvent>()
-					    {
-						       @Override
-						       public void handle(ActionEvent e)
-							  {
-						    	  primaryStage.close();
-						    	  Q_print(Owner,c,client);
-							  }
-					    });
-				       grid.add(B1, 1, 1);
-				       grid.add(B2, 2, 1);
-				       Scene scene = new Scene(grid,400,200);
-						scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-						primaryStage.setScene(scene);
-						primaryStage.show();
-			    	   }
-			    	   
-				  }
-		    });
+			
 			VBox buttons = new VBox();
 			// Add the Buttons to the VBox
-			buttons.getChildren().addAll(B1,B2,B3,B4);
+			buttons.getChildren().addAll(B1,B2,B4);
             root.setRight(buttons);
 			Scene scene = new Scene(root,600,449);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -479,7 +437,7 @@ public class SampleController {
 			e.printStackTrace();
 		}
 	}
-	public ScrollPane addScrollPane()
+	public ScrollPane addScrollPane()//creatin a question scroll pane
 	{
 		ScrollPane sp=new ScrollPane();
 		 ObservableList<String> data = FXCollections.observableArrayList();
@@ -500,8 +458,9 @@ public class SampleController {
         // Horizontal scroll bar is only displayed when needed
 		return sp;
 	}
-	public void Question_mode()
+	public void Question_mode()//viewing question
 	{
+		//initializing window view
 		Question Q_view=new Question();
 		Text txt1,txt2 = null,txt3 = null,txt4 = null,
 				txt5 = null,txt6 = null,txt7 = null,txt8 = null,txt9 = null,txt10;
@@ -541,16 +500,21 @@ public class SampleController {
 		board.setScene(do1);
 		board.show();
 	}
-	public void Back_button_Press(ActionEvent event) {
+	public void Back_button_Press(ActionEvent event) {//back button finction
 		Stage closer=(Stage) ((Node) event.getSource()).getScene().getWindow();
 		closer.close();
 	}
-    public void T_print(String Owner,int c,Client client)
+    public void T_print(String Owner,int c,Client client)//test database managing function
     {
+    	//initializing data
+		Subject_list=FXCollections.observableArrayList();//get subject list from database
+		    Course_list=FXCollections.observableArrayList();//get course list from database
+		    Course_list.addAll(client.getCoursesId());
+		    Subject_list.addAll(client.getSubjectsId());
     	Owner_name[c]=Owner;
     	primaryStage=new Stage();
     	test_list=client.getAllTests();
-    	for(int i=test_list.size()-1;i>=0;i--)
+    	for(int i=test_list.size()-1;i>=0;i--)//getting correct tests
     	{
     		if(!test_list.get(i).getOwner().equals(Owner))
     			test_list.remove(i);
@@ -558,7 +522,7 @@ public class SampleController {
 		SplitPane root = new SplitPane();
 		Scroll=new ScrollPane();
 		Scroll=addTestScrollPane();
-		Button B1=new Button("View test");
+		Button B1=new Button("View test");//view test
 		B1.setOnAction(new EventHandler<ActionEvent>()
 	    {
 		       @Override
@@ -567,15 +531,15 @@ public class SampleController {
 		    	   
 		    	   if(Question_select!="0")
 		    	   {
-		    		   for(int i=0;i<test_list.size();i++)
+		    		   for(int i=0;i<test_list.size();i++)//finding test in list
 		    		   {
 		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
-		    		   view_test(test_list.get(idx_C));
+		    		   view_test(test_list.get(idx_C));//view test
 		           }
 			  }
 	    });
-		Button B2=new Button("Add test");
+		Button B2=new Button("Add test");//creating a new test
 		B2.setOnAction(new EventHandler<ActionEvent>()
 	    {
 		       @Override
@@ -584,7 +548,7 @@ public class SampleController {
 		    	   Add_test(c,client);
 			  }
 	    });
-		Button B3=new Button("modify test");
+		Button B3=new Button("modify test");//modifying a test
 		B3.setOnAction(new EventHandler<ActionEvent>()
 	    {
 		       @Override
@@ -592,7 +556,7 @@ public class SampleController {
 			  {
 		    	   if(Question_select!="0")
 		    	   {
-		    		   for(int i=0;i<test_list.size();i++)
+		    		   for(int i=0;i<test_list.size();i++)//finding test in list
 		    		   {
 		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
@@ -600,66 +564,18 @@ public class SampleController {
 		           }
 			  }
 	    });
-		Button B4=new Button("remove test");
-		B4.setOnAction(new EventHandler<ActionEvent>()
-	    {
-		       @Override
-		       public void handle(ActionEvent e)
-			  {
-		    	   if(Question_select!="0")
-		    	   {
-		    		   for(int i=0;i<test_list.size();i++)
-		    		   {
-		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
-		    		   }
-		    		   Stage secondStage=new Stage();
-		    		   GridPane grid = new GridPane();
-				       grid.setHgap(10);
-				       grid.setVgap(10);
-				       grid.setPadding(new Insets(25, 25, 25, 25));
-				       Label Message=new Label("Are you sure you want to delete this Test?");
-				       grid.add(Message,1, 0);
-				       Button B1=new Button("Yes");
-				       B1.setOnAction(new EventHandler<ActionEvent>()
-					    {
-						       @Override
-						       public void handle(ActionEvent e)
-							  {
-						    	   test_list.remove(idx_C);
-						    	   secondStage.close();
-						    	   primaryStage.close();
-						    	   T_print(Owner_name[c],c,client);
-							  }
-					    });
-				       Button B2=new Button("No");
-				       B2.setOnAction(new EventHandler<ActionEvent>()
-					    {
-						       @Override
-						       public void handle(ActionEvent e)
-							  {
-						    	   secondStage.close();
-							  }
-					    });
-				       grid.add(B1, 1, 1);
-				       grid.add(B2, 2, 1);
-				       Scene scene = new Scene(grid,400,200);
-						scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-						secondStage.setScene(scene);
-						secondStage.show();
-
-		           }
-			  }
-	    });
+		
 		VBox box1=new VBox();
-		box1.getChildren().addAll(B1,B2,B3,B4);
+		box1.getChildren().addAll(B1,B2,B3);
 		root.getItems().addAll(Scroll,box1);
 		Scene scene = new Scene(root,600,449);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.setScene(scene);
 		primaryStage.show();
     }
-    public void view_test(Test Chosen)
+    public void view_test(Test Chosen)//a function to view test form
     {
+    	//initializing test form window
     	ScrollPane pane=new ScrollPane();
     	GridPane Text_edit=new GridPane();
     	Text_edit.setHgap(10);
@@ -720,8 +636,13 @@ public class SampleController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
     }
-    public void Add_test(int c,Client client)
+    public void Add_test(int c,Client client)// a function to create a new test
     {
+    	//initializng data
+		Subject_list=FXCollections.observableArrayList();//get subject list from database
+		    Course_list=FXCollections.observableArrayList();//get course list from database
+		    Course_list.addAll(client.getCoursesId());
+		    Subject_list.addAll(client.getSubjectsId());
     	Test test_add=new Test();
     	GridPane Text_edit=new GridPane();
     	Text_edit.setHgap(10);
@@ -734,7 +655,7 @@ public class SampleController {
     	ComboBox Test_number=new ComboBox();
     	Test_number.getItems().addAll("01","02");
     	Text_edit.add(Test_number, 2, 0);
-    	Button B1=new Button("Cancel");
+    	Button B1=new Button("Cancel");//canceling test creation
     	B1.setOnAction(new EventHandler<ActionEvent>()
 	    {
 		       @Override
@@ -776,13 +697,14 @@ public class SampleController {
 			  }
 	    });
     	Text_edit.add(B1, 0, 1);
-    	Button B2=new Button("Continue");
+    	Button B2=new Button("Continue");//continuing on creating
     	B2.setOnAction(new EventHandler<ActionEvent>()
 	    {
 		       @Override
 		       public void handle(ActionEvent e)
 			  {
 		    	   int j=0;
+		    	   //checking for invalid input
 		    	   if(Subjects.getValue()==null)
 		    	   {
 		    		   Subjects.setBlendMode(BlendMode.RED);
@@ -812,6 +734,7 @@ public class SampleController {
     			   }
 		           if(j==3)
 		           {
+		        	   //getting questions to add to test by subject
 		        	   Client client = new Client(Main.HOST_IP,Main.HOST_PORT);
 		        	   Q_list=client.getAllQuestion();
 		        	   ArrayList<Question> add=new ArrayList<Question>();
@@ -825,6 +748,7 @@ public class SampleController {
 		        	   
 		        	   test_add.setCode(Subjects.getValue()+""+Courses.getValue()+""+Test_number.getValue()+"");
 		        	   test_add.setOwner(Owner_name[c]);
+		        	   //initializing question select window
 		        	   BorderPane root = new BorderPane();
 		        	    Scene scene = new Scene(root, 400, 250, Color.WHITE);
 
@@ -888,7 +812,7 @@ public class SampleController {
 		        	    gridpane.add(vbox, 1, 1);
 		        	    root.setCenter(gridpane);
                         HBox hbox=new HBox();
-                        Button B1=new Button("Cancel");
+                        Button B1=new Button("Cancel");//canceling test creation
                     	B1.setOnAction(new EventHandler<ActionEvent>()
                 	    {
                 		       @Override
@@ -930,7 +854,7 @@ public class SampleController {
                 			       
                 			  }
                 	    });
-                        Button B2=new Button("Continue");
+                        Button B2=new Button("Continue");//continue on creating a test
                     	B2.setOnAction(new EventHandler<ActionEvent>()
                 	    {
                 		       @Override
@@ -954,7 +878,7 @@ public class SampleController {
                		        	    gridpane.setVgap(10);
                		        	    Label L1=new Label("Regular or Advanced Settings?");
                		        	    gridpane.add(L1, 0, 0);
-               		        	    Button B1=new Button("Regular Settings");
+               		        	    Button B1=new Button("Regular Settings");//adding only test time and question grades and some intructions
                		        	    B1.setOnAction(new EventHandler<ActionEvent>()
                          	        {
                          		       @Override
@@ -999,7 +923,7 @@ public class SampleController {
                   		        	       generalT.setPromptText("you may eneter general instructions for teachers here");
                   		        	       gridpane.add(generalT, 0, j);
                   		        	       j++;
-                     		        	    Button B1=new Button("Cancel");
+                     		        	    Button B1=new Button("Cancel");//canceling test creating
                      		        	    B1.setOnAction(new EventHandler<ActionEvent>()
                                 	        {
                                 		       @Override
@@ -1041,13 +965,14 @@ public class SampleController {
                                 			       
                                 			  }
                                 	        });
-                     		        	    Button B2=new Button("submit");
+                     		        	    Button B2=new Button("submit");//saving the test
                      		        	    B2.setOnAction(new EventHandler<ActionEvent>()
                                 	        {
                                 		       @Override
                                 		       public void handle(ActionEvent e)
                                 			  {
                                 		    	   int j=0;
+                                		    	   //checking for invalid input
                                 		    	   if(F1.getText().isEmpty())F1.setBlendMode(BlendMode.RED);
                                 		    	   else {
                                 		    		   test_add.setTime(F1.getText());
@@ -1069,6 +994,7 @@ public class SampleController {
                                 		    	   if(j==1+test_add.getQuestions().size())
                                 		    	   {
                                 		    		  if(sum==100) {
+                                		    			  //adding test
                                 		    		   test_add.setCommentsForStudent(generalS.getText());
                                 		    		   test_add.setCommentsForTeacher(generalT.getText());
                                  		    		   client.createTest(test_add);
@@ -1088,12 +1014,13 @@ public class SampleController {
                     					    primaryStage.show();
                          			  }
                          	        });
-               		        	    Button B2=new Button("Advanced Settings");
+               		        	    Button B2=new Button("Advanced Settings");//additional student/teacher instructions
                		        	  B2.setOnAction(new EventHandler<ActionEvent>()
                        	        {
                        		       @Override
                        		       public void handle(ActionEvent e)
                        			  {
+                       		    	   //creating adding window
                        		    	    TextArea matrix[][]=new TextArea[test_add.getQuestions().size()][3];
                        		    	    ScrollPane pane=new ScrollPane();
                        		    	    GridPane gridpane = new GridPane();
@@ -1149,7 +1076,7 @@ public class SampleController {
                 		        	    generalT.setPromptText("you may eneter general instructions for teachers here");
                 		        	    gridpane.add(generalT, 0, j);
                 		        	    j++;
-                   		        	    Button B1=new Button("Cancel");
+                   		        	    Button B1=new Button("Cancel");//cnceling test creation
                    		        	    B1.setOnAction(new EventHandler<ActionEvent>()
                               	        {
                               		       @Override
@@ -1191,13 +1118,14 @@ public class SampleController {
                               			       
                               			  }
                               	        });
-                   		        	    Button B2=new Button("submit");
+                   		        	    Button B2=new Button("submit");//saving the test
                    		        	    B2.setOnAction(new EventHandler<ActionEvent>()
                               	        {
                               		       @Override
                               		       public void handle(ActionEvent e)
                               			  {
                               		    	   int j=0;
+                              		    	   //checking for invalid input
                               		    	   if(F1.getText().isEmpty())F1.setBlendMode(BlendMode.RED);
                               		    	   else {
                               		    		   test_add.setTime(F1.getText());
@@ -1231,7 +1159,7 @@ public class SampleController {
                               		    	   {
                               		    		   if(sum==100)
                               		    		   {
-                              		    			   
+                              		    			   //saving test
                               		    			 test_add.setCommentsForStudent(generalS.getText());
                               		    		   test_add.setCommentsForTeacher(generalT.getText());
                               		    			   client.createTest(test_add);
@@ -1274,15 +1202,21 @@ public class SampleController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
     }
-    public void modify_test(Test Chosen,int c,Client client)
-    {
+    public void modify_test(Test Chosen,int c,Client client)//modifying existing test
+    {//initializing
+		Subject_list=FXCollections.observableArrayList();//get subject list from database
+		    Course_list=FXCollections.observableArrayList();//get course list from database
+		    Course_list.addAll(client.getCoursesId());
+		    Subject_list.addAll(client.getSubjectsId());
        Test Update=new Test();
        
  	   Q_list=client.getAllQuestion();
- 	   	  ArrayList<Question> rem1=new ArrayList<Question>();
+ 	  
+
+ 	  ArrayList<Question> rem1=new ArrayList<Question>();
  	  int sign=0;
  	  for(int h=0;h<Q_list.size();h++) {
- 	   for(int i=Chosen.getQuestions().size()-1;i>=0;i--)
+ 	   for(int i=Chosen.getQuestions().size()-1;i>=0;i--)//finding questions not in test
  	   {
  		   if(Q_list.get(h).getCode().equals(Chosen.getQuestions().get(i).getCode()))
  		   {
@@ -1292,13 +1226,14 @@ public class SampleController {
  	   if(sign==0)rem1.add(Q_list.get(h));
  	  sign=0;
  	  }
+ 	 System.out.println(rem1);
  	   ArrayList<Question> rem2=new ArrayList<Question>();
- 	   for(int i=0;i<rem1.size();i++)
+ 	   for(int i=0;i<rem1.size();i++)//getting question by course
  	   {
  		   if((rem1.get(i).getCode().charAt(0)+rem1.get(i).getCode().charAt(1)+"").equals
  				   (Chosen.getCode().charAt(0)+Chosen.getCode().charAt(1)+""))rem2.add(rem1.get(i));
  	   }
- 	  
+ 	  //initialize choice window
  	   BorderPane root = new BorderPane();
  	    Scene scene = new Scene(root, 400, 250, Color.WHITE);
 
@@ -1366,7 +1301,7 @@ public class SampleController {
  	    gridpane.add(vbox, 1, 1);
  	    root.setCenter(gridpane);
          HBox hbox=new HBox();
-         Button B1=new Button("Cancel");
+         Button B1=new Button("Cancel");//canceling test modifying
      	B1.setOnAction(new EventHandler<ActionEvent>()
  	    {
  		       @Override
@@ -1408,7 +1343,7 @@ public class SampleController {
  			       
  			  }
  	    });
-         Button B2=new Button("Continue");
+         Button B2=new Button("Continue");//continue on modifying
      	B2.setOnAction(new EventHandler<ActionEvent>()
  	    {
  		       @Override
@@ -1416,6 +1351,7 @@ public class SampleController {
  			  {
  		    	   if(!candidates.isEmpty())
  		    	   {
+ 		    		   //initializing test modifying window
  		    		   Q_list=client.getAllQuestion();
  		    		   for(int i=0;i<candidates.size();i++)
  		    		   {
@@ -1520,7 +1456,7 @@ public class SampleController {
     		        	    	gridpane.add(matrix[i][8], 1, j);
     		        	    	j++;
     		        	    }
-    		        	    Button B1=new Button("Cancel");
+    		        	    Button B1=new Button("Cancel");//canceling modifying
     		        	    B1.setOnAction(new EventHandler<ActionEvent>()
                	        {
                		       @Override
@@ -1562,13 +1498,14 @@ public class SampleController {
                			       
                			  }
                	        });
-    		        	    Button B2=new Button("submit");
+    		        	    Button B2=new Button("submit");//saving changes
     		        	    B2.setOnAction(new EventHandler<ActionEvent>()
                	        {
                		       @Override
                		       public void handle(ActionEvent e)
                			  {
                		    	   int j=0;
+               		    	   //checking for invalid input
                		    	   if(F1.getText().isEmpty())F1.setBlendMode(BlendMode.RED);
                		    	   else {
                		    		   Update.setTime(F1.getText());
@@ -1632,6 +1569,7 @@ public class SampleController {
                		    	   {
                		    		   if(sum==100)
                		    		   {
+               		    			   //updating the test in database
                		    			   Update.setCode(Chosen.getCode());
                		    			   
                		    			   Update.setOwner(Owner_name[c]);
@@ -1661,7 +1599,7 @@ public class SampleController {
  	    primaryStage.setScene(scene);
  	    primaryStage.show();
     }
-    public ScrollPane addTestScrollPane()
+    public ScrollPane addTestScrollPane()//creating a test scrollpane
 	{
 		ScrollPane sp=new ScrollPane();
 		 ObservableList<String> data = FXCollections.observableArrayList();
@@ -1682,9 +1620,9 @@ public class SampleController {
         // Horizontal scroll bar is only displayed when needed
 		return sp;
 	}
-    public void Run_test(String Owner,int c, Client client)
+    public void Run_test(String Owner,int c, Client client)//run tests/lock tests/extand test duration
     {
-	   
+	   //initializing window
     	Question_select="0";
     	primaryStage=new Stage();
     	BorderPane pane=new BorderPane();
@@ -1694,18 +1632,19 @@ public class SampleController {
     	Scroll=new ScrollPane();
     	Scroll=addTestScrollPane();
     	pane.setLeft(Scroll);
-    	Button B1=new Button("run test");
+    	Button B1=new Button("run test");//we choose to run tests
 		B1.setOnAction(new EventHandler<ActionEvent>()
 	    {
 		       @Override
 		       public void handle(ActionEvent e)
 			  {
 		    	   if(Question_select!="0")
-		    	   {
+		    	   {//we find the tests that canbe runned by the teacher
 		    		   for(int i=0;i<test_list.size();i++)
 		    		   {
 		    			   if(test_list.get(i).getCode().equals(Question_select)) idx_C=i;
 		    		   }
+		    		   //initializing the input window
 		    			    Stage SecondStage=new Stage();
 		    			    GridPane Text_edit=new GridPane();
 		    		    	Text_edit.setHgap(10);
@@ -1718,12 +1657,13 @@ public class SampleController {
 		    		    	F1.setPrefColumnCount(20);
 		    		    	F1.setPrefRowCount(1);
 		    		    	Text_edit.add(F1,1, 0);
-		    		    	Button B1=new Button("Execute");
+		    		    	Button B1=new Button("Execute");//executing test
 		    		    	B1.setOnAction(new EventHandler<ActionEvent>()
 		    			    {
 		    				       @Override
 		    				       public void handle(ActionEvent e)
 		    					  {
+		    				    	   //checking for invalid code
 		    				    	   if(F1.getText().length()!=4)
 		    				    	   {
 		    				    		   F1.setBlendMode(BlendMode.RED);
@@ -1749,6 +1689,7 @@ public class SampleController {
 		    				    			   }
 		    				    		   }
 		    				    		   if(check==0) {
+		    				    			   //executing tests
 		    				    			   client.AddToExecutreTest(add);
 		    				    		   }
 
@@ -1766,14 +1707,16 @@ public class SampleController {
 		    	   }
 			  }
 	    });
-		Button B2=new Button("lock test");
+		Button B2=new Button("lock test");//stoping running tests
 		B2.setOnAction(new EventHandler<ActionEvent>()
 	    {
 		       @Override
 		       public void handle(ActionEvent e)
 			  {
+		    	   //initializing choice window
 		    	 Stage second=new Stage();
 		    	 ArrayList<ExecutedTest> running=new ArrayList<ExecutedTest>();
+		    	 //finding lockable tests
 		    	 for(int u=0;u<client.GetAllExecutreTest().size();u++)
 		    	 {
 		    		 if(client.GetAllExecutreTest().get(u).getSign()==0)
@@ -1798,17 +1741,19 @@ public class SampleController {
 		  		    });
 		  		    sp.setContent(listView);
 		  		    p1.setRight(sp);
-		  		    Button B1=new Button("lock Test");
+		  		    Button B1=new Button("lock Test");//locking the test
 		  		    B1.setOnAction(new EventHandler<ActionEvent>()
 		  	        {
 		  		       @Override
 		  		       public void handle(ActionEvent e)
 		  			  {
 		  		    	   if(Question_select!="0") {
+		  		    		   //we find the correct test
 		  		    	   for(int i=0;i<running.size();i++)
 		  		    	   {
 		  		    		   if(running.get(i).getTest().getCode().equals(Question_select))idx_C=i;
 		  		    	   }
+		  		    	   //initializing choice window
 		  		    	   Stage second1=new Stage();
 		  		    	   GridPane grid = new GridPane();
 					       grid.setHgap(10);
@@ -1817,6 +1762,7 @@ public class SampleController {
 					       Label Message=new Label("Are you sure you want to lock this Test?");
 					       grid.add(Message,1, 0);
 					       Button B1=new Button("Yes");
+					       //locking the test
 					       B1.setOnAction(new EventHandler<ActionEvent>()
 						    {
 							       @Override
@@ -1836,6 +1782,7 @@ public class SampleController {
 							        		   break;
 							        	   }
 							           }
+							           //updating tes status in server
 							           client.GetAllExecutreTest().get(f).setSign(2);
 							           client.UpdateExecutreTest(client.GetAllExecutreTest().get(f));
 							    	   Run_test(Owner,c,client);
@@ -1866,12 +1813,12 @@ public class SampleController {
 		  		second.show();
 			  }
 	    });
-		Button B3=new Button("change test time");
+		Button B3=new Button("change test time");//changing time of a running test
 		B3.setOnAction(new EventHandler<ActionEvent>()
 	    {
 		       @Override
 		       public void handle(ActionEvent e)
-			  {
+			  {//initializing choice window
 		    	   Stage second=new Stage();
 		    	   BorderPane p1=new BorderPane();
 			    	 ScrollPane sp=new ScrollPane();
@@ -1879,9 +1826,11 @@ public class SampleController {
 
 			  		    ListView<String> listView = new ListView<String>(data);
 			  		    listView.setPrefSize(300, 250);
-			  		    for(int i=0;i<client.GetAllExecutreTest().size();i++) {
+			  		    for(int i=0;i<client.GetAllExecutreTest().size();i++) {//finding running tests
 			  		    	if(client.GetAllExecutreTest().get(i).getexecuter().equals(Owner_name[c]))
+			  		    		if(client.GetAllExecutreTest().get(i).getSign()==0) {
 			  		    			data.add(client.GetAllExecutreTest().get(i).getTest().getCode());
+			  		    		}
 			  		    }
 
 			  		    listView.setItems(data);
@@ -1891,14 +1840,14 @@ public class SampleController {
 			  		                Question_select=new_val;
 			  		                
 			  		    });
-			  		  Button B1=new Button("change time");
+			  		  Button B1=new Button("change time");//changing the time
 			  		    B1.setOnAction(new EventHandler<ActionEvent>()
 			  	        {
 			  		       @Override
 			  		       public void handle(ActionEvent e)
 			  			  {
 			  		    	   if(Question_select!="0")
-			  		    	   {
+			  		    	   {//finding the correct test
 			  		    		   for(int i=0;i<client.GetAllExecutreTest().size();i++)
 			  		    		   {
 			  		    			   if(client.GetAllExecutreTest().get(i).getTest().getCode().equals(Question_select));
@@ -1906,6 +1855,7 @@ public class SampleController {
 			  		    				   idx_C=i;
 			  		    			   }
 			  		    		   }
+			  		    		   //initializing prompt window
 			  		    		   GridPane p=new GridPane();
 			  		    		   Label L1=new Label("Explanation for request");
 			  		    		   p.add(L1, 0, 0);
@@ -1921,7 +1871,7 @@ public class SampleController {
 			  		    		   F2.setPrefRowCount(1);
 			  		    		   F2.setPromptText("enter time here");
 			  		    		   p.add(F2, 1, 1);
-			  		    		   Button B1=new Button("submit request");
+			  		    		   Button B1=new Button("submit request");//sending requst to manager
 			  		    		   B1.setOnAction(new EventHandler<ActionEvent>()
 								    {
 									       @Override
@@ -1930,6 +1880,7 @@ public class SampleController {
 									    	   int selected=0;
 									    	   selected=listView.getSelectionModel().getSelectedIndex();
 									    	   int j=0;
+									    	   //checking invalid input
 									    	   if(F1.getText().isEmpty())
 									    	   {
 									    		   F1.setBlendMode(BlendMode.RED);
@@ -1950,17 +1901,20 @@ public class SampleController {
 									    	   }
 									    	   if(j==2)
 									    	   {
+									    		   //updating running test in server
 									    		   client.GetAllExecutreTest().get(idx_C).setR(F1.getText());
-									    		   client.GetAllExecutreTest().get(idx_C).setT(F2.getText());
+									    		   client.GetAllExecutreTest().get(idx_C).setT((int)Integer.parseInt(F2.getText()));
 									    		   client.GetAllExecutreTest().get(idx_C).setSign(3);
+									    		   System.out.println(client.GetAllExecutreTest().get(idx_C).returnR()+" "+client.GetAllExecutreTest().get(idx_C).returnT());
 									    		   client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx_C));
+									    		   System.out.println(client.GetAllExecutreTest().get(idx_C).returnR()+" "+client.GetAllExecutreTest().get(idx_C).returnT());
 
 									    		   second.close();
 									    	   }
 									    	   
 										  }
 								    });
-			  		    		   Button B2=new Button("cancel request");
+			  		    		   Button B2=new Button("cancel request");//canceling the requesst
 			  		    		   B2.setOnAction(new EventHandler<ActionEvent>()
 								    {
 									       @Override
@@ -2019,7 +1973,7 @@ public class SampleController {
 				  		second.show();
 			  }
 	    });
-		 Button B4=new Button("back");
+		 Button B4=new Button("back");//back to main window function
 		 B4.setOnAction(new EventHandler<ActionEvent>()
 	     {
 				 @Override
@@ -2039,11 +1993,12 @@ public class SampleController {
     	
     	
     }
-    public void CheckTests(int c, Client client)
+    public void CheckTests(int c, Client client)//checking solved tests
     {
-    	
+    	//initializing checking window
         primaryStage=new Stage();
         solved_Tests=new ArrayList<studentTest>();
+        //getting solved tests
         studentTest list[]=client.getAllTestsByTeacherId(Owner_name[0]);
         for(int u=0;u<list.length;u++)
         {
@@ -2070,7 +2025,7 @@ public class SampleController {
 		    });
 		    sp.setContent(listView);
 		    pane.setLeft(sp);
-		    Button B1=new Button("Check Test");
+		    Button B1=new Button("Check Test");//checking test
 		    B1.setOnAction(new EventHandler<ActionEvent>()
 			{
 				 @Override
@@ -2078,7 +2033,7 @@ public class SampleController {
 					  {
 					    
 					     if(Question_select!="0")
-					     {
+					     {//initializing test view window
 					    	 int k=0;
 					    	 sum=0;
 					    	 int a=listView.getSelectionModel().getSelectedIndex();
@@ -2113,7 +2068,7 @@ public class SampleController {
 					     	CheckBox gradeChange=new CheckBox();
 					     	TextArea T1=new TextArea();
 					     	TextArea T2=new TextArea();
-					     	gradeChange.setText("change grade");
+					     	gradeChange.setText("change grade");//changing the grade
 					     	gradeChange.setOnAction(new EventHandler<ActionEvent>()
 				    		{
 				    			 @Override
@@ -2147,7 +2102,7 @@ public class SampleController {
 					     	p.setTextFill(Color.AQUA);
 					     	Text_edit.add(p, 0, 7);
 					     	
-					     	if(solved_Tests.get(a).isCheat())
+					     	if(solved_Tests.get(a).isCheat())//notifying about possible copying
 					     	{
 					     		p.setVisible(true);
 					     	}
@@ -2204,7 +2159,7 @@ public class SampleController {
 					        	instructions[val].setPromptText("enter remarks here");
 					        	instructions[val].setVisible(false);
 					         	decision[val]=new CheckBox();
-					         	decision[val].setText("add remarks");
+					         	decision[val].setText("add remarks");//adding remarks on question
 					         	decision[val].setOnAction(new EventHandler<ActionEvent>()
 					    		{
 					    			 @Override
@@ -2225,7 +2180,7 @@ public class SampleController {
 					         	Text_edit.add(instructions[val], 0, j);
 					         	j++;
 					     		}
-					     		else {
+					     		else {//answered wrongly questions init
 					     			L1=new Label("Question"+(i+1)+":");
 						     		L1.setFont(Font.font( "", FontWeight.BOLD, 17));
 						     		L1.setTextFill(Color.RED);
@@ -2305,7 +2260,7 @@ public class SampleController {
 						         	j++;
 					     		}
 					     	}
-					     	Button Save_Change=new Button("save checked test");
+					     	Button Save_Change=new Button("save checked test");//saving checked test with changes
 					     	Save_Change.setOnAction(new EventHandler<ActionEvent>()
 				    		{
 				    			 @Override
@@ -2313,6 +2268,7 @@ public class SampleController {
 				    				  {
 				    				      if(gradeChange.selectedProperty().get()==true)
 				    				      {
+				    				    	  //checking for invalid input
 				    				    	  if(T1.getText().isEmpty())
 				    				    	  {
 				    				    		  T1.setBlendMode(BlendMode.RED);
@@ -2364,6 +2320,7 @@ public class SampleController {
 			    				    			  solved_Tests.get(a).getRemark().add("");
 			    				    		  }
 			    				    	  }
+				    				      //updating database
 				    				      solved_Tests.get(a).setCheck(true);
 				    				      client.UpdateStudentTest(solved_Tests.get(a));
 				    				      primaryStage.close();
@@ -2382,7 +2339,7 @@ public class SampleController {
 					  }
 					 
 			});
-		    Button B2=new Button("back");
+		    Button B2=new Button("back");//going back window
 		    B2.setOnAction(new EventHandler<ActionEvent>()
 			{
 				 @Override
@@ -2399,9 +2356,9 @@ public class SampleController {
 			primaryStage.show();
 			
     }
-    public void Check_test_statistics(int c,Client client)
+    public void Check_test_statistics(int c,Client client)//checking statistics about executed tests
     {
-    	
+    	//initializing window
     	Stage second=new Stage();
  	   BorderPane p1=new BorderPane();
 	    	 ScrollPane sp=new ScrollPane();
@@ -2409,7 +2366,7 @@ public class SampleController {
                 ArrayList<ExecutedTest> arr=new ArrayList<ExecutedTest>();
 	  		    ListView<String> listView = new ListView<String>(data);
 	  		    listView.setPrefSize(300, 250);
-	  		    for(int i=0;i<client.GetAllExecutreTest().size();i++) {
+	  		    for(int i=0;i<client.GetAllExecutreTest().size();i++) {//getting tests
 	  		    	if(client.GetAllExecutreTest().get(i).getTest().getOwner().equals(Owner_name[c])&& client.GetAllExecutreTest().get(i).getSign()==1)
 	  		    			{
 	  		    		      data.add(client.GetAllExecutreTest().get(i).getTest().getCode());
@@ -2425,14 +2382,14 @@ public class SampleController {
 	  		                Question_select=new_val;
 	  		                
 	  		    });
-	  		    Button B1=new Button("get report");
+	  		    Button B1=new Button("get report");//getting report
 	  		    B1.setOnAction(new EventHandler<ActionEvent>()
 				{
 					 @Override
 					  public void handle(ActionEvent e)
 						  {
 						      if(Question_select!="0")
-						      {
+						      {//initializing test report
 						    	  ScrollPane pane=new ScrollPane();
 						    	  int idx=0;
 						    	  idx=listView.getSelectionModel().getSelectedIndex();
@@ -2443,13 +2400,16 @@ public class SampleController {
 						    	  p.add(new Label("Test duration: "+arr.get(idx).getCurrentTime()), 0, 3);
 						    	  p.add(new Label("Executed by: "+arr.get(idx).getexecuter()), 0, 4);
 						    	  int avarage=0;
+						    	  //calculating avarage
 				    				 for(int b=0;b<arr.get(idx).getGradeList().size();b++)
 				    				 {
 				    					 avarage+=Integer.parseInt(arr.get(idx).getGradeList().get(b));
 				    				 }
+				    				 System.out.println(arr.get(idx).getGradeList());
 				    				 avarage=avarage/arr.get(idx).getFInishedNum();
 				    				 p.add(new Label("avarage grade: "+avarage), 0, 5);
 				    				 int median=0;
+				    				 //calculating median
 				    				 int middle = arr.get(idx).getFInishedNum();
 				    				 if(arr.get(idx).getGradeList().size()!=0) {
 				    			        if (arr.get(idx).getGradeList().size() % 2 == 1) {
@@ -2459,6 +2419,7 @@ public class SampleController {
 				    			        }
 				    				 }
 				    			     p.add(new Label("median: "+median),0, 6);
+				    			     //calculating grade spread by tens
 				    			     int gradeSpace[]=new int[10];
 				    			     for(int k=0;k<10;k++)gradeSpace[k]=0;
 				    			     for(int b=0;b<arr.get(idx).getGradeList().size();b++)
@@ -2496,7 +2457,7 @@ public class SampleController {
 				    			    	 
 				    			    	 
 				    			     }
-				    			     
+				    			     //creating hystogram view
 				    			        final NumberAxis xAxis = new NumberAxis();
 				    			        final CategoryAxis yAxis = new CategoryAxis();
 				    			        final BarChart<Number, String> bc = new BarChart<Number, String>(xAxis, yAxis);

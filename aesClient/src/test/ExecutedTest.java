@@ -28,8 +28,8 @@ public class ExecutedTest implements Serializable {
 	private int sign;
 	private int run_sign;
 	public Map<Integer , ArrayList<String>> gradelog;
-	private static String reason;
-	private static String timeC;
+	private String reason;
+	private int timeC;
 	public ExecutedTest(Test T1,Date currentDate,String Length)
 	{
 		Execute=new Test();
@@ -49,7 +49,7 @@ public class ExecutedTest implements Serializable {
 		gradelog=new HashMap();
 		FUplist=new ArrayList<String>();
 		reason=null;
-		timeC=null;
+		timeC=0;
 	}
 	public ExecutedTest()
 	{
@@ -59,23 +59,23 @@ public class ExecutedTest implements Serializable {
 		gradelog=new HashMap();
 		FUplist=new ArrayList<String>();
 		reason=null;
-		timeC=null;
+		timeC=0;
 	}
 	public String returnR()
 	{
 		return reason;
 	}
-	public String returnT()
+	public int returnT()
 	{
 		return timeC;
 	}
 	public void setR(String s1)
 	{
-		 reason=s1;
+		 this.reason=s1;
 	}
-	public void setT(String s1)
+	public void setT(int s1)
 	{
-		 timeC=s1;
+		 this.timeC=s1;
 	}
 	public ArrayList<String> getF()
 	{
@@ -154,5 +154,9 @@ public class ExecutedTest implements Serializable {
     }
 	public void setSignUpList(ArrayList<String> signUpList2) {
 		this.SignUplist = signUpList2;	
+	}
+	public void setGList(ArrayList<String> gradeList2) {
+		this.gradeList = gradeList2;
+		
 	}
 }

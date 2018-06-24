@@ -25,6 +25,7 @@ public class Client implements ChatIF {
 	final public static int DEFAULT_PORT = 5555;
 
 	/**
+	 * 
 	* The instance of the client that created this ConsoleChat.
 	*/
 	private ChatClient chatClient;
@@ -386,6 +387,13 @@ public class Client implements ChatIF {
 	public ArrayList<String> getCoursesId()
 	{
 		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.COURSE_GET_ID_LIST), " ");
+		this.chatClient.handleMessageFromClientUI(msg);
+		waitForAnswer();
+		return (ArrayList<String>) this.answer;
+	}
+	public ArrayList<String> getSubjectsId()
+	{
+		MessageType msg = new MessageType(ActionsType.getValue(ActionNumber.Subject_GET_ID_LIST), " ");
 		this.chatClient.handleMessageFromClientUI(msg);
 		waitForAnswer();
 		return (ArrayList<String>) this.answer;

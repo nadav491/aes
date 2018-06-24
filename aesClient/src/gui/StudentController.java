@@ -50,11 +50,11 @@ import test.studentTest;
 public class StudentController {
 	public final String Owner_name[]=new String[2];
 	private Stage primaryStage;
+	
 	public static final ArrayList<Stage> closestage=new  ArrayList<Stage>();
-	public static final ArrayList<Stage> Messagestage=new  ArrayList<Stage>();
-	public static ArrayList<Test> signUp_test_list=new ArrayList<Test>();
-	public ArrayList<studentTest> checked_list=new ArrayList<studentTest>();
-	private ArrayList<Test> test_list;
+	public static ArrayList<Test> signUp_test_list=new ArrayList<Test>();//signup test list
+	public ArrayList<studentTest> checked_list=new ArrayList<studentTest>();//checked test list
+	private ArrayList<Test> test_list;//test list
 	private String Question_select="0";
 	private Test save=new Test();
 	private int start=0;
@@ -64,24 +64,22 @@ public class StudentController {
 	private static int val=0;
 	static int timeC=0;
 	int dur;
-	private MyFile file;
-	public static  Map <Integer,ArrayList<Test>> checkedTests=new HashMap();
 	public static final Timeline time1[]=new Timeline[2];
 
 	public StudentController()
 	{
-		checkedTests.put(val, new ArrayList<Test>());
+		//init
 		closestage.add(new Stage());
 		val++;
 		primaryStage=new Stage();
 		test_list=new ArrayList<Test>();
 	}
-	public void signUp(String Owner ,int c,Client client)
+	public void signUp(String Owner ,int c,Client client)//signup to running tests
 	{
 		
 		Owner_name[c]=Owner;
 		signUp_test_list=new ArrayList<Test>();
-		for(int i=0;i<client.GetAllExecutreTest().size();i++)
+		for(int i=0;i<client.GetAllExecutreTest().size();i++)//getting running tests without being already signed up
 		{
 			if(client.GetAllExecutreTest().get(i).getSign()==0)
 			{
@@ -91,7 +89,7 @@ public class StudentController {
 				}
 			}
 		}
-		
+		//initializing choice window
 		 BorderPane root = new BorderPane();
 		    Scene scene = new Scene(root, 400, 250, Color.WHITE);
 
@@ -171,13 +169,13 @@ public class StudentController {
 		    vbox.getChildren().addAll(sendRightButton, sendLeftButton);
 
 		    gridpane.add(vbox, 1, 1);
-		    Button B1=new Button("SignUp");
+		    Button B1=new Button("SignUp");//signing up
 		    B1.setOnAction(new EventHandler<ActionEvent>()
 			{
 				 @Override
 				  public void handle(ActionEvent e)
 					  {    
-					       if(selected.size()==0)
+					       if(selected.size()==0)//not added to list choice
 					       {
 					    	   Stage SecondStage=new Stage();
 					    	   GridPane grid = new GridPane();
@@ -215,7 +213,7 @@ public class StudentController {
 					       else
 					       {
 					    	   int index;
-					    	   for(int i=0;i<selected.size();i++)
+					    	   for(int i=0;i<selected.size();i++)//updating tests
 					    	   {
 					    		   for(int j=0;j<client.GetAllExecutreTest().size();j++)
 					    		   {
@@ -228,6 +226,7 @@ public class StudentController {
 					    				   client.GetAllExecutreTest().get(j).getF().add("0");					    				  
 					    				   signUp_test_list.add(client.GetAllExecutreTest().get(j).getTest());
 					    				   client.UpdateExecutreTest(client.GetAllExecutreTest().get(j));
+					    				   System.out.println(client.GetAllExecutreTest().get(j).getSignUpList());
 					    				   break;
 					    			   }
 					    			   }
@@ -237,8 +236,6 @@ public class StudentController {
 					       }
 					  }
 			});
-		    Button B2=new Button("Cancel");
-		    gridpane.add(B2 ,0, 2);
 		    gridpane.add(B1 ,2, 2);
 		    root.setCenter(gridpane);
 
@@ -247,12 +244,12 @@ public class StudentController {
 		    primaryStage.show();
     	
 	}
-	public void viewSignUpList(int c , Client client)
+	public void viewSignUpList(int c , Client client)//view signup list
 	{
 		primaryStage=new Stage();
 		
 		signUp_test_list=new ArrayList<Test>();
-		for(int i=0;i<client.GetAllExecutreTest().size();i++)
+		for(int i=0;i<client.GetAllExecutreTest().size();i++)//getting tests
 		{
 			if(client.GetAllExecutreTest().get(i).getSign()==0)
 			{
@@ -282,12 +279,12 @@ public class StudentController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	public void loadTestChoiceWindow(int c, Client client)
+	public void loadTestChoiceWindow(int c, Client client)//solving tests
 	{
 		ArrayList<String> exeCodes=new ArrayList<String>();
 		primaryStage=new Stage();
 		signUp_test_list=new ArrayList<Test>();
-		for(int i=0;i<client.GetAllExecutreTest().size();i++)
+		for(int i=0;i<client.GetAllExecutreTest().size();i++)//finding running tests and exe codes
 		{
 			if(client.GetAllExecutreTest().get(i).getSign()==0)
 			{
@@ -305,6 +302,7 @@ public class StudentController {
 				}
 			}
 		}
+		//initializing choice window
 		BorderPane Test_form=new BorderPane();
 		ScrollPane pane=new ScrollPane();
 		ObservableList<String> data = FXCollections.observableArrayList();
@@ -321,7 +319,7 @@ public class StudentController {
 	                
 	    });
 	    pane.setContent(listView);
-	    Button B1=new Button("Start Test");
+	    Button B1=new Button("Start Test");//starting test
 	    B1.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override
@@ -333,7 +331,7 @@ public class StudentController {
 			       grid.setPadding(new Insets(25, 25, 25, 25));
 			       Label Message=new Label("take a written test or online?");
 			       grid.add(Message,1, 0);
-			       Button B1=new Button("Written");
+			       Button B1=new Button("Written");//written test choice
 			       B1.setOnAction(new EventHandler<ActionEvent>()
 				    {
 					       @Override
@@ -345,7 +343,7 @@ public class StudentController {
 					    	   F1.setPrefColumnCount(30);
 					    	   F1.setPrefRowCount(1);
 					    	   enter_pass.add(F1, 0, 0);
-					    	   for(int i=0;i<signUp_test_list.size();i++)
+					    	   for(int i=0;i<signUp_test_list.size();i++)//finding test
 						    	  {
 						    		  if(signUp_test_list.get(i).getCode().equals(Question_select))
 						    			  {
@@ -353,17 +351,18 @@ public class StudentController {
 						    			  }
 						    	  }
 					    	   
-					    	   Button B1=new Button("Start");
+					    	   Button B1=new Button("Start");//starting test
 					    	   B1.setOnAction(new EventHandler<ActionEvent>()
 							    {
 								       @Override
 								       public void handle(ActionEvent e)
 									  {
+								    	   //check for invalid input
 								    	   if(F1.getText().equals(exeCodes.get(idx)))
 								    	   {
 								    		 GridPane p=new GridPane();
 								    		 Stage j=new Stage();
-								    		 Button B1=new Button("DownLoad");
+								    		 Button B1=new Button("DownLoad");//download test file
 									    	   B1.setOnAction(new EventHandler<ActionEvent>()
 											    {
 												       @Override
@@ -372,7 +371,7 @@ public class StudentController {
 												    	   client.downloadFile(client.GetAllExecutreTest().get(idx));
 													  }
 											    });
-									    	   Button B2=new Button("UpLoad");
+									    	   Button B2=new Button("UpLoad");//uploading test file
 									    	   B2.setOnAction(new EventHandler<ActionEvent>()
 											    {
 												       @Override
@@ -401,7 +400,7 @@ public class StudentController {
 								primaryStage.show();
 						  }
 				    });
-			       Button B2=new Button("Online");
+			       Button B2=new Button("Online");//choose online test
 			       B2.setOnAction(new EventHandler<ActionEvent>()
 				    {
 					       @Override
@@ -420,14 +419,15 @@ public class StudentController {
 						    			      idx=i;
 						    			  }
 						    	  }
-					    	   Button B1=new Button("Start");
+					    	   Button B1=new Button("Start");//start test
 					    	   B1.setOnAction(new EventHandler<ActionEvent>()
 							    {
 								       @Override
 								       public void handle(ActionEvent e)
 									  {
+								    	   //check for invalid input
 								    	   if(F1.getText().equals(exeCodes.get(idx)))
-								    	   {
+								    	   {//finding test
 								    		        for(int q=0;q<client.GetAllExecutreTest().size();q++)
 								    		        {
 								    		        	if(client.GetAllExecutreTest().get(q).getTest().equals(signUp_test_list.get(idx)))
@@ -436,10 +436,12 @@ public class StudentController {
 								    		        		break;
 								    		        	}
 								    		        }
+								    		        //initializing test window
 								    		        client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()+1);
 								    		        BorderPane window=new BorderPane();
 											        final studentTest sav1=new studentTest(Owner_name[c],client.GetAllExecutreTest().get(idx).getTest(),0,new ArrayList<String>(),client.GetAllExecutreTest().get(idx).getTest().getTime(),
 											        		client.GetAllExecutreTest().get(idx).getTest().getOwner());
+											        
   										    	    ScrollPane pane=new ScrollPane();
 											      	GridPane Text_edit=new GridPane();
 											      	Text_edit.setHgap(10);
@@ -474,41 +476,33 @@ public class StudentController {
 													    		   }
 													    		   else
 													    		   {
+													    			   //starting test timer
 													    			   pane.setVisible(true);
 													    			   b.setVisible(false);
-													    			     dur=Integer.parseInt(sav1.getTime());
 													    			   time1[c].setCycleCount(Timeline.INDEFINITE);
 													    			   time1[c].getKeyFrames().add(
 													   		                new KeyFrame(Duration.seconds(1),
 													   		                  new EventHandler() {
 													   							@Override
 													   							public void handle(Event event) {
-													   								if(client.executedTestsCheckLock(client.GetAllExecutreTest().get(idx))==2)
+													   								if(client.executedTestsCheckLock(client.GetAllExecutreTest().get(idx))==2)//if test was locked stop this test
 													   								{
 													   									time1[c].stop();
 													   								    closestage.get(c).close();
 													   								}
-													   								if(client.executedTestsCheckLock(client.GetAllExecutreTest().get(idx))==4)
+													   								if(client.executedTestsCheckLock(client.GetAllExecutreTest().get(idx))==4)// if time was changed change time
 													   								{
 													   									dur=Integer.parseInt(client.GetAllExecutreTest().get(idx).getCurrentTime());
 													   									client.GetAllExecutreTest().get(idx).setSign(1);
 												    								    client.UpdateExecutreTest(client.GetAllExecutreTest().get(idx));
-												    								    Pane p=new Pane()  ;
-												    								    Label L1=new Label("test period extanded by "+
-												    								    (Integer.parseInt(client.GetAllExecutreTest().get(idx).getCurrentTime())-
-												    								    		Integer.parseInt(client.GetAllExecutreTest().get(idx).getTest().getTime()))+" minuts");
-												    								    p.getChildren().add(L1);
-												    								    Stage h=new Stage();
-												    								    Scene scene = new Scene(p,400,200);
-																						scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-																						h.setScene(scene);
-																						h.show();
+												    			
 												    								      
 													   								}
 													   								timeC++;
 													   								
-													   								if(timeC==dur*60) {
+													   								if(timeC==dur*60) {//after time ended save the test as it is
 													   							   int j=0;
+													   							  //check for answers
 																		    	   for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 																		    	   {
 																		    		   if(select[i][0].selectedProperty().get()==true)
@@ -546,6 +540,7 @@ public class StudentController {
 																		    		   }
 																		    		   j=0;
 																		    	   }
+																		    	   //update database and server
 																		    	   signUp_test_list.remove(idx);
 																		    	   client.GetAllExecutreTest().get(idx).setStudentNumber(client.GetAllExecutreTest().get(idx).getSignUpList().size());
 																		    	   client.GetAllExecutreTest().get(idx).setFFInishedNum(client.GetAllExecutreTest().get(idx).getFFInishedNum()+1);
@@ -584,7 +579,7 @@ public class StudentController {
 											      	Text_edit.add(L1, 0, 2);
 											      	int j=3;
 											      	int k ,l;
-											      	
+											      	//initializing test choices
 											      	for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 											      	{
 											      		select[i][0]=new CheckBox();
@@ -596,6 +591,7 @@ public class StudentController {
 											      	for(int i=0;i<sav1.getTest().getQuestions().size();i++)
 											      	{
 											      		final int val=i;
+											      		//create handlers
 											      		select[i][0].setOnAction(new EventHandler<ActionEvent>()
 											    		{
 											    			 @Override
@@ -702,7 +698,7 @@ public class StudentController {
 											         
 											      	}
 											        sav1.setAnswers(new ArrayList<String>());
-											     	Button Submit=new Button("Submit");
+											     	Button Submit=new Button("Submit");//saving test
 										          	Submit.setOnAction(new EventHandler<ActionEvent>()
 										     		{
 										     			 @Override
@@ -718,6 +714,7 @@ public class StudentController {
 										     				      }
 										     				      if(check<sav1.getTest().getQuestions().size())
 										     				      {
+										     				    	  //load choice window
 										     				    	  Stage SecondStage=new Stage();
 															    	   GridPane grid = new GridPane();
 																       grid.setHgap(10);
@@ -726,7 +723,7 @@ public class StudentController {
 																       Label Message=new Label("you didnt anwer all the questions , do you wish to submit your test?");
 																       grid.add(Message,1, 0);
 																       Button B1=new Button("Yes");
-																       B1.setOnAction(new EventHandler<ActionEvent>()
+																       B1.setOnAction(new EventHandler<ActionEvent>()//saving test data
 																	    {
 																		       @Override
 																		       public void handle(ActionEvent e)
@@ -777,7 +774,7 @@ public class StudentController {
 																		    	   {
 																		    		   sum+=Integer.parseInt(sav1.getAnswers().get(y));
 																		    	   }
-																		    	   
+																		    	   //updating database
 																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
 																		    	   client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()-1);
 																		    	   client.GetAllExecutreTest().get(idx).setStudentNumber(client.GetAllExecutreTest().get(idx).getSignUpList().size());
@@ -793,6 +790,7 @@ public class StudentController {
 																		    	   int sign1=0;
 																		    	   int q=client.GetAllExecutreTest().get(idx).gradelog.size();
 																		    	   client.GetAllExecutreTest().get(idx).gradelog.put(client.GetAllExecutreTest().get(idx).gradelog.size(), sav1.getAnswers());
+																		    	   System.out.println(client.GetAllExecutreTest().get(idx).gradelog);
 																		    	   for(int f=0;f<client.GetAllExecutreTest().get(idx).getGradeList().size();f++)
 																		    	   {
 																		    		   		if(client.GetAllExecutreTest().get(idx).getGradeList().get(f).equals(sum+""))	
@@ -810,6 +808,7 @@ public class StudentController {
 																		    	   }
 																		    	   
 																		    	  
+																		    	   System.out.println(client.GetAllExecutreTest().get(idx).getTest().getCode());
 																		    	   studentTest st1 = new studentTest(Owner_name[c], client.GetAllExecutreTest().get(idx).getTest(), sum, sav1.getAnswers(), sav1.getTime(), sav1.getTeacher());
 																		    	   if(sign1>1) st1.setCheat(true);
 																		    	   client.submitStudentTest(st1);
@@ -820,7 +819,7 @@ public class StudentController {
 																		    	  
 																			  }
 																	    });
-																       Button B2=new Button("No");
+																       Button B2=new Button("No");//continue solving test
 																       B2.setOnAction(new EventHandler<ActionEvent>()
 																	    {
 																		       @Override
@@ -851,6 +850,7 @@ public class StudentController {
 																		       @Override
 																		       public void handle(ActionEvent e)
 																			  {
+																		    	   //submiting test
 																		    	   SecondStage.close();
 																		    	   closestage.get(c).close();
 																		    	   int j=0;
@@ -897,6 +897,7 @@ public class StudentController {
 																		    	   {
 																		    		   sum+=Integer.parseInt(sav1.getAnswers().get(y));
 																		    	   }
+																		    	   //update database
 																		    	   client.GetAllExecutreTest().get(idx).setFInishedNum(client.GetAllExecutreTest().get(idx).getFInishedNum()+1);
 																		    	   client.GetAllExecutreTest().get(idx).setrSign(client.GetAllExecutreTest().get(idx).getrSign()-1);
 																		    	   client.GetAllExecutreTest().get(idx).setStudentNumber(client.GetAllExecutreTest().get(idx).getSignUpList().size());
@@ -926,6 +927,7 @@ public class StudentController {
 																		    		   		}
 																		    	   }
 																		    	   client.GetAllExecutreTest().get(idx).getGradeList().add(sum+"");
+																		    	   System.out.println(client.GetAllExecutreTest().get(idx).getTest().getCode());
 																		    	  
 																		    	   studentTest st1 = new studentTest(Owner_name[c], client.GetAllExecutreTest().get(idx).getTest(), sum, sav1.getAnswers(), sav1.getTime(), sav1.getTeacher());
 																		    	   if(sign1>1) st1.setCheat(true);
@@ -937,7 +939,7 @@ public class StudentController {
 																		    	   
 																			  }
 																	    });
-																       Button B2=new Button("No");
+																       Button B2=new Button("No");//continue solving
 																       B2.setOnAction(new EventHandler<ActionEvent>()
 																	    {
 																		       @Override
@@ -990,7 +992,7 @@ public class StudentController {
 					primaryStage.show();
 				  }
 		});
-	    Button B2=new Button("back");
+	    Button B2=new Button("back");//going to main window
 	    B2.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override
@@ -1028,12 +1030,13 @@ public class StudentController {
 	        // Horizontal scroll bar is only displayed when needed
 			return sp;
 		}
-	public void resultWindow(String str4,int c,Client client) {
+	public void resultWindow(String str4,int c,Client client) {//checking grades
 		
 		Stage Second=new Stage();
+		//loading choice window
 		checked_list=new ArrayList<studentTest>();
 		studentTest list[]=client.getAllTestsByStudentId(str4).getTests();
-		if(list != null) {
+		if(list != null) {//getting tests
 			for(int i=0;i<list.length;i++)
 			{
 				if(list[i].isCheck())
@@ -1057,17 +1060,18 @@ public class StudentController {
 	                Question_select=new_val;
 	                
 	    });
-	    Button view1=new Button("view grade");
+	    Button view1=new Button("view grade");//view only the grade
 	    view1.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override
 			  public void handle(ActionEvent e)
 				  {
 				    if(Question_select!="0") {
+				    	//loading the window
 				     Stage second=new Stage();
 				     GridPane pane=new GridPane();
 				     int idx=0;
-				     for(int i=0;i<checked_list.size();i++)
+				     for(int i=0;i<checked_list.size();i++)//finding the test
 				     {
 				    	 if(checked_list.get(i).getTest().getCode().equals(Question_select))idx=i;
 				     }
@@ -1080,7 +1084,7 @@ public class StudentController {
 				    }
 				  }
 		});
-	    Button view2=new Button("view Test");
+	    Button view2=new Button("view Test");//loading test
 	    view2.setOnAction(new EventHandler<ActionEvent>()
 		{
 			 @Override
@@ -1089,7 +1093,7 @@ public class StudentController {
 				 if(Question_select!="0") {
 				     int idx=0,idx2=0;
 				     Date d=new Date();
-			         for(int i=0;i<checked_list.size();i++)
+			         for(int i=0;i<checked_list.size();i++)//finding test
 			         {
 			    	 if(checked_list.get(i).getTest().getCode().equals(Question_select))idx=i;
 			         }
@@ -1101,6 +1105,7 @@ public class StudentController {
 			        		 d=client.GetAllExecutreTest().get(i).getDate();
 			        	 }
 			         }
+			         //loading test window
 			         studentTest Chosen=new studentTest();
 			         Chosen.setTest(checked_list.get(idx).getTest());
 				    ScrollPane pane=new ScrollPane();
