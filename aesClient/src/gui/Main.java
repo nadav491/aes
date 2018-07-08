@@ -34,7 +34,7 @@ import javafx.geometry.Insets;
 
 
 public class Main extends Application {
-	public static String HOST_IP = "";
+	public static final String HOST_IP = "";
 	public static final int HOST_PORT = 5555;
 	
     public static final StudentController Controller[]=new StudentController[2];//Student controller
@@ -81,7 +81,7 @@ public class Main extends Application {
 				       public void handle(ActionEvent e)//on action 
 					  { 
 				    	if(!txt3.getText().isEmpty()) {
-				    	Main.HOST_IP=txt3.getText();
+				    	//Main.HOST_IP=txt3.getText();
 				    	Client client = new Client(Main.HOST_IP,Main.HOST_PORT);//getting the client 
 				    	ArrayList<String> typeName = User.login(client, txt1.getText(), txt2.getText());//login input
 				    	if(typeName.size()==2) //if we found the id and password pair in database
